@@ -32,6 +32,16 @@ export default defineType({
         ),
     }),
     defineField({
+      name: 'heroSlides',
+      type: 'array',
+      title: 'Hero Slides',
+      description:
+        'The full-screen images at the top of the homepage, under the large logo. Each one’s caption shows along the bottom.',
+      of: [{type: 'figure'}],
+      options: {layout: 'grid'},
+      hidden: ({document}) => !isHomepage(document),
+    }),
+    defineField({
       name: 'intro',
       type: 'richText',
       title: 'Introduction',

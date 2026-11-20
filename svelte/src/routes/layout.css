@@ -181,7 +181,13 @@ is desktop.
 	src: url('/fonts/CourierPrime-Regular.woff2') format('woff2');
 }
 
+/* From lg, the logo's column, shared by the sidebar, the content grid and
+   the footer so they line up: 18% of the width, kept between 21.2rem and
+   Figma's 276px square plus a gap. The logo's square is 5.52em, so
+   --logo-size is the font-size that fills the column less the gap. */
 html {
+	--logo-column: clamp(21.2rem, 18vw, 28.8rem);
+	--logo-size: calc((var(--logo-column) - var(--spacing-xs)) / 5.52);
 	font-size: 10px;
 }
 

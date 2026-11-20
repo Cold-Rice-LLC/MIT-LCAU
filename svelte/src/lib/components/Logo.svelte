@@ -24,9 +24,11 @@
 	 * animation; at step 1 the full name fades in in the middle. `short` is the
 	 * small square mobile mark, initials alone. It scales with font-size (the
 	 * square is 5.52em, as at 50px in Figma), so size it with a text-*
-	 * class. Decorative: label the link around it.
+	 * class. `fill` drops the square to stretch the words to the corners of
+	 * its box instead, as over the homepage hero. Decorative: label the
+	 * link around it.
 	 */
-	let { step = LOGO_STEPS, short = false, class: className } = $props();
+	let { step = LOGO_STEPS, short = false, fill = false, class: className } = $props();
 
 	let shown = $derived(words.map((word, i) => word.slice(0, short ? 1 : lengths[i][step - 1])));
 </script>
@@ -35,7 +37,7 @@
 	aria-hidden="true"
 	class={[
 		'grid leading-none font-[450] tracking-[-0.04em] whitespace-nowrap *:col-start-1 *:row-start-1 *:text-trim',
-		short ? 'size-[2.17em]' : 'size-[5.52em]',
+		fill ? 'size-full' : short ? 'size-[2.17em]' : 'size-[5.52em]',
 		className
 	]}
 >
