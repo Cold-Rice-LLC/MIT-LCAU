@@ -1,5 +1,8 @@
 <script>
 	import './layout.css';
+	import 'nprogress/nprogress.css';
+	import NProgress from 'nprogress';
+	import { beforeNavigate } from '$app/navigation';
 	import favicon from '#lib/assets/favicon.svg';
 	import Logo from '#lib/components/Logo.svelte';
 	import DesktopNav from '#lib/components/layout/DesktopNav.svelte';
@@ -10,6 +13,18 @@
 	import Sidebar from '#lib/components/layout/Sidebar.svelte';
 
 	let { children, data } = $props();
+
+	NProgress.configure({ showSpinner: false });
+
+	// Finishes on `complete` rather than in afterNavigate, which doesn't run
+	// when a navigation is cancelled or fails, leaving the bar stuck. Query
+	// changes made in code on the same page load nothing, so they skip it.
+	beforeNavigate(({ willUnload, type, from, to, complete }) => {
+		if (willUnload || (type === 'goto' && from?.url.pathname === to?.url.pathname)) return;
+		NProgress.start();
+		const done = () => NProgress.done();
+		complete.then(done, done);
+	});
 </script>
 
 <svelte:head>
@@ -40,4 +55,4 @@
 	</div>
 </div>
 
-<Footer navigation={data.navigation} footer={data.footer} />
+<Footer footer={data.footer} />

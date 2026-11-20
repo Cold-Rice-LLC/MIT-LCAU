@@ -179,3 +179,16 @@ html {
 		text-transform: inherit;
 	}
 }
+
+/* nprogress builds its own markup, so it's styled here. Nested under body
+   to outrank nprogress.css */
+body {
+	#nprogress {
+		z-index: 5000;
+	}
+
+	#nprogress .bar {
+		height: 0.2rem;
+		background-color: var(--color-black);
+	}
+}
