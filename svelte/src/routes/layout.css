@@ -141,6 +141,17 @@ is desktop.
 	text-box: trim-both cap alphabetic;
 }
 
+/* Links that fade to half on hover, as in the footer */
+@utility hover-fade {
+	transition: opacity 200ms var(--default-transition-timing-function);
+
+	@media (hover: hover) {
+		&:hover {
+			opacity: 0.5;
+		}
+	}
+}
+
 @font-face {
 	font-family: 'Antique Legacy';
 	font-weight: 400;

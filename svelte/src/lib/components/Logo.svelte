@@ -14,11 +14,14 @@
 </script>
 
 <script>
+	import { prefersReducedMotion } from 'svelte/motion';
+	import { fade } from 'svelte/transition';
+
 	/**
 	 * The LCAU logo set in type: Leventhal, Center for, Advanced and
 	 * Urbanism in the corners of a square, the middle two turned on their
 	 * side. `step` (1–8) shows that much of each word, as in Figma's hover
-	 * animation; at step 1 the full name shows in the middle. `short` is the
+	 * animation; at step 1 the full name fades in in the middle. `short` is the
 	 * small square mobile mark, initials alone. It scales with font-size (the
 	 * square is 5.52em, as at 50px in Figma), so size it with a text-*
 	 * class. Decorative: label the link around it.
@@ -42,6 +45,7 @@
 	<span class="self-end justify-self-end">{shown[3]}</span>
 	{#if !short && step === 1}
 		<span
+			in:fade={{ duration: prefersReducedMotion.current ? 0 : 250 }}
 			class="w-[91%] self-center justify-self-center text-center text-[max(1.2rem,0.32em)] leading-[1.2] tracking-slight whitespace-normal"
 		>
 			MIT Norman B. Leventhal Center for Advanced Urbanism
