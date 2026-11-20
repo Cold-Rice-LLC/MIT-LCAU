@@ -99,6 +99,14 @@ is desktop.
 	}
 }
 
+/* The footer's headings and the mobile wordmark: the same at every size */
+@utility text-h4 {
+	font-size: 2rem;
+	font-weight: 450;
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+}
+
 @utility text-body-lg {
 	font-size: 1.6rem;
 	font-weight: 450;

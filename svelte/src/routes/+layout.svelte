@@ -42,7 +42,7 @@
 			class="flex items-center gap-xs pt-xs lg:hidden"
 		>
 			<Logo short class="box-content rounded-def bg-black p-[0.7rem] text-[2.4rem] text-white" />
-			<span aria-hidden="true" class="text-[2rem] leading-[1.1] tracking-[-0.02em]">
+			<span aria-hidden="true" class="text-h4">
 				MIT Norman B.<br />Leventhal Center for<br />Advanced Urbanism
 			</span>
 		</a>

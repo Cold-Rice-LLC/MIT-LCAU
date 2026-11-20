@@ -44,7 +44,7 @@
 </script>
 
 {#snippet heading(text, className)}
-	<h2 class={['text-[2rem] leading-[1.1] tracking-[-0.02em] text-trim', className]}>{text}</h2>
+	<h2 class={['text-h4 text-trim', className]}>{text}</h2>
 {/snippet}
 
 <footer class="px-xs pb-xs">
@@ -77,7 +77,7 @@
 				>
 					{#if newsletterHeading}{@render heading(newsletterHeading)}{/if}
 					<div
-						class="flex h-[3.8rem] rounded-def bg-white/5 text-[2rem] leading-[1.1] tracking-[-0.02em] focus-within:outline-2 focus-within:outline-white lg:h-[3.1rem] lg:text-[1.6rem]"
+						class="flex h-[3.8rem] rounded-def bg-white/5 text-h4 focus-within:outline-2 focus-within:outline-white lg:h-[3.1rem] lg:text-[1.6rem]"
 					>
 						<label for="newsletter-email" class="sr-only">Email address</label>
 						<input

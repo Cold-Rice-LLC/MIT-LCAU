@@ -12,12 +12,7 @@
 </script>
 
 {#each value as block (block._key)}
-	<p
-		class={[
-			'[p+&]:mt-[1lh]',
-			truncate ? 'overflow-hidden text-ellipsis whitespace-pre' : 'whitespace-pre-line'
-		]}
-	>
+	<p class={truncate ? 'overflow-hidden text-ellipsis whitespace-pre' : 'whitespace-pre-line'}>
 		{#each block.children ?? [] as span (span._key)}
 			{@const link = block.markDefs?.find((def) => span.marks?.includes(def._key))}
 			{#if link}
@@ -28,3 +23,10 @@
 		{/each}
 	</p>
 {/each}
+
+<style>
+	/* A line's space between paragraphs */
+	p + p {
+		margin-top: 1lh;
+	}
+</style>
