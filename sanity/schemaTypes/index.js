@@ -1,0 +1,44 @@
+import siteSettings from './siteSettings'
+import caseStudy from './documents/caseStudy'
+import course from './documents/course'
+import educationPage from './documents/educationPage'
+import event from './documents/event'
+import exhibition from './documents/exhibition'
+import news from './documents/news'
+import opportunity from './documents/opportunity'
+import page from './documents/page'
+import person from './documents/person'
+import research from './documents/research'
+import {moduleTypes} from './modules'
+import exploreLink from './objects/exploreLink'
+import figure from './objects/figure'
+import link from './objects/link'
+import navSection from './objects/navSection'
+import richText from './objects/richText'
+import seo from './objects/seo'
+import video from './objects/video'
+
+export const schemaTypes = [
+  // Documents
+  siteSettings,
+  page,
+  person,
+  event,
+  research,
+  exhibition,
+  course,
+  educationPage,
+  news,
+  opportunity,
+  caseStudy,
+  // Objects
+  exploreLink,
+  figure,
+  link,
+  navSection,
+  richText,
+  seo,
+  video,
+  // Modules
+  ...moduleTypes,
+]

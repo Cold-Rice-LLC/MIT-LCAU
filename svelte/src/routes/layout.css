@@ -1,0 +1,181 @@
+@import 'tailwindcss';
+
+/*
+Tailwind Config
+*/
+
+@theme {
+	/* Colors */
+	--color-white: #ffffff;
+	--color-black: #000000;
+	--color-charcoal: #111111;
+	--color-ui: #eeeeee;
+	--color-highlight: #8800dd;
+	--color-upcoming: #00bbff;
+
+	/* Content types: Event, Course, News, Research, Grant */
+	--color-orange: #ffbb77;
+	--color-pink: #ffd2e3;
+	--color-brown: #d6beac;
+	--color-cool-gray: #cacdd6;
+	--color-blue: #c8c3ff;
+
+	/* Fonts. Web-safe stand-ins until the Antique Legacy files arrive */
+	--font-sans: 'Antique Legacy', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--font-mono: 'Courier Prime', 'Courier New', Courier, monospace;
+
+	/* Spacing */
+	--spacing-2xs: 0.6rem;
+	--spacing-xs: 1.2rem;
+	--spacing-sm: 1.8rem;
+	--spacing-md: 2.4rem;
+	--spacing-lg: 3.6rem;
+	--spacing-xl: 4.8rem;
+	--spacing-2xl: 7.2rem;
+	--spacing-3xl: 9.6rem;
+
+	/* Letter Spacing: the 1% on card, subnav and footer small print */
+	--tracking-slight: 0.01em;
+
+	/* Widths: the 20px paragraph column, and landing-page intros */
+	--container-measure: 69rem;
+	--container-intro: 108rem;
+
+	/* Border Radius */
+	--radius-def: 0.6rem;
+}
+
+/*
+Type Styles
+
+One class per Figma text style. Base values are mobile; lg (1024px) and up
+is desktop.
+*/
+
+@utility text-display {
+	font-size: 4.2rem;
+	font-weight: 400;
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+	font-feature-settings: 'case' 1;
+
+	@media (width >= 1024px) {
+		font-size: 7.2rem;
+	}
+}
+
+@utility text-h1 {
+	font-size: 4.2rem;
+	font-weight: 400;
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+	font-feature-settings: 'case' 1;
+
+	@media (width >= 1024px) {
+		font-size: 8rem;
+	}
+}
+
+@utility text-h2 {
+	font-size: 3rem;
+	font-weight: 400;
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+
+	@media (width >= 1024px) {
+		font-size: 4.8rem;
+	}
+}
+
+@utility text-h3 {
+	font-size: 2.2rem;
+	font-weight: 450;
+	line-height: 1.15;
+	letter-spacing: -0.01em;
+
+	@media (width >= 1024px) {
+		font-size: 3.2rem;
+		letter-spacing: -0.02em;
+	}
+}
+
+@utility text-body-lg {
+	font-size: 1.6rem;
+	font-weight: 450;
+	line-height: 1.25;
+
+	@media (width >= 1024px) {
+		font-size: 2rem;
+		line-height: 1.2;
+	}
+}
+
+@utility text-body {
+	font-size: 1.2rem;
+	font-weight: 450;
+	line-height: 1.25;
+
+	@media (width >= 1024px) {
+		font-size: 1.6rem;
+		line-height: 1.2;
+	}
+}
+
+@utility text-label {
+	font-family: var(--font-mono);
+	font-size: 1.4rem;
+	font-weight: 400;
+	line-height: 1;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	font-feature-settings: 'case' 1;
+
+	@media (width >= 1024px) {
+		font-size: 1.8rem;
+	}
+}
+
+/* Trims a text box to the capitals' height, as Figma's "Vertical trim: Cap
+   height to baseline" does, so padding around a line matches the design */
+@utility text-trim {
+	text-box: trim-both cap alphabetic;
+}
+
+@font-face {
+	font-family: 'Antique Legacy';
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/AntiqueLegacy-Regular.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Antique Legacy';
+	font-weight: 450;
+	font-display: swap;
+	src: url('/fonts/AntiqueLegacy-Book.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Courier Prime';
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/CourierPrime-Regular.woff2') format('woff2');
+}
+
+html {
+	font-size: 10px;
+}
+
+/* Tailwind's preflight gives buttons the default cursor, and leaves the
+   browser's text-transform: none, so they'd ignore an uppercase parent.
+   In the base layer so utilities (uppercase, cursor-*) still win. */
+@layer base {
+	body {
+		font-weight: 450;
+	}
+
+	button {
+		cursor: pointer;
+		text-transform: inherit;
+	}
+}
