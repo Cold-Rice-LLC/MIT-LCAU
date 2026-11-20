@@ -83,3 +83,18 @@ export const referencesField = (name, title, to, options = {}) =>
     validation: (rule) => rule.unique(),
     ...options,
   })
+
+/**
+ * Spread into a field to show it only where `applies`, a test of the
+ * field's context (its `parent` and `document`). Given `required`, it's
+ * required there, with that message. `rule` starts the validation off,
+ * e.g. with the URL schemes it accepts.
+ */
+export const shownWhere = (applies, {required, rule: base = (rule) => rule} = {}) => ({
+  hidden: (context) => !applies(context),
+  validation: (rule) =>
+    base(rule).custom((value, context) => {
+      if (!applies(context)) return true
+      return value ? true : (required ?? true)
+    }),
+})

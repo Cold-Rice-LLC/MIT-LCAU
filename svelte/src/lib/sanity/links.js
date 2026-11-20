@@ -15,6 +15,15 @@ export const linkFields = `
 	"internal": internalLink->{ ${internalFields} }
 `;
 
+/**
+ * GROQ projection for a plainText field: its lines, with each link mark's
+ * page resolved the way linkFields resolves it.
+ */
+export const plainTextFields = `
+	...,
+	markDefs[]{ ..., "internal": internalLink->{ ${internalFields} } }
+`;
+
 // Where each linkable document type lives on the site
 const paths = {
 	page: (slug) => `/${slug}`,

@@ -27,7 +27,7 @@ export default defineType({
       name: 'links',
       type: 'array',
       title: 'Links',
-      of: [{type: 'link'}],
+      of: [{type: 'navLink'}],
     }),
   ],
   preview: {

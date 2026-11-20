@@ -80,7 +80,7 @@ export default defineType({
       type: 'array',
       title: 'Links',
       description: 'Like Google Scholar or a lab website.',
-      of: [{type: 'link'}],
+      of: [{type: 'navLink'}],
     }),
     seoField(),
   ],

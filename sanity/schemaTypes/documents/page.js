@@ -42,7 +42,7 @@ export default defineType({
       type: 'array',
       title: 'Links',
       description: 'Buttons under the introduction, like “Visit Index”.',
-      of: [{type: 'link'}],
+      of: [{type: 'navLink'}],
       hidden: ({document}) => !isResearchLanding(document),
     }),
     modulesField({hidden: ({document}) => isResearchLanding(document)}),

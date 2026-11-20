@@ -12,8 +12,9 @@ import research from './documents/research'
 import {moduleTypes} from './modules'
 import exploreLink from './objects/exploreLink'
 import figure from './objects/figure'
-import link from './objects/link'
+import navLink from './objects/navLink'
 import navSection from './objects/navSection'
+import plainText from './objects/plainText'
 import richText from './objects/richText'
 import seo from './objects/seo'
 import video from './objects/video'
@@ -34,8 +35,9 @@ export const schemaTypes = [
   // Objects
   exploreLink,
   figure,
-  link,
+  navLink,
   navSection,
+  plainText,
   richText,
   seo,
   video,

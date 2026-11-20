@@ -11,7 +11,7 @@ export default defineType({
   fields: [
     defineField({
       name: 'link',
-      type: 'link',
+      type: 'navLink',
       title: 'Link',
       validation: (rule) => rule.required(),
     }),

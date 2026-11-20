@@ -1,6 +1,6 @@
 import { client } from '#lib/sanity/client.js';
 import { imageFields } from '#lib/sanity/images.js';
-import { internalFields, linkFields } from '#lib/sanity/links.js';
+import { internalFields, linkFields, plainTextFields } from '#lib/sanity/links.js';
 
 export async function load() {
 	const settings = await client.fetch(`
@@ -20,11 +20,14 @@ export async function load() {
 				description,
 				image{ ${imageFields} }
 			},
-			otherLinks[]{ _key, ${linkFields} },
-			socialLinks[]{ _key, ${linkFields} },
-			address,
-			phone,
-			email
+			section1NewsletterHeading,
+			section1LinksHeading,
+			section1Links[]{ _key, ${linkFields} },
+			section2Heading,
+			section2LinksColumn1[]{ ${plainTextFields} },
+			section2LinksColumn2[]{ ${plainTextFields} },
+			section3Heading,
+			section3Text[]{ ${plainTextFields} }
 		}
 	`);
 
@@ -38,11 +41,13 @@ export async function load() {
 		navigation: settings?.navigation ?? [],
 		explore: settings?.explore ?? [],
 		footer: {
-			otherLinks: settings?.otherLinks ?? [],
-			socialLinks: settings?.socialLinks ?? [],
-			address: settings?.address,
-			phone: settings?.phone,
-			email: settings?.email
+			newsletterHeading: settings?.section1NewsletterHeading,
+			linksHeading: settings?.section1LinksHeading,
+			links: settings?.section1Links ?? [],
+			sitemapHeading: settings?.section2Heading,
+			sitemap: [settings?.section2LinksColumn1 ?? [], settings?.section2LinksColumn2 ?? []],
+			contactHeading: settings?.section3Heading,
+			contact: settings?.section3Text ?? []
 		}
 	};
 }
