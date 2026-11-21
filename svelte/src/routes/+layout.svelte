@@ -17,6 +17,8 @@
 	let { children, data } = $props();
 
 	let home = $derived(page.route.id === '/');
+	// Explore's height, for the logo to stop above it
+	let exploreHeight = $state(0);
 
 	NProgress.configure({ showSpinner: false });
 
@@ -37,17 +39,18 @@
 
 <Seo defaults={data.seo} />
 
-<!-- From lg: the sidebar beside a 9-column content grid (see the style
-     block). The homepage's hero spans the top row; the nav holds no space
-     of its own and sticks over the grid's columns for the whole page, over
-     the hero first. -->
-<div class="shell">
-	{#if home}
-		<HomeHero slides={page.data.homepage?.heroSlides ?? []} class="col-span-full row-start-1" />
-	{/if}
-	<DesktopNav navigation={data.navigation} class="col-start-2 row-start-1" />
-	<Sidebar class="row-start-2" />
-	<div class="min-w-0 px-xs lg:row-start-2">
+<!-- The nav holds no space of its own and sticks over the content's
+     columns for the whole page, over the homepage's hero first -->
+<DesktopNav navigation={data.navigation} class="lg:ml-(--sidebar-column)" />
+{#if home}
+	<HomeHero slides={page.data.homepage?.heroSlides ?? []} />
+{/if}
+
+<!-- From lg: the sidebar's column beside a 9-column content grid (see the
+     style block) -->
+<div class="shell" style:--explore-height="{exploreHeight}px">
+	<Sidebar />
+	<div class="min-w-0 px-xs lg:col-start-2 lg:row-start-1 lg:flex lg:flex-col">
 		<a
 			href="/"
 			aria-label="MIT Norman B. Leventhal Center for Advanced Urbanism, home"
@@ -59,22 +62,26 @@
 			</span>
 		</a>
 		<MobileMenu navigation={data.navigation} />
-		<main class={['lg:grid lg:grid-cols-9 lg:gap-xs', home ? 'lg:pt-xs' : 'lg:pt-[5.8rem]']}>
+		<!-- TEMPORARY min-h-svh: room to scroll past the sidebar until pages
+		     have content -->
+		<main
+			class={['min-h-svh lg:grid lg:grid-cols-9 lg:gap-xs', home ? 'lg:pt-xs' : 'lg:pt-[5.8rem]']}
+		>
 			{@render children()}
 		</main>
-		<Explore links={data.explore} />
+		<!-- On a short page, at the foot, clear of the logo -->
+		<Explore links={data.explore} bind:height={exploreHeight} class="lg:mt-auto" />
 	</div>
 </div>
 
 <Footer footer={data.footer} />
 
 <style>
-	/* The sidebar's column is the logo's (layout.css) plus its padding; the
-	   content takes the rest */
+	/* The sidebar's column (layout.css), and the content in the rest */
 	.shell {
 		@media (width >= 1024px) {
 			display: grid;
-			grid-template-columns: calc(var(--logo-column) + var(--spacing-md)) minmax(0, 1fr);
+			grid-template-columns: var(--sidebar-column) minmax(0, 1fr);
 		}
 	}
 </style>

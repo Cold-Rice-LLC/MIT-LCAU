@@ -9,7 +9,7 @@
 	 * around; the count and caption run along the bottom. Desktop only for
 	 * now, so text-body is its 16px desktop size.
 	 */
-	let { slides, class: className } = $props();
+	let { slides } = $props();
 
 	let current = $state(0);
 
@@ -17,7 +17,7 @@
 </script>
 
 {#if slides.length}
-	<section aria-label="Featured" class={['relative hidden h-svh text-white lg:block', className]}>
+	<section aria-label="Featured" class="relative hidden h-svh text-white lg:block">
 		{#each slides as slide, i (slide._key)}
 			<Image
 				image={slide}
