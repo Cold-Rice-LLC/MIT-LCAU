@@ -1,14 +1,12 @@
 import {CogIcon} from '@sanity/icons/Cog'
 import {DocumentIcon} from '@sanity/icons/Document'
+import {ProjectsIcon} from '@sanity/icons/Projects'
+import {UserIcon} from '@sanity/icons/User'
 import {landingPages} from './landingPages'
 
-// The kinds of document listed on their own, in menu order
+// The kinds of document listed on their own, after People, Events and
+// Research, in menu order
 const documentTypes = [
-  ['person', 'People'],
-  ['role', 'Roles'],
-  ['event', 'Events'],
-  ['research', 'Research'],
-  ['researchCategory', 'Research Categories'],
   ['exhibition', 'Exhibitions'],
   ['course', 'Courses'],
   ['educationPage', 'Education'],
@@ -16,6 +14,21 @@ const documentTypes = [
   ['opportunity', 'Opportunities'],
   ['caseStudy', 'Case Studies'],
 ]
+
+const typeItem = (S, [type, title]) => S.documentTypeListItem(type).title(title)
+
+// A type and the one that only exists to label it, like people and their
+// roles, together under one item
+const typeGroup = (S, id, title, icon, types) =>
+  S.listItem()
+    .id(id)
+    .title(title)
+    .icon(icon)
+    .child(
+      S.list()
+        .title(title)
+        .items(types.map((type) => typeItem(S, type))),
+    )
 
 const landingFilter = landingPages.flatMap(({id}) => [`"${id}"`, `"drafts.${id}"`]).join(', ')
 
@@ -50,7 +63,16 @@ export const myStructure = (S) =>
 
       S.divider(),
 
-      ...documentTypes.map(([type, title]) => S.documentTypeListItem(type).title(title)),
+      typeGroup(S, 'peopleGroup', 'People', UserIcon, [
+        ['person', 'All People'],
+        ['role', 'Roles'],
+      ]),
+      typeItem(S, ['event', 'Events']),
+      typeGroup(S, 'researchGroup', 'Research', ProjectsIcon, [
+        ['research', 'All Research'],
+        ['researchCategory', 'Categories'],
+      ]),
+      ...documentTypes.map((type) => typeItem(S, type)),
 
       S.divider(),
 

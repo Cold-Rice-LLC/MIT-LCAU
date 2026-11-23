@@ -1,6 +1,6 @@
 import {UserIcon} from '@sanity/icons/User'
 import {defineField, defineType} from 'sanity'
-import {imageField, seoField, slugField} from '../fields'
+import {seoField, slugField} from '../fields'
 
 /**
  * Someone at or connected to LCAU. Their research and courses list on
@@ -41,17 +41,16 @@ export default defineType({
       description: 'Like “Faculty Director” or “Associate Professor of Urban Planning”.',
       of: [{type: 'string'}],
     }),
+    // A plain image: alt text comes from the media library, and a photo
+    // never shows a caption
     defineField({
-      name: 'cohort',
-      type: 'number',
-      title: 'Fellowship Year',
-      description: 'For SPURS fellows and visiting scholars, as “2026 SPURS Fellow”.',
-      validation: (rule) => rule.integer().min(1900).max(2100),
-    }),
-    imageField({
       name: 'photo',
+      type: 'image',
       title: 'Photo',
-      description: 'Cropped to 3:2 around the hotspot.',
+      description:
+        'Square on cards, 3:2 on their page, cropped around the hotspot. Its alt text is the media library’s.',
+      options: {hotspot: true},
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'bio',
