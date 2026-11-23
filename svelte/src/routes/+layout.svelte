@@ -2,9 +2,11 @@
 	import './layout.css';
 	import 'nprogress/nprogress.css';
 	import NProgress from 'nprogress';
+	import { onMount } from 'svelte';
 	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import favicon from '#lib/assets/favicon.svg';
+	import { keepFonts } from '#lib/fonts.js';
 	import Logo from '#lib/components/Logo.svelte';
 	import DesktopNav from '#lib/components/layout/DesktopNav.svelte';
 	import Explore from '#lib/components/layout/Explore.svelte';
@@ -21,6 +23,8 @@
 	let exploreHeight = $state(0);
 
 	NProgress.configure({ showSpinner: false });
+
+	onMount(keepFonts);
 
 	// Finishes on `complete` rather than in afterNavigate, which doesn't run
 	// when a navigation is cancelled or fails, leaving the bar stuck. Query

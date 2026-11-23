@@ -79,8 +79,11 @@
 	};
 
 	// Held until the panel has been measured at its new size and painted:
-	// two frames after the navigation finishes (or fails)
-	beforeNavigate(({ complete }) => {
+	// two frames after the navigation finishes (or fails). A change to the
+	// query alone, like typing in People's search, leaves the nav be while
+	// it's shut: the breadcrumb is the same.
+	beforeNavigate(({ from, to, complete }) => {
+		if (!open && !searching && from?.url.pathname === to?.url.pathname) return;
 		instant = true;
 		const done = () => {
 			close();
