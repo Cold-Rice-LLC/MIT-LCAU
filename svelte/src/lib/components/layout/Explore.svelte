@@ -3,11 +3,12 @@
 	import Image from '#lib/components/Image.svelte';
 
 	/**
-	 * The large links above the footer on every page. On desktop, hovering
-	 * one turns it purple and shows its description, and its image grows
+	 * The large links above the footer on every page, each title on one
+	 * line. On desktop, hovering one turns it purple and grows its image
 	 * out of the sidebar's column from the top-right corner (timed from the
-	 * designers' prototype). `height` binds its height out, for the
-	 * sidebar's logo to stop above it.
+	 * designers' prototype); from xl, where there's room beside the title,
+	 * it also shows its description, at most half the row, on the right.
+	 * `height` binds its height out, for the sidebar's logo to stop above it.
 	 */
 	let { links, height = $bindable(0), class: className } = $props();
 </script>
@@ -23,13 +24,13 @@
 				<li class="group relative border-t-2 border-black/20">
 					<AppLink {link} class="flex gap-[3.2rem] py-sm lg:py-md">
 						<span
-							class="flex-1 text-display leading-[0.95] transition-colors duration-200 text-trim group-hover:text-highlight"
+							class="flex-1 text-display leading-[0.95] transition-colors duration-200 text-trim group-hover:text-highlight lg:flex-none"
 						>
 							{link.label}
 						</span>
 						{#if description}
 							<span
-								class="hidden flex-1 text-[1.6rem] leading-[1.25] opacity-0 transition-opacity duration-200 text-trim group-hover:opacity-100 lg:block"
+								class="ml-auto hidden max-w-1/2 flex-1 text-[1.6rem] leading-[1.25] opacity-0 transition-opacity duration-200 text-trim group-hover:opacity-100 xl:block"
 							>
 								{description}
 							</span>
