@@ -17,7 +17,7 @@ export default defineType({
       name: 'pluralTitle',
       type: 'string',
       title: 'Plural Title',
-      description: 'For filters: “PhD Students”. Leave empty if it’s the same.',
+      description: 'For filters and tabs: “PhD Students”. Leave empty if it’s the same.',
     }),
   ],
   orderings: [{title: 'Title', name: 'titleAsc', by: [{field: 'title', direction: 'asc'}]}],

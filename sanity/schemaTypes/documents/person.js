@@ -1,6 +1,6 @@
 import {UserIcon} from '@sanity/icons/User'
 import {defineField, defineType} from 'sanity'
-import {imageField, referencesField, seoField, slugField} from '../fields'
+import {imageField, seoField, slugField} from '../fields'
 
 /**
  * Someone at or connected to LCAU. Their research and courses list on
@@ -18,10 +18,21 @@ export default defineType({
       title: 'Name',
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'sortName',
+      type: 'string',
+      title: 'Sort Name',
+      description:
+        'How they’re alphabetized, like “Sánchez de Madariaga, Inés”. Leave empty to sort by their last word: “Sarah Williams” as “Williams, Sarah”.',
+    }),
     slugField({options: {source: 'name'}}),
-    referencesField('roles', 'Roles', 'role', {
-      description: 'The first shows as their tag. Every one adds them to that Role filter.',
-      validation: (rule) => rule.required().min(1).unique(),
+    defineField({
+      name: 'role',
+      type: 'reference',
+      title: 'Role',
+      description: 'Their tag, and the Role filter they’re under.',
+      to: [{type: 'role'}],
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'positions',
@@ -48,15 +59,11 @@ export default defineType({
       title: 'Bio',
     }),
     defineField({
-      name: 'office',
-      type: 'string',
-      title: 'Office',
-      description: 'Like “E14-140D”.',
-    }),
-    defineField({
-      name: 'email',
-      type: 'email',
-      title: 'Email',
+      name: 'contact',
+      type: 'plainText',
+      title: 'Contact',
+      description:
+        'Under the photo, like “Visit Me: E14-140D” and their email as a link. Shift+Enter starts a new line; Enter leaves a line’s space.',
     }),
     defineField({
       name: 'links',
@@ -67,8 +74,18 @@ export default defineType({
     }),
     seoField(),
   ],
-  orderings: [{title: 'Name', name: 'nameAsc', by: [{field: 'name', direction: 'asc'}]}],
+  orderings: [
+    {title: 'Name', name: 'nameAsc', by: [{field: 'name', direction: 'asc'}]},
+    {
+      title: 'Sort Name',
+      name: 'sortNameAsc',
+      by: [
+        {field: 'sortName', direction: 'asc'},
+        {field: 'name', direction: 'asc'},
+      ],
+    },
+  ],
   preview: {
-    select: {title: 'name', subtitle: 'roles.0.title', media: 'photo'},
+    select: {title: 'name', subtitle: 'role.title', media: 'photo'},
   },
 })

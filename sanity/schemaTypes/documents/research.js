@@ -29,6 +29,13 @@ export default defineType({
       title: 'Year',
       validation: (rule) => rule.required().integer().min(1900).max(2100),
     }),
+    defineField({
+      name: 'category',
+      type: 'reference',
+      title: 'Category',
+      description: 'Beside the year on cards, as “2025, Cities Initiative”.',
+      to: [{type: 'researchCategory'}],
+    }),
     excerptField(),
     imageField(),
     referencesField('people', 'People', 'person', {
@@ -74,6 +81,11 @@ export default defineType({
   ],
   orderings: [{title: 'Year', name: 'yearDesc', by: [{field: 'year', direction: 'desc'}]}],
   preview: {
-    select: {title: 'title', subtitle: 'year', media: 'image'},
+    select: {title: 'title', year: 'year', category: 'category.title', media: 'image'},
+    prepare: ({title, year, category, media}) => ({
+      title,
+      subtitle: [year, category].filter(Boolean).join(', '),
+      media,
+    }),
   },
 })

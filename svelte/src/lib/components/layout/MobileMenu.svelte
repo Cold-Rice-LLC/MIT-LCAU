@@ -34,7 +34,10 @@
 				<span class="min-w-0 flex-1 truncate">
 					{#if trail.section}
 						{trail.section.title} →
-						<span class="text-highlight">{trail.link?.label ?? page.data.seo?.title}</span>
+						{#if trail.nested}{trail.link.label} →{/if}
+						<span class="text-highlight">
+							{trail.nested ? page.data.seo?.title : (trail.link?.label ?? page.data.seo?.title)}
+						</span>
 					{/if}
 				</span>
 				{open ? 'Close' : 'Menu'}

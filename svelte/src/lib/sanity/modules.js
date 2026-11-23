@@ -5,14 +5,15 @@ const text = `text[]{ ${portableTextFields} }`;
 const images = `images[]{ _key, ${imageFields} }`;
 
 // A document as an internal link, for AppLink
-const linkTo = `"link": { "linkType": "internal", "internal": { ${internalFields} } }`;
+export const linkTo = `"link": { "linkType": "internal", "internal": { ${internalFields} } }`;
 
-// What PersonCard shows: their first role is the tag
-const personCard = `
+// What PersonCard shows, and their Sort Name to sort them by (see sortPeople)
+export const personCard = `
 	_id,
 	name,
+	sortName,
 	positions,
-	"role": roles[0]->title,
+	"role": role->title,
 	photo{ ${imageFields} },
 	${linkTo}
 `;
@@ -34,14 +35,15 @@ export const modulesFields = `
 			"tabs": roles[]->{
 				_id,
 				"label": coalesce(pluralTitle, title),
-				"people": *[_type == "person" && references(^._id)] | order(name asc)[0...4]{ ${personCard} }
+				"people": *[_type == "person" && references(^._id)]{ ${personCard} }
 			},
 			"peoplePage": *[_id == "page-people"][0]{ ${linkTo} }.link
 		},
 		display != "tabs" => {
 			${text},
+			"byRole": defined(role),
 			"people": select(
-				defined(role) => *[_type == "person" && references(^.role._ref)] | order(name asc),
+				defined(role) => *[_type == "person" && references(^.role._ref)],
 				people[]->
 			){ ${personCard} }
 		}

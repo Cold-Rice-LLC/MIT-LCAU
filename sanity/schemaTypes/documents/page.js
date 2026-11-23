@@ -1,11 +1,13 @@
 import {defineField, defineType} from 'sanity'
 import {DocumentIcon} from '@sanity/icons/Document'
 import {isLandingPage} from '../../landingPages'
-import {modulesField, seoField, titleField} from '../fields'
+import {modulesField, referencesField, seoField, titleField} from '../fields'
 
-const isHomepage = (document) => ['homepage', 'drafts.homepage'].includes(document?._id)
-const isResearchLanding = (document) =>
-  ['page-research', 'drafts.page-research'].includes(document?._id)
+// Tests for whether a document is the page with ID `id`, or its draft
+const isPage = (id) => (document) => [id, `drafts.${id}`].includes(document?._id)
+const isHomepage = isPage('homepage')
+const isPeopleLanding = isPage('page-people')
+const isResearchLanding = isPage('page-research')
 
 /**
  * Any page that isn't a person, event or other document: the homepage,
@@ -53,6 +55,7 @@ export default defineType({
       type: 'richText',
       title: 'Introduction',
       description: 'The large text under the headline. Optional.',
+      hidden: ({document}) => isHomepage(document) || isPeopleLanding(document),
     }),
     defineField({
       name: 'links',
@@ -62,7 +65,15 @@ export default defineType({
       of: [{type: 'navLink'}],
       hidden: ({document}) => !isResearchLanding(document),
     }),
-    modulesField({hidden: ({document}) => isResearchLanding(document)}),
+    referencesField('roleFilters', 'Role Filters', 'role', {
+      description:
+        'The Role buttons above everyone, in this order. Roles with no one yet are left out.',
+      hidden: ({document}) => !isPeopleLanding(document),
+    }),
+    modulesField({
+      hidden: ({document}) =>
+        isHomepage(document) || isPeopleLanding(document) || isResearchLanding(document),
+    }),
     seoField(),
   ],
 })

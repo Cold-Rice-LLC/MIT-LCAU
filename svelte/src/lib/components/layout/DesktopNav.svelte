@@ -168,7 +168,13 @@
 								]}
 							>
 								{section.title}{#if !open && current && trail.link}
-									&nbsp;→ <span class="text-highlight">{trail.link.label}</span>
+									&nbsp;→
+									{#if trail.nested}
+										{trail.link.label} →
+										<span class="text-highlight">{page.data.seo?.title}</span>
+									{:else}
+										<span class="text-highlight">{trail.link.label}</span>
+									{/if}
 								{/if}
 							</a>
 							{#if open}

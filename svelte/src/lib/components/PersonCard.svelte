@@ -1,39 +1,19 @@
 <script>
-	import AppLink from '#lib/components/AppLink.svelte';
-	import ImageFrame from '#lib/components/ImageFrame.svelte';
-	import Tag from '#lib/components/Tag.svelte';
+	import Card from '#lib/components/Card.svelte';
 
 	/**
-	 * Figma's D - Card - Box / M - Card - Box for a person: their first role
-	 * as a tag, a square photo, their name and positions, linking to their
-	 * page. The photo multiplies into the grey, as in Figma.
+	 * A person's Card: their role as the tag, a square photo, their name and
+	 * positions, on grey (queried with personCard).
 	 */
-	let { person, class: className } = $props();
+	let { person } = $props();
 </script>
 
-<AppLink
+<Card
 	link={person.link}
-	class={[
-		'flex h-full flex-col gap-xs rounded-def bg-ui px-[0.9rem] pt-[0.9rem] pb-xs lg:px-xs lg:pt-xs lg:pb-sm',
-		className
-	]}
->
-	{#if person.role}
-		<Tag label={person.role} />
-	{/if}
-	<ImageFrame
-		as="span"
-		image={person.photo}
-		aspect={1}
-		sizes="(width >= 1024px) 25vw, 50vw"
-		class="mix-blend-multiply"
-	/>
-	<span class="text-body-lg text-trim lg:leading-[1.1] lg:tracking-[-0.02em]">
-		{person.name}
-	</span>
-	{#if person.positions?.length}
-		<span class="text-body text-trim lg:leading-[1.3] lg:tracking-slight">
-			{person.positions.join('; ')}
-		</span>
-	{/if}
-</AppLink>
+	tag={person.role}
+	image={person.photo}
+	aspect={1}
+	title={person.name}
+	meta={person.positions?.join('; ')}
+	class="bg-ui"
+/>

@@ -8,6 +8,7 @@ const documentTypes = [
   ['role', 'Roles'],
   ['event', 'Events'],
   ['research', 'Research'],
+  ['researchCategory', 'Research Categories'],
   ['exhibition', 'Exhibitions'],
   ['course', 'Courses'],
   ['educationPage', 'Education'],

@@ -193,6 +193,28 @@ is desktop.
 	margin-inline: auto;
 }
 
+/* Cards four across, two on phones: every grid of D - Card - Box */
+@utility card-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--spacing-xs);
+
+	@media (width >= 1024px) {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}
+
+/* Room above Explore after a page's last section */
+@utility end-gap {
+	&:last-child {
+		margin-bottom: var(--spacing-xl);
+
+		@media (width >= 1024px) {
+			margin-bottom: var(--spacing-3xl);
+		}
+	}
+}
+
 /* Links that fade to half on hover, as in the footer */
 @utility hover-fade {
 	transition: opacity 200ms var(--default-transition-timing-function);

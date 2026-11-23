@@ -65,7 +65,10 @@
 		<!-- TEMPORARY min-h-svh: room to scroll past the sidebar until pages
 		     have content -->
 		<main
-			class={['min-h-svh lg:grid lg:grid-cols-9 lg:gap-x-xs', home ? 'lg:pt-xs' : 'lg:pt-[5.8rem]']}
+			class={[
+				'min-h-svh lg:grid lg:grid-cols-9 lg:content-start lg:gap-x-xs',
+				home ? 'lg:pt-xs' : 'lg:pt-[5.8rem]'
+			]}
 		>
 			{@render children()}
 		</main>

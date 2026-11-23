@@ -9,6 +9,7 @@ import opportunity from './documents/opportunity'
 import page from './documents/page'
 import person from './documents/person'
 import research from './documents/research'
+import researchCategory from './documents/researchCategory'
 import role from './documents/role'
 import {moduleTypes} from './modules'
 import exploreLink from './objects/exploreLink'
@@ -28,6 +29,7 @@ export const schemaTypes = [
   role,
   event,
   research,
+  researchCategory,
   exhibition,
   course,
   educationPage,
