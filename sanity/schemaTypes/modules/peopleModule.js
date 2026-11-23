@@ -1,11 +1,15 @@
 import {UsersIcon} from '@sanity/icons/Users'
 import {defineField, defineType} from 'sanity'
-import {personRoles} from '../documents/person'
+import {radioField, referencesField} from '../fields'
 import {headingField} from './headingField'
 
+const isTabs = (parent) => parent?.display === 'tabs'
+
 /**
- * A grid of people, like "SPURS Current Fellows": everyone with a role,
- * or people picked one by one.
+ * People as a grid, like "SPURS Current Fellows": everyone with a role,
+ * or people picked one by one. Or as role tabs, like the About page's:
+ * the first four people with each role, alphabetically, and a link to
+ * the People page.
  */
 export default defineType({
   name: 'peopleModule',
@@ -14,32 +18,40 @@ export default defineType({
   icon: UsersIcon,
   fields: [
     headingField(),
+    radioField('display', 'Display', {Grid: 'grid', 'Role tabs': 'tabs'}),
     defineField({
       name: 'text',
       type: 'richText',
       title: 'Text',
+      hidden: ({parent}) => isTabs(parent),
     }),
     defineField({
       name: 'role',
-      type: 'string',
+      type: 'reference',
       title: 'Everyone With Role',
       description: 'Leave empty to pick people below instead.',
-      options: {list: personRoles},
+      to: [{type: 'role'}],
+      hidden: ({parent}) => isTabs(parent),
     }),
-    defineField({
-      name: 'people',
-      type: 'array',
-      title: 'People',
-      of: [{type: 'reference', to: [{type: 'person'}]}],
-      validation: (rule) => rule.unique(),
-      hidden: ({parent}) => Boolean(parent?.role),
+    referencesField('people', 'People', 'person', {
+      hidden: ({parent}) => isTabs(parent) || Boolean(parent?.role),
+    }),
+    referencesField('roles', 'Roles', 'role', {
+      description: 'One tab each, in this order. The first is selected to start.',
+      validation: (rule) =>
+        rule
+          .unique()
+          .custom((roles, {parent}) =>
+            isTabs(parent) && !roles?.length ? 'Pick at least one role' : true,
+          ),
+      hidden: ({parent}) => !isTabs(parent),
     }),
   ],
   preview: {
-    select: {heading: 'heading', role: 'role'},
-    prepare: ({heading, role}) => ({
+    select: {heading: 'heading', display: 'display', role: 'role.title'},
+    prepare: ({heading, display, role}) => ({
       title: heading ?? 'People',
-      subtitle: role ? `People: ${personRoles.find(({value}) => value === role)?.title}` : 'People',
+      subtitle: display === 'tabs' ? 'People: role tabs' : role ? `People: ${role}` : 'People',
     }),
   },
 })

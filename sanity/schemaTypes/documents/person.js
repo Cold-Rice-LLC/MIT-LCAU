@@ -1,18 +1,6 @@
 import {UserIcon} from '@sanity/icons/User'
 import {defineField, defineType} from 'sanity'
-import {imageField, seoField, slugField} from '../fields'
-
-// The People page's Role filter, and the tag on each person's card
-export const personRoles = [
-  {title: 'Administrative Staff', value: 'administrativeStaff'},
-  {title: 'Affiliated Faculty', value: 'affiliatedFaculty'},
-  {title: 'Research Staff', value: 'researchStaff'},
-  {title: 'PhD Student', value: 'phdStudent'},
-  {title: 'PhD Alumni', value: 'phdAlumni'},
-  {title: 'Visiting Scholar', value: 'visitingScholar'},
-  {title: 'SPURS Team', value: 'spursTeam'},
-  {title: 'SPURS Fellow', value: 'spursFellow'},
-]
+import {imageField, referencesField, seoField, slugField} from '../fields'
 
 /**
  * Someone at or connected to LCAU. Their research and courses list on
@@ -31,13 +19,8 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     slugField({options: {source: 'name'}}),
-    defineField({
-      name: 'roles',
-      type: 'array',
-      title: 'Roles',
+    referencesField('roles', 'Roles', 'role', {
       description: 'The first shows as their tag. Every one adds them to that Role filter.',
-      of: [{type: 'string'}],
-      options: {list: personRoles},
       validation: (rule) => rule.required().min(1).unique(),
     }),
     defineField({
@@ -86,11 +69,6 @@ export default defineType({
   ],
   orderings: [{title: 'Name', name: 'nameAsc', by: [{field: 'name', direction: 'asc'}]}],
   preview: {
-    select: {title: 'name', role: 'roles.0', media: 'photo'},
-    prepare: ({title, role, media}) => ({
-      title,
-      subtitle: personRoles.find(({value}) => value === role)?.title,
-      media,
-    }),
+    select: {title: 'name', subtitle: 'roles.0.title', media: 'photo'},
   },
 })

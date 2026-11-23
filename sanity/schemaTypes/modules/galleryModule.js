@@ -1,5 +1,6 @@
 import {ImagesIcon} from '@sanity/icons/Images'
 import {defineField, defineType} from 'sanity'
+import {radioField} from '../fields'
 import {headingField} from './headingField'
 
 /**
@@ -13,20 +14,7 @@ export default defineType({
   icon: ImagesIcon,
   fields: [
     headingField(),
-    defineField({
-      name: 'display',
-      type: 'string',
-      title: 'Display',
-      options: {
-        list: [
-          {title: 'Carousel', value: 'carousel'},
-          {title: 'Grid', value: 'grid'},
-        ],
-        layout: 'radio',
-        direction: 'horizontal',
-      },
-      initialValue: 'carousel',
-    }),
+    radioField('display', 'Display', {Carousel: 'carousel', Grid: 'grid'}),
     defineField({
       name: 'images',
       type: 'array',

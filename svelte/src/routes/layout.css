@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+/* Swiper's own styles, a layer under the utilities so classes can override
+   them (a slide's width, say) */
+@import 'swiper/css' layer(components);
 
 /*
 Tailwind Config
@@ -147,6 +150,47 @@ is desktop.
    height to baseline" does, so padding around a line matches the design */
 @utility text-trim {
 	text-box: trim-both cap alphabetic;
+}
+
+/* text-trim for text cut off with overflow (truncate, line-clamp): trimmed
+   to the descenders rather than the baseline, so they aren't clipped */
+@utility text-trim-clipped {
+	text-box: trim-both cap text;
+}
+
+/* Figma's CTA (D - CTA, M - CTA): purple on grey, with a soft purple glow
+   inside, and case-sensitive forms for the arrows and capitals */
+@utility cta {
+	padding: var(--spacing-sm) var(--spacing-md);
+	border-radius: var(--radius-def);
+	background-color: var(--color-ui);
+	box-shadow: inset 0 0 0.6rem color-mix(in srgb, var(--color-highlight) 25%, transparent);
+	color: var(--color-highlight);
+	font-size: 1.6rem;
+	line-height: 1.25;
+	font-feature-settings: 'case' 1;
+	text-box: trim-both cap alphabetic;
+
+	@media (width >= 1024px) {
+		font-size: 2rem;
+		line-height: 1;
+	}
+}
+
+/* Figma's D - Buttons and refine controls: a grey rounded button, with
+   case-sensitive forms for the arrows and capitals. Text style apart. */
+@utility button {
+	padding: 1rem var(--spacing-xs);
+	border-radius: var(--radius-def);
+	background-color: var(--color-ui);
+	font-feature-settings: 'case' 1;
+}
+
+/* The site's paragraph column, centred: 690px, half the content width */
+@utility measure {
+	width: 100%;
+	max-width: var(--container-measure);
+	margin-inline: auto;
 }
 
 /* Links that fade to half on hover, as in the footer */

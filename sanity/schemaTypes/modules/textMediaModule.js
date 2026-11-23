@@ -1,5 +1,6 @@
 import {ImageIcon} from '@sanity/icons/Image'
 import {defineField, defineType} from 'sanity'
+import {radioField} from '../fields'
 import {headingField} from './headingField'
 
 /**
@@ -18,20 +19,7 @@ export default defineType({
       type: 'richText',
       title: 'Text',
     }),
-    defineField({
-      name: 'mediaType',
-      type: 'string',
-      title: 'Media',
-      options: {
-        list: [
-          {title: 'Images', value: 'images'},
-          {title: 'Video', value: 'video'},
-        ],
-        layout: 'radio',
-        direction: 'horizontal',
-      },
-      initialValue: 'images',
-    }),
+    radioField('mediaType', 'Media', {Images: 'images', Video: 'video'}),
     defineField({
       name: 'images',
       type: 'array',
@@ -47,21 +35,12 @@ export default defineType({
       title: 'Video',
       hidden: ({parent}) => parent?.mediaType !== 'video',
     }),
-    defineField({
-      name: 'layout',
-      type: 'string',
-      title: 'Layout',
-      description: 'Two images or a video always go above the text.',
-      options: {
-        list: [
-          {title: 'Media beside text', value: 'beside'},
-          {title: 'Media above text', value: 'above'},
-        ],
-        layout: 'radio',
-        direction: 'horizontal',
-      },
-      initialValue: 'beside',
-    }),
+    radioField(
+      'layout',
+      'Layout',
+      {'Media beside text': 'beside', 'Media above text': 'above'},
+      {description: 'Two images or a video always go above the text.'},
+    ),
   ],
   preview: {
     select: {heading: 'heading', media: 'images.0', mediaType: 'mediaType'},

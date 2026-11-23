@@ -1,8 +1,12 @@
 import {TextIcon} from '@sanity/icons/Text'
 import {defineField, defineType} from 'sanity'
+import {radioField} from '../fields'
 import {headingField} from './headingField'
 
-/** A column of text, with or without a heading. */
+/**
+ * A column of text, with or without a heading: regular paragraphs, or
+ * large text across more of the page, like the About page's Mission.
+ */
 export default defineType({
   name: 'textModule',
   type: 'object',
@@ -16,6 +20,7 @@ export default defineType({
       title: 'Text',
       validation: (rule) => rule.required(),
     }),
+    radioField('size', 'Size', {Regular: 'regular', Large: 'large'}),
   ],
   preview: {
     select: {heading: 'heading', text: 'text'},

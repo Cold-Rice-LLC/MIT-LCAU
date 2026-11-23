@@ -1,6 +1,6 @@
 import { client } from '#lib/sanity/client.js';
 import { imageFields } from '#lib/sanity/images.js';
-import { internalFields, linkFields, plainTextFields } from '#lib/sanity/links.js';
+import { internalFields, linkFields, portableTextFields } from '#lib/sanity/links.js';
 
 export async function load() {
 	const settings = await client.fetch(`
@@ -24,10 +24,10 @@ export async function load() {
 			section1LinksHeading,
 			section1Links[]{ _key, ${linkFields} },
 			section2Heading,
-			section2LinksColumn1[]{ ${plainTextFields} },
-			section2LinksColumn2[]{ ${plainTextFields} },
+			section2LinksColumn1[]{ ${portableTextFields} },
+			section2LinksColumn2[]{ ${portableTextFields} },
 			section3Heading,
-			section3Text[]{ ${plainTextFields} }
+			section3Text[]{ ${portableTextFields} }
 		}
 	`);
 

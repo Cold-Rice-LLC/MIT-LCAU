@@ -5,6 +5,7 @@ import {landingPages} from './landingPages'
 // The kinds of document listed on their own, in menu order
 const documentTypes = [
   ['person', 'People'],
+  ['role', 'Roles'],
   ['event', 'Events'],
   ['research', 'Research'],
   ['exhibition', 'Exhibitions'],

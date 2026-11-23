@@ -42,10 +42,17 @@ export default defineType({
       hidden: ({document}) => !isHomepage(document),
     }),
     defineField({
+      name: 'headline',
+      type: 'string',
+      title: 'Headline',
+      description: 'The large heading at the top of the page, like “About LCAU”. Optional.',
+      hidden: ({document}) => isHomepage(document),
+    }),
+    defineField({
       name: 'intro',
       type: 'richText',
       title: 'Introduction',
-      description: 'The large text at the top of the page.',
+      description: 'The large text under the headline. Optional.',
     }),
     defineField({
       name: 'links',

@@ -12,6 +12,13 @@ export default defineType({
   fields: [
     titleField(),
     slugField(),
+    defineField({
+      name: 'open',
+      type: 'boolean',
+      title: 'Open',
+      description: 'Listed on the About page while it’s open.',
+      initialValue: true,
+    }),
     excerptField({description: 'Shows in the list on the About page.'}),
     defineField({
       name: 'term',
@@ -60,6 +67,10 @@ export default defineType({
     {title: 'Newest', name: 'postedOnDesc', by: [{field: 'postedOn', direction: 'desc'}]},
   ],
   preview: {
-    select: {title: 'title', subtitle: 'term'},
+    select: {title: 'title', term: 'term', open: 'open'},
+    prepare: ({title, term, open}) => ({
+      title,
+      subtitle: [open === false && 'Closed', term].filter(Boolean).join(' · '),
+    }),
   },
 })

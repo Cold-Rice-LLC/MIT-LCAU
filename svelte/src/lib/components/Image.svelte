@@ -48,8 +48,8 @@
 	{loading}
 	class={className}
 	class:loaded
-	onload={() =>
-		el
+	onload={({ currentTarget }) =>
+		currentTarget
 			.decode()
 			.catch(() => {})
 			.then(() => (loaded = true))}

@@ -16,10 +16,10 @@ export const linkFields = `
 `;
 
 /**
- * GROQ projection for a plainText field: its lines, with each link mark's
- * page resolved the way linkFields resolves it.
+ * GROQ projection for a plainText or richText field's blocks, with each
+ * link mark's page resolved the way linkFields resolves it.
  */
-export const plainTextFields = `
+export const portableTextFields = `
 	...,
 	markDefs[]{ ..., "internal": internalLink->{ ${internalFields} } }
 `;
@@ -34,7 +34,7 @@ const paths = {
 	course: (slug) => `/courses/${slug}`,
 	educationPage: (slug) => `/education/${slug}`,
 	news: (slug) => `/news/${slug}`,
-	opportunity: (slug) => `/opportunities/${slug}`,
+	opportunity: (slug) => `/about/opportunities/${slug}`,
 	caseStudy: (slug) => `/case-studies/${slug}`
 };
 

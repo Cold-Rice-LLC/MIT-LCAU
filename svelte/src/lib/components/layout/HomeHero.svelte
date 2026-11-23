@@ -1,7 +1,5 @@
 <script>
-	import Swiper from 'swiper';
-	import { Keyboard } from 'swiper/modules';
-	import 'swiper/css';
+	import { Carousel } from '#lib/carousel.svelte.js';
 	import Image from '#lib/components/Image.svelte';
 	import Logo from '#lib/components/Logo.svelte';
 
@@ -16,48 +14,40 @@
 	 */
 	let { slides } = $props();
 
-	let current = $state(0);
-
-	/** @type {Swiper} */
-	let swiper;
-
-	// The current slide and the ones either side load straight away, so the
-	// next or previous one is ready before it's slid to
-	const near = (i) =>
-		[0, 1, slides.length - 1].includes((i - current + slides.length) % slides.length);
-
 	// Swiper reorders the slides Svelte rendered to loop them; they never
 	// change after load, so the two don't fight over them
-	const carousel = (el) => {
-		swiper = new Swiper(el, {
-			modules: [Keyboard],
-			loop: slides.length > 1,
-			allowTouchMove: slides.length > 1,
-			// Drags start on the prev/next buttons, outside the wrapper
-			touchEventsTarget: 'container',
-			keyboard: true,
-			on: { realIndexChange: ({ realIndex }) => (current = realIndex) }
-		});
-		return () => swiper.destroy();
-	};
+	const carousel = new Carousel(() => slides.length, {
+		loop: slides.length > 1,
+		allowTouchMove: slides.length > 1,
+		// Drags start on the prev/next buttons, outside the wrapper
+		touchEventsTarget: 'container'
+	});
 
 	// A drag that starts on a button ends in a click too: ignore that one
-	const go = (by) => swiper.allowClick && (by < 0 ? swiper.slidePrev() : swiper.slideNext());
+	const go = (by) => {
+		const { swiper } = carousel;
+		if (!swiper?.allowClick) return;
+		if (by < 0) swiper.slidePrev();
+		else swiper.slideNext();
+	};
 </script>
 
 {#if slides.length}
 	<section
 		aria-label="Featured"
-		class="hidden h-svh grid-rows-[1fr_auto] overflow-hidden text-white *:col-start-1 lg:grid"
+		class="hidden h-svh grid-cols-1 grid-rows-[1fr_auto] overflow-hidden text-white *:col-start-1 lg:grid"
 	>
-		<!-- w-full: Swiper's auto side margins would stop the grid stretching it -->
-		<div class="swiper row-span-full w-full" {@attach carousel}>
+		<!-- w-full: Swiper's auto side margins would stop the grid stretching
+		     it. grid-cols-1 pins the column to the screen: left to size itself,
+		     it grows to a photo's own width as it loads, and Swiper, measuring
+		     then, jumps to the wrong place -->
+		<div class="swiper row-span-full w-full" {@attach carousel.attach}>
 			<div class="swiper-wrapper">
 				{#each slides as slide, i (slide._key)}
 					<Image
 						image={slide}
-						loading={near(i) ? 'eager' : 'lazy'}
-						aria-hidden={i !== current}
+						loading={carousel.near(i) ? 'eager' : 'lazy'}
+						aria-hidden={i !== carousel.current}
 						class="swiper-slide object-cover"
 					/>
 				{/each}
@@ -79,13 +69,15 @@
 
 		<Logo fill class="logo" />
 
+		<!-- Trimmed to the descenders, so a cut-off caption keeps them: the
+		     6px under them makes the 12px under the baseline, as in Figma -->
 		<p
 			aria-live="polite"
-			class="pointer-events-none z-10 row-start-2 flex gap-md px-[1.6rem] py-xs text-body whitespace-nowrap"
+			class="pointer-events-none z-10 row-start-2 flex gap-md px-[1.6rem] pt-xs pb-2xs text-body whitespace-nowrap *:text-trim-clipped"
 		>
-			<span class="text-trim">{current + 1} of {slides.length}</span>
-			{#if slides[current].caption}
-				<span class="min-w-0 flex-1 truncate text-trim">{slides[current].caption}</span>
+			<span>{carousel.current + 1} of {slides.length}</span>
+			{#if slides[carousel.current].caption}
+				<span class="min-w-0 flex-1 truncate">{slides[carousel.current].caption}</span>
 			{/if}
 		</p>
 	</section>

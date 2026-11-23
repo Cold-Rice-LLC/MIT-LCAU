@@ -74,6 +74,24 @@ export const seoField = (options = {}) =>
     ...options,
   })
 
+/**
+ * A choice of a few options as radio buttons in a row, the first chosen to
+ * start. `choices` maps each option's title to its value, in order.
+ */
+export const radioField = (name, title, choices, options = {}) =>
+  defineField({
+    name,
+    type: 'string',
+    title,
+    options: {
+      list: Object.entries(choices).map(([title, value]) => ({title, value})),
+      layout: 'radio',
+      direction: 'horizontal',
+    },
+    initialValue: Object.values(choices)[0],
+    ...options,
+  })
+
 export const referencesField = (name, title, to, options = {}) =>
   defineField({
     name,

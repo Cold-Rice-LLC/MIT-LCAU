@@ -3,7 +3,7 @@
 
 	/**
 	 * A Sanity plainText value (paragraphs of text and links) with
-	 * plainTextFields' projection. Line breaks (Shift+Enter in the Studio)
+	 * portableTextFields' projection. Line breaks (Shift+Enter in the Studio)
 	 * stay as typed, and a paragraph after another has a line's space above.
 	 * `truncate` keeps each line to one, cut off with an ellipsis where it's
 	 * too long for its column.

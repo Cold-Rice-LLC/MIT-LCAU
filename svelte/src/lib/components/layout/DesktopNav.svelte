@@ -141,11 +141,7 @@
 						autocomplete="off"
 						class="h-xl min-w-0 flex-1 bg-transparent p-0 text-[4.8rem] leading-none tracking-[-0.02em] outline-none placeholder:text-white/50"
 					/>
-					<button
-						class="go rounded-def bg-ui px-md py-sm text-[2rem] leading-none text-highlight text-trim"
-					>
-						Go
-					</button>
+					<button class="cta"> Go </button>
 				</form>
 			{:else}
 				<ul
@@ -235,11 +231,5 @@
 	.instant,
 	.instant :global(*) {
 		transition: none;
-	}
-
-	/* Figma's CTA: case-sensitive forms, and a soft purple glow inside */
-	.go {
-		font-feature-settings: 'case' 1;
-		box-shadow: inset 0 0 0.6rem color-mix(in srgb, var(--color-highlight) 25%, transparent);
 	}
 </style>

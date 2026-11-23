@@ -1,7 +1,9 @@
 import {defineArrayMember, defineType} from 'sanity'
 import accordionModule from './accordionModule'
+import columnsModule from './columnsModule'
 import galleryModule from './galleryModule'
 import groupedImagesModule from './groupedImagesModule'
+import opportunitiesModule from './opportunitiesModule'
 import peopleModule from './peopleModule'
 import quoteModule from './quoteModule'
 import textMediaModule from './textMediaModule'
@@ -24,14 +26,18 @@ const modules = defineType({
     'quoteModule',
     'accordionModule',
     'peopleModule',
+    'opportunitiesModule',
+    'columnsModule',
   ].map((type) => defineArrayMember({type})),
 })
 
 export const moduleTypes = [
   modules,
   accordionModule,
+  columnsModule,
   galleryModule,
   groupedImagesModule,
+  opportunitiesModule,
   peopleModule,
   quoteModule,
   textMediaModule,
