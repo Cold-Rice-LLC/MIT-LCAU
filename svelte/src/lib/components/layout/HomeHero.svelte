@@ -6,14 +6,20 @@
 	 * The full-screen carousel at the top of the homepage (its Hero Slides),
 	 * with the logo's words stretched to its corners. The left and right
 	 * halves of the screen are the previous and next buttons, wrapping
-	 * around; the count and caption run along the bottom. Desktop only for
-	 * now, so text-body is its 16px desktop size.
+	 * around, with the slides either side loaded ahead; the count and
+	 * caption run along the bottom. Desktop only for now, so text-body is
+	 * its 16px desktop size.
 	 */
 	let { slides } = $props();
 
 	let current = $state(0);
 
 	const go = (by) => (current = (current + by + slides.length) % slides.length);
+
+	// The current slide and the ones either side load straight away, so the
+	// next or previous one is ready before it's clicked to
+	const near = (i) =>
+		[0, 1, slides.length - 1].includes((i - current + slides.length) % slides.length);
 </script>
 
 {#if slides.length}
@@ -21,7 +27,7 @@
 		{#each slides as slide, i (slide._key)}
 			<Image
 				image={slide}
-				loading={i === 0 ? 'eager' : 'lazy'}
+				loading={near(i) ? 'eager' : 'lazy'}
 				class={['absolute inset-0 size-full object-cover', i !== current && 'invisible']}
 			/>
 		{/each}

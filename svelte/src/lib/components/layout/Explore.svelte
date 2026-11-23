@@ -23,7 +23,7 @@
 				<li class="group relative border-t-2 border-black/20">
 					<AppLink {link} class="flex gap-[3.2rem] py-sm lg:py-md">
 						<span
-							class="flex-1 text-display transition-colors duration-200 text-trim group-hover:text-highlight"
+							class="flex-1 text-display leading-[0.95] transition-colors duration-200 text-trim group-hover:text-highlight"
 						>
 							{link.label}
 						</span>
