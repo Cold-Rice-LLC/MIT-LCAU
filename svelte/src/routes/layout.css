@@ -70,7 +70,7 @@ is desktop.
 @utility text-h1 {
 	font-size: 4.2rem;
 	font-weight: 400;
-	line-height: 1.1;
+	line-height: 0.95;
 	letter-spacing: -0.02em;
 	font-feature-settings: 'case' 1;
 

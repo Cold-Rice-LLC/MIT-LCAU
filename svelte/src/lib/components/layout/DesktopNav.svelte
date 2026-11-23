@@ -6,13 +6,14 @@
 	import { prefersReducedMotion } from 'svelte/motion';
 	import AppLink from '#lib/components/AppLink.svelte';
 	import SearchIcon from '#lib/components/icons/Search.svelte';
-	import { activeTrail, sectionHref } from '#lib/navigation.js';
+	import { activeTrail, breadcrumb, sectionHref } from '#lib/navigation.js';
 
 	/**
 	 * Desktop main menu: a grey pill of section titles centred over the
 	 * content grid, stuck to the top of the page. Inside a section, the
 	 * others dim and the current one shows in purple (as "Events → Upcoming
-	 * Events" on a page under it). Hovering or tabbing into it grows it to
+	 * Events" on a page under it), never wider than the grid: a long
+	 * breadcrumb ends in an ellipsis. Hovering or tabbing into it grows it to
 	 * the grid's full width with every section's links; Search turns it
 	 * into a purple search bar. Leaving, or Escape, shrinks it back.
 	 *
@@ -37,6 +38,7 @@
 	let instant = $state(false);
 
 	let trail = $derived(activeTrail(navigation, page.url.pathname));
+	let crumb = $derived(breadcrumb(trail, page.data.seo?.title));
 	let duration = $derived(prefersReducedMotion.current ? 0 : 200);
 
 	const startSearch = async () => {
@@ -152,7 +154,7 @@
 						'shrink-0 self-start text-[2rem] leading-none',
 						open
 							? 'grid w-[100cqw] auto-cols-fr grid-flow-col gap-xs px-xs pt-[1rem] pb-[12rem]'
-							: 'flex gap-md px-xs py-[1rem] whitespace-nowrap'
+							: 'flex max-w-[100cqw] gap-md px-xs py-[1rem] whitespace-nowrap'
 					]}
 					bind:this={list}
 					bind:offsetWidth={width}
@@ -160,24 +162,22 @@
 				>
 					{#each navigation as section (section._key)}
 						{@const current = section === trail.section}
-						<li class="flex flex-col gap-xs">
+						<!-- The current section's breadcrumb gives way first when the
+						     pill would outgrow the grid, ending in an ellipsis -->
+						<li class={['flex flex-col gap-xs', !open && current && 'min-w-0']}>
 							<a
 								href={sectionHref(section)}
 								class={[
 									'transition-colors duration-300 text-trim',
-									open && 'hover:text-highlight',
-									!open && current && !trail.link && 'text-highlight',
+									open ? 'hover:text-highlight' : 'overflow-x-clip text-ellipsis',
+									!open && current && !crumb.here && 'text-highlight',
 									!open && trail.section && !current && 'text-black/40'
 								]}
 							>
-								{section.title}{#if !open && current && trail.link}
+								{section.title}{#if !open && current && crumb.here}
 									&nbsp;→
-									{#if trail.nested}
-										{trail.link.label} →
-										<span class="text-highlight">{page.data.seo?.title}</span>
-									{:else}
-										<span class="text-highlight">{trail.link.label}</span>
-									{/if}
+									{#if crumb.via}{crumb.via} →{/if}
+									<span class="text-highlight">{crumb.here}</span>
 								{/if}
 							</a>
 							{#if open}

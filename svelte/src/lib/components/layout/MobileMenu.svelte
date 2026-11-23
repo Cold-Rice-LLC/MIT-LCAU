@@ -2,7 +2,7 @@
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import AppLink from '#lib/components/AppLink.svelte';
-	import { activeTrail, sectionHref } from '#lib/navigation.js';
+	import { activeTrail, breadcrumb, sectionHref } from '#lib/navigation.js';
 
 	/**
 	 * Mobile main menu: a bar that stays at the top of the page, showing
@@ -13,6 +13,7 @@
 
 	let open = $state(false);
 	let trail = $derived(activeTrail(navigation, page.url.pathname));
+	let crumb = $derived(breadcrumb(trail, page.data.seo?.title));
 
 	afterNavigate(() => (open = false));
 </script>
@@ -34,10 +35,8 @@
 				<span class="min-w-0 flex-1 truncate">
 					{#if trail.section}
 						{trail.section.title} →
-						{#if trail.nested}{trail.link.label} →{/if}
-						<span class="text-highlight">
-							{trail.nested ? page.data.seo?.title : (trail.link?.label ?? page.data.seo?.title)}
-						</span>
+						{#if crumb.via}{crumb.via} →{/if}
+						<span class="text-highlight">{crumb.here ?? page.data.seo?.title}</span>
 					{/if}
 				</span>
 				{open ? 'Close' : 'Menu'}

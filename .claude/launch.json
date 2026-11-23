@@ -8,6 +8,12 @@
       "port": 5180
     },
     {
+      "name": "svelte-alt",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "source ~/.nvm/nvm.sh && nvm use 24 >/dev/null && cd svelte && npm run dev -- --port 5182 --strictPort"],
+      "port": 5182
+    },
+    {
       "name": "sanity",
       "runtimeExecutable": "bash",
       "runtimeArgs": ["-c", "source ~/.nvm/nvm.sh && nvm use 24 >/dev/null && cd sanity && npm run dev -- --port 3333"],
