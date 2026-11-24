@@ -6,6 +6,16 @@ export const sectionHref = (section) =>
 		? linkHref({ linkType: 'internal', internal: section.landing })
 		: linkHref(section.links?.[0]);
 
+// The first section with a link to `href`, and that link, or whose landing
+// page is there, with a null link
+const findTrail = (navigation, href) => {
+	for (const section of navigation) {
+		const link = section.links?.find((link) => linkHref(link) === href);
+		if (link) return { section, link };
+		if (section.landing && sectionHref(section) === href) return { section, link: null };
+	}
+};
+
 /**
  * The menu section the current page is in, and the link under it that
  * points here, for highlighting and breadcrumbs. `link` is null on a
@@ -15,15 +25,15 @@ export const sectionHref = (section) =>
  * landing page instead, like an opportunity's under About's, is nested in
  * the section alone, with a null `link`: "About → Title". That holds even
  * when a link also points at the landing page, as Mission does.
+ * A page can name the one it's nested in, by its href, as `parent`: an
+ * event is under Upcoming Events or Past Events depending on its date.
  */
-export const activeTrail = (navigation, pathname) => {
-	for (const section of navigation) {
-		const link = section.links?.find((link) => linkHref(link) === pathname);
-		if (link) return { section, link, nested: false };
-		if (section.landing && sectionHref(section) === pathname) {
-			return { section, link: null, nested: false };
-		}
-	}
+export const activeTrail = (navigation, pathname, parent) => {
+	const above = parent && findTrail(navigation, parent);
+	if (above) return { ...above, nested: true };
+	const here = findTrail(navigation, pathname);
+	if (here) return { ...here, nested: false };
+
 	const isUnder = (href) => href?.startsWith('/') && pathname.startsWith(`${href}/`);
 	for (const section of navigation) {
 		const landing = section.landing && sectionHref(section);

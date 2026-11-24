@@ -1,6 +1,5 @@
 import { plain } from '#lib/search.js';
-
-const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
+import { compare } from '#lib/sort.js';
 
 /**
  * What a person sorts by: their Sort Name, or else their name last word
@@ -14,7 +13,7 @@ const sortKey = ({ sortName, name = '' }) => {
 
 /** `people` A–Z by sortKey, or Z–A given `descending`. A new array. */
 export const sortPeople = (people, descending = false) => {
-	const sorted = people.toSorted((a, b) => collator.compare(sortKey(a), sortKey(b)));
+	const sorted = people.toSorted((a, b) => compare(sortKey(a), sortKey(b)));
 	return descending ? sorted.reverse() : sorted;
 };
 

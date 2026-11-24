@@ -6,6 +6,7 @@
 	import PeopleModule from '#lib/components/modules/PeopleModule.svelte';
 	import TextMediaModule from '#lib/components/modules/TextMediaModule.svelte';
 	import TextModule from '#lib/components/modules/TextModule.svelte';
+	import VideoModule from '#lib/components/modules/VideoModule.svelte';
 
 	/**
 	 * A page's modules (queried with modulesFields), each a Section with
@@ -16,18 +17,24 @@
 	const components = {
 		textModule: TextModule,
 		textMediaModule: TextMediaModule,
+		videoModule: VideoModule,
 		galleryModule: GalleryModule,
 		peopleModule: PeopleModule,
 		opportunitiesModule: OpportunitiesModule,
 		columnsModule: ColumnsModule
 	};
+
+	// Sanity returns null for an empty field, which a module's defaults
+	// (like no images) don't replace; left out, they do
+	const filled = (module) =>
+		Object.fromEntries(Object.entries(module).filter(([, value]) => value !== null));
 </script>
 
 {#each modules as module (module._key)}
 	{@const Module = components[module._type]}
 	{#if Module}
 		<Section heading={module.heading}>
-			<Module {...module} />
+			<Module {...filled(module)} />
 		</Section>
 	{/if}
 {/each}

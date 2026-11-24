@@ -8,6 +8,7 @@ import peopleModule from './peopleModule'
 import quoteModule from './quoteModule'
 import textMediaModule from './textMediaModule'
 import textModule from './textModule'
+import videoModule from './videoModule'
 
 /**
  * The flexible body of detail and landing pages, from the "all modules"
@@ -21,6 +22,7 @@ const modules = defineType({
   of: [
     'textModule',
     'textMediaModule',
+    'videoModule',
     'galleryModule',
     'groupedImagesModule',
     'quoteModule',
@@ -42,4 +44,5 @@ export const moduleTypes = [
   quoteModule,
   textMediaModule,
   textModule,
+  videoModule,
 ]

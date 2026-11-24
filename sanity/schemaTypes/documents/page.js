@@ -3,11 +3,16 @@ import {DocumentIcon} from '@sanity/icons/Document'
 import {isLandingPage} from '../../landingPages'
 import {modulesField, referencesField, seoField, titleField} from '../fields'
 
-// Tests for whether a document is the page with ID `id`, or its draft
-const isPage = (id) => (document) => [id, `drafts.${id}`].includes(document?._id)
+// Tests for whether a document is one of the pages with these IDs, or its draft
+const isPage =
+  (...ids) =>
+  (document) =>
+    ids.some((id) => [id, `drafts.${id}`].includes(document?._id))
 const isHomepage = isPage('homepage')
 const isPeopleLanding = isPage('page-people')
 const isResearchLanding = isPage('page-research')
+// Pages that only list documents, with nothing but a headline above
+const isListing = isPage('page-people', 'page-events', 'page-events-all')
 
 /**
  * Any page that isn't a person, event or other document: the homepage,
@@ -55,7 +60,7 @@ export default defineType({
       type: 'richText',
       title: 'Introduction',
       description: 'The large text under the headline. Optional.',
-      hidden: ({document}) => isHomepage(document) || isPeopleLanding(document),
+      hidden: ({document}) => isHomepage(document) || isListing(document),
     }),
     defineField({
       name: 'links',
@@ -72,7 +77,7 @@ export default defineType({
     }),
     modulesField({
       hidden: ({document}) =>
-        isHomepage(document) || isPeopleLanding(document) || isResearchLanding(document),
+        isHomepage(document) || isResearchLanding(document) || isListing(document),
     }),
     seoField(),
   ],

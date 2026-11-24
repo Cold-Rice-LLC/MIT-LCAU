@@ -1,5 +1,6 @@
 <script>
 	import AppLink from '#lib/components/AppLink.svelte';
+	import Fact from '#lib/components/Fact.svelte';
 	import RichText from '#lib/components/RichText.svelte';
 
 	let { data } = $props();
@@ -40,21 +41,14 @@
 	<h1 class="text-center text-h1 text-trim">{opportunity.title}</h1>
 	<dl class="mt-2xl grid grid-cols-2 gap-x-xs gap-y-lg lg:mt-[14.2rem] lg:grid-cols-4">
 		{#each facts as [label, value] (label)}
-			<div class="fact">
-				<dt>{label}</dt>
-				<dd>{value}</dd>
-			</div>
+			<Fact {label} {value} valueClass="lg:leading-[1.3]" />
 		{/each}
 		{#if opportunity.deadline || applyLink}
-			<div class="fact">
-				<dt>Apply</dt>
-				{#if opportunity.deadline}
-					<dd>{opportunity.deadline}</dd>
-				{/if}
+			<Fact label="Apply" value={opportunity.deadline} valueClass="lg:leading-[1.3]">
 				{#if applyLink}
 					<dd class="flex">{@render apply()}</dd>
 				{/if}
-			</div>
+			</Fact>
 		{/if}
 	</dl>
 </header>
@@ -88,25 +82,6 @@
 
 <style>
 	@reference '../../../layout.css';
-
-	/* A label over its value, the CTA under the deadline */
-	.fact {
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-sm);
-
-		& dt {
-			@apply text-label text-trim;
-		}
-
-		& dd {
-			@apply text-body-lg text-trim;
-
-			@media (width >= 1024px) {
-				line-height: 1.3;
-			}
-		}
-	}
 
 	/* The details' text, and its subheadings and How to Apply's heading:
 	   H3 on phones, H4 from lg, a section's gap above and 24px below */

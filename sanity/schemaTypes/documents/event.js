@@ -5,6 +5,7 @@ import {imageField, modulesField, referencesField, seoField, slugField, titleFie
 // The All Events Type filter, and the tag on each event's card
 export const eventTypes = [
   {title: 'Conference', value: 'conference'},
+  {title: 'Exhibition', value: 'exhibition'},
   {title: 'Lecture', value: 'lecture'},
   {title: 'Workshop', value: 'workshop'},
   {title: 'Open House', value: 'openHouse'},
@@ -20,7 +21,11 @@ export default defineType({
   fieldsets: [{name: 'when', title: 'When and Where', options: {columns: 2}}],
   fields: [
     titleField(),
-    slugField(),
+    slugField({
+      // /events/all is the All Events page
+      validation: (rule) =>
+        rule.required().custom((slug) => (slug?.current === 'all' ? '“all” is taken' : true)),
+    }),
     defineField({
       name: 'subtitle',
       type: 'string',
@@ -68,10 +73,19 @@ export default defineType({
       name: 'rsvpUrl',
       type: 'url',
       title: 'RSVP URL',
+      description: 'Where the RSVP button goes. Hidden once the event has ended.',
       fieldset: 'when',
       validation: (rule) => rule.uri({scheme: ['http', 'https', 'mailto']}),
     }),
-    imageField(),
+    defineField({
+      name: 'exhibition',
+      type: 'reference',
+      title: 'Exhibition',
+      description: 'The exhibition this event is part of, like its opening. Optional.',
+      to: [{type: 'exhibition'}],
+      options: {disableNew: true},
+    }),
+    imageField({description: 'For cards. Cropped to 3:2 around the hotspot.'}),
     modulesField(),
     referencesField('relatedEvents', 'Related Events', 'event', {
       description: 'Leave empty to show the next upcoming events.',

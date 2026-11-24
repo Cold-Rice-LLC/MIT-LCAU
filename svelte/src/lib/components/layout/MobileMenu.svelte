@@ -12,7 +12,7 @@
 	let { navigation } = $props();
 
 	let open = $state(false);
-	let trail = $derived(activeTrail(navigation, page.url.pathname));
+	let trail = $derived(activeTrail(navigation, page.url.pathname, page.data.menuParent));
 	let crumb = $derived(breadcrumb(trail, page.data.seo?.title));
 
 	afterNavigate(() => (open = false));

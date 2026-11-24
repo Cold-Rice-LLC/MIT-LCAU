@@ -215,6 +215,17 @@ is desktop.
 	}
 }
 
+/* Figma's D - Link type, for refine links and search fields: body-lg,
+   set solid from lg */
+@utility text-control {
+	@apply text-body-lg;
+
+	@media (width >= 1024px) {
+		line-height: 1;
+		letter-spacing: -0.02em;
+	}
+}
+
 /* Links that fade to half on hover, as in the footer */
 @utility hover-fade {
 	transition: opacity 200ms var(--default-transition-timing-function);

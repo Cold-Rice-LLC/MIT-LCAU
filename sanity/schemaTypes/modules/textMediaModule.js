@@ -19,6 +19,20 @@ export default defineType({
       type: 'richText',
       title: 'Text',
     }),
+    defineField({
+      name: 'note',
+      type: 'string',
+      title: 'Note',
+      description:
+        'Purple text under the text, like “This event is free and open to MIT students.”',
+    }),
+    defineField({
+      name: 'links',
+      type: 'array',
+      title: 'Buttons',
+      description: 'Under the text and note, like “RSVP”.',
+      of: [{type: 'navLink'}],
+    }),
     radioField('mediaType', 'Media', {Images: 'images', Video: 'video'}),
     defineField({
       name: 'images',

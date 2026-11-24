@@ -37,7 +37,7 @@
 	// While a navigation settles: no transitions or gliding titles
 	let instant = $state(false);
 
-	let trail = $derived(activeTrail(navigation, page.url.pathname));
+	let trail = $derived(activeTrail(navigation, page.url.pathname, page.data.menuParent));
 	let crumb = $derived(breadcrumb(trail, page.data.seo?.title));
 	let duration = $derived(prefersReducedMotion.current ? 0 : 200);
 

@@ -1,5 +1,5 @@
 import { imageFields } from '#lib/sanity/images.js';
-import { internalFields, portableTextFields } from '#lib/sanity/links.js';
+import { internalFields, linkFields, portableTextFields } from '#lib/sanity/links.js';
 
 const text = `text[]{ ${portableTextFields} }`;
 const images = `images[]{ _key, ${imageFields} }`;
@@ -18,6 +18,21 @@ export const personCard = `
 	${linkTo}
 `;
 
+// Filter for the events that have a page to list: a slug and a date
+export const listedEvents = `_type == "event" && defined(slug.current) && defined(start)`;
+
+// What an event's cards and list rows show
+export const eventCard = `
+	_id,
+	title,
+	type,
+	start,
+	end,
+	location,
+	image{ ${imageFields} },
+	${linkTo}
+`;
+
 /**
  * GROQ projection for each module in a modules field, by type. People
  * and opportunities are queried here, so the modules need nothing more.
@@ -27,7 +42,14 @@ export const modulesFields = `
 	_type,
 	heading,
 	_type == "textModule" => { size, ${text} },
-	_type == "textMediaModule" => { layout, ${text}, ${images} },
+	_type == "textMediaModule" => {
+		layout,
+		${text},
+		note,
+		links[]{ _key, ${linkFields} },
+		${images}
+	},
+	_type == "videoModule" => { video{ url, caption, poster{ ${imageFields} } } },
 	_type == "galleryModule" => { display, ${images} },
 	_type == "peopleModule" => {
 		display,
