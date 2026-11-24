@@ -5,13 +5,16 @@
 export const internalFields = `_id, _type, "slug": slug.current`;
 
 /**
- * GROQ projection for a link with a Link Type of internal or external.
- * Internal links come back as the target document's internalFields.
+ * GROQ projection for a link with a Link Type of internal, external or
+ * file. Internal links come back as the target document's internalFields,
+ * with the suffix (a #section or ?filter) that follows its URL.
  */
 export const linkFields = `
 	label,
 	linkType,
 	externalUrl,
+	suffix,
+	"fileUrl": file.asset->url,
 	"internal": internalLink->{ ${internalFields} }
 `;
 
@@ -30,8 +33,8 @@ const paths = {
 	person: (slug) => `/people/${slug}`,
 	event: (slug) => `/events/${slug}`,
 	research: (slug) => `/research/${slug}`,
-	exhibition: (slug) => `/exhibitions/${slug}`,
-	course: (slug) => `/courses/${slug}`,
+	exhibition: (slug) => `/research/exhibitions/${slug}`,
+	course: (slug) => `/education/courses/${slug}`,
 	educationPage: (slug) => `/education/${slug}`,
 	news: (slug) => `/news/${slug}`,
 	opportunity: (slug) => `/about/opportunities/${slug}`,
@@ -41,13 +44,15 @@ const paths = {
 /** The href for a link, or null when it points nowhere. */
 export const linkHref = (link) => {
 	if (link?.linkType === 'external') return link.externalUrl || null;
+	if (link?.linkType === 'file') return link.fileUrl || null;
 	if (link?.linkType !== 'internal' || !link.internal) return null;
 
 	const { _id, _type, slug } = link.internal;
-	if (_id === 'homepage') return '/';
-	return slug && paths[_type] ? paths[_type](slug) : null;
+	const path = _id === 'homepage' ? '/' : slug && paths[_type]?.(slug);
+	return path ? path + (link.suffix ?? '') : null;
 };
 
-// Opens in a new tab: web URLs only, not mailto:/tel:
+// Opens in a new tab: files and web URLs, not mailto:/tel:
 export const isExternalLink = (link) =>
-	link?.linkType === 'external' && /^https?:/.test(link.externalUrl ?? '');
+	link?.linkType === 'file' ||
+	(link?.linkType === 'external' && /^https?:/.test(link.externalUrl ?? ''));

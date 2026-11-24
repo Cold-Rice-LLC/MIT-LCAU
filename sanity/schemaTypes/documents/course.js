@@ -1,16 +1,20 @@
 import {BookIcon} from '@sanity/icons/Book'
-import {defineField, defineType} from 'sanity'
+import {defineType} from 'sanity'
 import {
+  classificationFields,
   excerptField,
   imageField,
   modulesField,
+  onThisPageField,
   referencesField,
   seoField,
   slugField,
+  subtitleField,
   titleField,
+  yearField,
 } from '../fields'
 
-/** A sponsored course, listed under Education and in the Research Index. */
+/** A sponsored course, at /education/courses/…, also listed in the Research Index. */
 export default defineType({
   name: 'course',
   type: 'document',
@@ -19,24 +23,16 @@ export default defineType({
   fields: [
     titleField(),
     slugField(),
-    defineField({
-      name: 'subtitle',
-      type: 'string',
-      title: 'Subtitle',
-    }),
-    defineField({
-      name: 'year',
-      type: 'number',
-      title: 'Course Year',
-      validation: (rule) => rule.required().integer().min(1900).max(2100),
-    }),
+    subtitleField(),
+    yearField({title: 'Course Year'}),
+    ...classificationFields(),
     excerptField(),
     imageField(),
     referencesField('people', 'People', 'person', {
       description: 'Lists this course on each person’s page.',
     }),
+    onThisPageField(),
     modulesField(),
-    referencesField('relatedResearch', 'Related Research', 'research'),
     seoField(),
   ],
   orderings: [{title: 'Course Year', name: 'yearDesc', by: [{field: 'year', direction: 'desc'}]}],

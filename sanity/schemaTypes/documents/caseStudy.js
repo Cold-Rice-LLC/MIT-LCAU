@@ -18,7 +18,9 @@ export default defineType({
       description: 'Shows under the title on cards.',
     }),
     excerptField(),
-    imageField(),
+    imageField({
+      description: 'For cards and the top of the page. Cropped to 3:2 around the hotspot.',
+    }),
     modulesField(),
     seoField(),
   ],

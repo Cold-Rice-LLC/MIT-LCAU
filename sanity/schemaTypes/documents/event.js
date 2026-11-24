@@ -1,6 +1,14 @@
 import {CalendarIcon} from '@sanity/icons/Calendar'
 import {defineField, defineType} from 'sanity'
-import {imageField, modulesField, referencesField, seoField, slugField, titleField} from '../fields'
+import {
+  imageField,
+  modulesField,
+  referencesField,
+  seoField,
+  slugField,
+  subtitleField,
+  titleField,
+} from '../fields'
 
 /** A lecture, conference or other event. It's upcoming or past by its dates. */
 export default defineType({
@@ -11,15 +19,9 @@ export default defineType({
   fieldsets: [{name: 'when', title: 'When and Where', options: {columns: 2}}],
   fields: [
     titleField(),
-    slugField({
-      // /events/all is the All Events page
-      validation: (rule) =>
-        rule.required().custom((slug) => (slug?.current === 'all' ? '“all” is taken' : true)),
-    }),
-    defineField({
-      name: 'subtitle',
-      type: 'string',
-      title: 'Subtitle',
+    // /events/all is the All Events page
+    slugField({reserved: ['all']}),
+    subtitleField({
       description: 'Like “Lecture Series — Sara Bronin”. Shows on the event page only.',
     }),
     defineField({
@@ -68,7 +70,7 @@ export default defineType({
       fieldset: 'when',
       validation: (rule) => rule.uri({scheme: ['http', 'https', 'mailto']}),
     }),
-    imageField({description: 'For cards. Cropped to 3:2 around the hotspot.'}),
+    imageField(),
     modulesField(),
     referencesField('relatedEvents', 'Related Events', 'event', {
       description: 'Leave empty to show the next upcoming events.',

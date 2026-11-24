@@ -4,12 +4,13 @@
 	 * heading centred above it. From lg it spans the page's 9 columns as a
 	 * subgrid, so what's inside places itself in them, like the middle 7.
 	 * Row gaps only, so the subgrid keeps the page's column gap. With
-	 * `smallHeading`, the heading starts the paragraph column instead.
+	 * `smallHeading`, the heading starts the paragraph column instead, and
+	 * 'close' brings it nearer what's under it on phones.
 	 */
-	let { id, heading, smallHeading = false, children } = $props();
+	let { id, heading, smallHeading, children } = $props();
 </script>
 
-<section {id} class={['end-gap scroll-mt-3xl', smallHeading && 'close']}>
+<section {id} class={['end-gap scroll-mt-3xl', smallHeading === 'close' && 'close']}>
 	{#if heading}
 		<h2
 			class={['col-span-full text-trim', smallHeading ? 'measure text-h3' : 'text-center text-h2']}
@@ -35,7 +36,7 @@
 			margin-top: var(--spacing-3xl);
 		}
 
-		/* Closer on phones, under a small heading */
+		/* Closer on phones, under a small heading over text */
 		&.close {
 			row-gap: var(--spacing-md);
 

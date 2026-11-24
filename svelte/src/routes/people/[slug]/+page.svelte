@@ -1,36 +1,17 @@
 <script>
 	import AppLink from '#lib/components/AppLink.svelte';
-	import Card from '#lib/components/Card.svelte';
 	import ImageFrame from '#lib/components/ImageFrame.svelte';
+	import ResearchSection from '#lib/components/ResearchSection.svelte';
 	import RichText from '#lib/components/RichText.svelte';
-	import Section from '#lib/components/Section.svelte';
 	import Tag from '#lib/components/Tag.svelte';
 
 	let { data } = $props();
 
 	let person = $derived(data.person);
-
-	// Their research and courses as Cards (extra fields are ignored)
-	let research = $derived(
-		person.research.map((project) => ({
-			...project,
-			tag: 'Research',
-			meta: [project.year, project.category].filter(Boolean).join(', '),
-			class: 'bg-cool-gray'
-		}))
-	);
-	let courses = $derived(
-		person.courses.map((course) => ({
-			...course,
-			tag: 'Course',
-			meta: course.year && `${course.year} Course Year`,
-			class: 'bg-pink'
-		}))
-	);
 </script>
 
 <!-- Their name, positions a line each, and role, centred -->
-<header class="col-span-full flex flex-col items-center pt-[6rem] text-center lg:pt-3xl">
+<header class="col-span-full flex flex-col items-center page-top text-center">
 	<h1 class="text-h1 text-trim">{person.name}</h1>
 	{#if person.positions?.length}
 		<p class="mt-lg text-body-lg text-trim lg:mt-xl">
@@ -70,20 +51,8 @@
 	</div>
 {/if}
 
-{#snippet related(heading, cards)}
-	{#if cards.length}
-		<Section {heading}>
-			<ul class="col-span-full card-grid">
-				{#each cards as card (card._id)}
-					<li><Card {...card} /></li>
-				{/each}
-			</ul>
-		</Section>
-	{/if}
-{/snippet}
-
-{@render related('Related Research', research)}
-{@render related('Related Courses', courses)}
+<ResearchSection heading="Related Research" items={person.research} />
+<ResearchSection heading="Related Courses" items={person.courses} />
 
 <style>
 	@reference '../../layout.css';

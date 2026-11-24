@@ -37,7 +37,7 @@ export default defineType({
       description: 'The short description in All News and search results.',
       validation: (rule) => rule.required(),
     }),
-    imageField({description: 'For cards. Cropped to 3:2 around the hotspot.'}),
+    imageField(),
     modulesField(),
     referencesField('relatedNews', 'Related News', 'news', {
       description:

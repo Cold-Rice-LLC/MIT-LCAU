@@ -1,6 +1,6 @@
 import {UserIcon} from '@sanity/icons/User'
 import {defineField, defineType} from 'sanity'
-import {seoField, slugField} from '../fields'
+import {linksField, seoField, slugField} from '../fields'
 
 /**
  * Someone at or connected to LCAU. Their research and courses list on
@@ -64,13 +64,7 @@ export default defineType({
       description:
         'Under the photo, like “Visit Me: E14-140D” and their email as a link. Shift+Enter starts a new line; Enter leaves a line’s space.',
     }),
-    defineField({
-      name: 'links',
-      type: 'array',
-      title: 'Links',
-      description: 'Like Google Scholar or a lab website.',
-      of: [{type: 'navLink'}],
-    }),
+    linksField({description: 'Like Google Scholar or a lab website.'}),
     seoField(),
   ],
   orderings: [

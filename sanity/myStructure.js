@@ -8,8 +8,8 @@ import {landingPages} from './landingPages'
 
 const typeItem = (S, [type, title]) => S.documentTypeListItem(type).title(title)
 
-// A type and the one that only exists to label it, like people and their
-// roles, together under one item
+// Types that go together, like people and the roles that label them, under
+// one item
 const typeGroup = (S, id, title, icon, types) =>
   S.listItem()
     .id(id)
@@ -65,9 +65,10 @@ export const myStructure = (S) =>
       ]),
       typeGroup(S, 'researchGroup', 'Research', ProjectsIcon, [
         ['research', 'All Research'],
-        ['researchCategory', 'Categories'],
+        ['exhibition', 'Exhibitions'],
+        ['researchTheme', 'Themes'],
+        ['researchField', 'Fields'],
       ]),
-      typeItem(S, ['exhibition', 'Exhibitions']),
       typeItem(S, ['course', 'Courses']),
       typeItem(S, ['educationPage', 'Education']),
       typeGroup(S, 'newsGroup', 'News', DocumentTextIcon, [

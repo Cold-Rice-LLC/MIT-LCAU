@@ -3,6 +3,8 @@ import { internalFields, linkFields, portableTextFields } from '#lib/sanity/link
 
 const text = `text[]{ ${portableTextFields} }`;
 const images = `images[]{ _key, ${imageFields} }`;
+const video = `video{ url, caption, poster{ ${imageFields} } }`;
+const links = `links[]{ _key, ${linkFields} }`;
 
 // A document as an internal link, for AppLink
 export const linkTo = `"link": { "linkType": "internal", "internal": { ${internalFields} } }`;
@@ -48,6 +50,32 @@ export const newsCard = `
 // What NewsRow shows
 export const newsRow = `${newsCard}, "type": type->title, excerpt`;
 
+// Filter for the research, exhibitions and courses that have a page to
+// list: a slug, and a year or a date
+export const listedResearch = `
+	_type in ["research", "exhibition", "course"]
+	&& defined(slug.current)
+	&& defined(coalesce(startDate, year))
+`;
+
+// Latest first: by year, then exhibitions by their opening date
+export const latestResearch = `order(coalesce(startDate, string(year)) desc, _createdAt desc)`;
+
+// What ResearchCard shows
+export const researchCard = `
+	_id,
+	_type,
+	title,
+	excerpt,
+	year,
+	startDate,
+	endDate,
+	datesLabel,
+	"theme": themes[0]->title,
+	image{ ${imageFields} },
+	${linkTo}
+`;
+
 /**
  * GROQ for a listing page's filters: the labels picked in its `field`, in
  * order, or else every document of `type`, A–Z. `label` is what they say.
@@ -73,15 +101,35 @@ export const modulesFields = `
 		${text}
 	},
 	_type == "textMediaModule" => {
+		mediaType,
 		layout,
+		side,
 		${text},
 		note,
-		links[]{ _key, ${linkFields} },
-		${images}
+		${links},
+		${images},
+		${video}
 	},
-	_type == "videoModule" => { video{ url, caption, poster{ ${imageFields} } } },
+	_type == "videoModule" => { ${video} },
 	_type == "galleryModule" => { display, ${images} },
 	_type == "imagesModule" => { ${images} },
+	_type == "quoteModule" => { quote, attribution },
+	_type == "detailsModule" => { groups[]{ _key, heading, ${text}, ${links} } },
+	_type == "cardsModule" => {
+		${text},
+		count,
+		"picked": source == "picked",
+		source == "picked" => {
+			"cards": (documents[]->)[${listedResearch}]{ ${researchCard} }
+		},
+		source != "picked" => {
+			"cards": *[
+				${listedResearch} && _type == coalesce(^.kind, "research") && _id != ^.^._id
+			] | ${latestResearch}[0...12]{ ${researchCard} }
+		},
+		note,
+		${links}
+	},
 	_type == "peopleModule" => {
 		display,
 		display == "tabs" => {

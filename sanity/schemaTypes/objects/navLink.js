@@ -17,7 +17,7 @@ export default defineType({
       title: 'Label',
       validation: (rule) => rule.required(),
     }),
-    ...linkTargetFields({required: true}),
+    ...linkTargetFields({required: true, files: true}),
   ],
   preview: {
     select: {label: 'label', ...linkTargetSelect},

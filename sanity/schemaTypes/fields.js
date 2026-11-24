@@ -28,14 +28,36 @@ export const titleField = (options = {}) =>
     ...options,
   })
 
-export const slugField = (options = {}) =>
+/** `reserved` slugs are taken by other pages, like All Events at /events/all. */
+export const slugField = ({reserved = [], ...options} = {}) =>
   defineField({
     name: 'slug',
     type: 'slug',
     title: 'Slug',
     description: 'The last part of the page’s URL.',
     options: {source: 'title'},
-    validation: (rule) => rule.required(),
+    validation: (rule) =>
+      rule
+        .required()
+        .custom((slug) => (reserved.includes(slug?.current) ? `“${slug.current}” is taken` : true)),
+    ...options,
+  })
+
+export const subtitleField = (options = {}) =>
+  defineField({
+    name: 'subtitle',
+    type: 'string',
+    title: 'Subtitle',
+    description: 'A line under the title. Optional.',
+    ...options,
+  })
+
+export const yearField = (options = {}) =>
+  defineField({
+    name: 'year',
+    type: 'number',
+    title: 'Year',
+    validation: (rule) => rule.required().integer().min(1900).max(2100),
     ...options,
   })
 
@@ -54,7 +76,7 @@ export const imageField = (options = {}) =>
     name: 'image',
     type: 'figure',
     title: 'Image',
-    description: 'For cards and the top of the page. Cropped to 3:2 around the hotspot.',
+    description: 'For cards. Cropped to 3:2 around the hotspot.',
     ...options,
   })
 
@@ -63,6 +85,18 @@ export const modulesField = (options = {}) =>
     name: 'modules',
     type: 'modules',
     title: 'Content',
+    ...options,
+  })
+
+/** Whether a page lists its modules under "On this page" (see onThisPageFields). */
+export const onThisPageField = (options = {}) =>
+  defineField({
+    name: 'onThisPage',
+    type: 'boolean',
+    title: 'Show “On this page”',
+    description:
+      'Links to the page’s sections, under the logo. Each section can be renamed there or left out.',
+    initialValue: false,
     ...options,
   })
 
@@ -101,6 +135,34 @@ export const referencesField = (name, title, to, options = {}) =>
     validation: (rule) => rule.unique(),
     ...options,
   })
+
+/** Purple text over buttons (see linksField). */
+export const noteField = (options = {}) =>
+  defineField({
+    name: 'note',
+    type: 'string',
+    title: 'Note',
+    ...options,
+  })
+
+export const linksField = (options = {}) =>
+  defineField({
+    name: 'links',
+    type: 'array',
+    title: 'Links',
+    of: [{type: 'navLink'}],
+    ...options,
+  })
+
+/** The Theme and Field a research, exhibition or course page is filtered by in the Index. */
+export const classificationFields = () => [
+  referencesField('themes', 'Themes', 'researchTheme', {
+    description: 'Filters in the Index. The first shows on cards, as in “2025, Cities Initiative”.',
+  }),
+  referencesField('fields', 'Fields', 'researchField', {
+    description: 'Filters in the Index, like Transportation. Tags at the top of the page.',
+  }),
+]
 
 /**
  * Spread into a field to show it only where `applies`, a test of the

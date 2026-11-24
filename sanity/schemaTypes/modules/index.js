@@ -1,6 +1,8 @@
 import {defineArrayMember, defineType} from 'sanity'
 import accordionModule from './accordionModule'
+import cardsModule from './cardsModule'
 import columnsModule from './columnsModule'
+import detailsModule from './detailsModule'
 import galleryModule from './galleryModule'
 import imagesModule from './imagesModule'
 import {onThisPageFields} from './onThisPageFields'
@@ -11,6 +13,22 @@ import textMediaModule from './textMediaModule'
 import textModule from './textModule'
 import videoModule from './videoModule'
 
+// In the order the Studio lists them to insert
+const members = [
+  textModule,
+  textMediaModule,
+  videoModule,
+  galleryModule,
+  imagesModule,
+  quoteModule,
+  detailsModule,
+  cardsModule,
+  accordionModule,
+  peopleModule,
+  opportunitiesModule,
+  columnsModule,
+]
+
 /**
  * The flexible body of detail and landing pages, from the "all modules"
  * Research Detail frame in Figma. On pages with "On this page", each
@@ -20,18 +38,7 @@ const modules = defineType({
   name: 'modules',
   type: 'array',
   title: 'Content',
-  of: [
-    'textModule',
-    'textMediaModule',
-    'videoModule',
-    'galleryModule',
-    'imagesModule',
-    'quoteModule',
-    'accordionModule',
-    'peopleModule',
-    'opportunitiesModule',
-    'columnsModule',
-  ].map((type) => defineArrayMember({type})),
+  of: members.map(({name}) => defineArrayMember({type: name})),
 })
 
 const withOnThisPage = (module) => ({
@@ -39,18 +46,4 @@ const withOnThisPage = (module) => ({
   fields: [...module.fields, ...onThisPageFields],
 })
 
-export const moduleTypes = [
-  modules,
-  ...[
-    accordionModule,
-    columnsModule,
-    galleryModule,
-    imagesModule,
-    opportunitiesModule,
-    peopleModule,
-    quoteModule,
-    textMediaModule,
-    textModule,
-    videoModule,
-  ].map(withOnThisPage),
-]
+export const moduleTypes = [modules, ...members.map(withOnThisPage)]

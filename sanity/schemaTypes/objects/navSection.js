@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {linksField} from '../fields'
 
 /**
  * One top-level section of the main menu, like Events: its title, an
@@ -23,12 +24,7 @@ export default defineType({
         'Where the title goes, as About goes to About LCAU. Leave empty to use the first link.',
       to: [{type: 'page'}],
     }),
-    defineField({
-      name: 'links',
-      type: 'array',
-      title: 'Links',
-      of: [{type: 'navLink'}],
-    }),
+    linksField(),
   ],
   preview: {
     select: {title: 'title', links: 'links'},

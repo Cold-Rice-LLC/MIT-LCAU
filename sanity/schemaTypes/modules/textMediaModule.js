@@ -1,6 +1,6 @@
 import {ImageIcon} from '@sanity/icons/Image'
 import {defineField, defineType} from 'sanity'
-import {radioField} from '../fields'
+import {linksField, noteField, radioField} from '../fields'
 import {headingField} from './headingField'
 
 /**
@@ -19,20 +19,11 @@ export default defineType({
       type: 'richText',
       title: 'Text',
     }),
-    defineField({
-      name: 'note',
-      type: 'string',
-      title: 'Note',
+    noteField({
       description:
         'Purple text under the text, like “This event is free and open to MIT students.”',
     }),
-    defineField({
-      name: 'links',
-      type: 'array',
-      title: 'Buttons',
-      description: 'Under the text and note, like “RSVP”.',
-      of: [{type: 'navLink'}],
-    }),
+    linksField({title: 'Buttons', description: 'Under the text and note, like “RSVP”.'}),
     radioField('mediaType', 'Media', {Images: 'images', Video: 'video'}),
     defineField({
       name: 'images',
@@ -54,6 +45,15 @@ export default defineType({
       'Layout',
       {'Media beside text': 'beside', 'Media above text': 'above'},
       {description: 'Two images or a video always go above the text.'},
+    ),
+    radioField(
+      'side',
+      'Media Side',
+      {Left: 'left', Right: 'right'},
+      {
+        description: 'Which side of the text an image beside it is on.',
+        hidden: ({parent}) => parent?.layout === 'above' || parent?.mediaType === 'video',
+      },
     ),
   ],
   preview: {

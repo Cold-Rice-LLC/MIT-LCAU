@@ -10,7 +10,8 @@ import {UsersIcon} from '@sanity/icons/Users'
  * landing page above each kind of document (People above every person).
  * They list first under Pages and can't be deleted, and their slugs are
  * fixed because the documents' URLs sit under them (/people/jane-doe).
- * All Events is the events archive, at /events/all. The People,
+ * All Events is the events archive, at /events/all, and Research Index
+ * everything under Research, at /research/all. The People,
  * Education and News IDs are the ones the seeded menu already points at.
  */
 export const landingPages = [
@@ -20,6 +21,7 @@ export const landingPages = [
   {id: 'page-events-all', title: 'All Events', icon: CalendarIcon},
   {id: 'page-education', title: 'Education Landing', icon: BookIcon},
   {id: 'page-research', title: 'Research Landing', icon: ProjectsIcon},
+  {id: 'page-research-all', title: 'Research Index', icon: ProjectsIcon},
   {id: 'page-news', title: 'News Landing', icon: DocumentTextIcon},
 ]
 

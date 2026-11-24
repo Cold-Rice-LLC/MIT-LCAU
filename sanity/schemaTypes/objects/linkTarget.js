@@ -7,10 +7,11 @@ const linkTypeIs = (type) => (context) => context.parent?.linkType === type
  * Where a link points, with no label of its own: a page on this site or
  * an external URL. Pass `required: true` for links that must point
  * somewhere; left optional, an untouched link renders as no link.
- * `schemes` widens the URL schemes an external link accepts, as rich text
- * links take mailto: and tel:. The same fields as desertx's links.
+ * `files` adds an uploaded file, like a PDF. `schemes` widens the URL
+ * schemes an external link accepts, as rich text links take mailto: and
+ * tel:.
  */
-export const linkTargetFields = ({required = false, schemes} = {}) => [
+export const linkTargetFields = ({required = false, schemes, files = false} = {}) => [
   defineField({
     name: 'linkType',
     type: 'string',
@@ -23,6 +24,7 @@ export const linkTargetFields = ({required = false, schemes} = {}) => [
         ...(required ? [] : [{title: 'None', value: 'none'}]),
         {title: 'Internal', value: 'internal'},
         {title: 'External', value: 'external'},
+        ...(files ? [{title: 'File', value: 'file'}] : []),
       ],
       layout: 'radio',
       direction: 'horizontal',
@@ -40,6 +42,18 @@ export const linkTargetFields = ({required = false, schemes} = {}) => [
     ...shownWhere(linkTypeIs('internal'), {required: 'Choose a page.'}),
   }),
   defineField({
+    name: 'suffix',
+    type: 'string',
+    title: 'Section or Filter',
+    description:
+      'Added to the end of the page’s URL: a section, like #contact, or a filter, like ?type=courses. Optional.',
+    hidden: (context) => !linkTypeIs('internal')(context),
+    validation: (rule) =>
+      rule
+        .regex(/^[?#]\S+$/, {name: 'section or filter'})
+        .error('Starts with # or ?, with no spaces.'),
+  }),
+  defineField({
     name: 'externalUrl',
     type: 'url',
     title: 'External URL',
@@ -51,6 +65,17 @@ export const linkTargetFields = ({required = false, schemes} = {}) => [
       rule: (rule) => (schemes ? rule.uri({scheme: schemes}) : rule),
     }),
   }),
+  ...(files
+    ? [
+        defineField({
+          name: 'file',
+          type: 'file',
+          title: 'File',
+          description: 'Opens in a new tab.',
+          ...shownWhere(linkTypeIs('file'), {required: 'Choose a file.'}),
+        }),
+      ]
+    : []),
 ]
 
 /** Rich text's link annotation: a required target, URLs including mailto:/tel:. */
@@ -67,10 +92,18 @@ export const linkTargetSelect = {
   internalTitle: 'internalLink.title',
   internalName: 'internalLink.name',
   externalUrl: 'externalUrl',
+  fileName: 'file.asset.originalFilename',
 }
 
 /** Shared preview subtitle for a link destination. */
-export const linkTargetSubtitle = ({linkType, internalTitle, internalName, externalUrl}) => {
+export const linkTargetSubtitle = ({
+  linkType,
+  internalTitle,
+  internalName,
+  externalUrl,
+  fileName,
+}) => {
   if (linkType === 'external') return `↗ ${externalUrl || ''}`
+  if (linkType === 'file') return fileName || 'File'
   return internalTitle || internalName || ''
 }

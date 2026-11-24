@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { onThisPageLinks, withIds } from '#lib/onThisPage.js';
+import { pageSections } from '#lib/onThisPage.js';
 import { client } from '#lib/sanity/client.js';
 import { portableTextFields } from '#lib/sanity/links.js';
 import { modulesFields } from '#lib/sanity/modules.js';
@@ -23,11 +23,11 @@ export async function load({ params }) {
 
 	if (!page) error(404, 'Not found');
 
-	const modules = withIds(page.modules);
+	const { modules, onThisPage } = pageSections(page);
 
 	return {
 		page: { ...page, modules },
-		onThisPage: page.onThisPage ? onThisPageLinks(modules) : [],
+		onThisPage,
 		seo: pageSeo(page.seo, { title: page.title })
 	};
 }

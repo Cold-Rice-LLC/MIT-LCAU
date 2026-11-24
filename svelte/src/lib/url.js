@@ -33,12 +33,12 @@ export const labelSlug = (label) =>
 
 /**
  * Filter options from `labels` (see filterLabels): those any of `items`
- * have, by the label's _id in their `key`, each with its `value` for the
- * URL (see labelSlug).
+ * have, by the label's _id in their `key` (one _id, or an array of them),
+ * each with its `value` for the URL (see labelSlug).
  */
 export const filterOptions = (labels, items, key) =>
 	labels
-		.filter((label) => items.some((item) => item[key] === label._id))
+		.filter((label) => items.some((item) => [item[key]].flat().includes(label._id)))
 		.map((label) => ({ ...label, value: labelSlug(label.label) }));
 
 /**

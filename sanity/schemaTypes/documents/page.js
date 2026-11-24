@@ -1,7 +1,16 @@
 import {defineField, defineType} from 'sanity'
 import {DocumentIcon} from '@sanity/icons/Document'
 import {isLandingPage} from '../../landingPages'
-import {modulesField, referencesField, seoField, titleField} from '../fields'
+import {
+  linksField,
+  modulesField,
+  noteField,
+  onThisPageField,
+  referencesField,
+  seoField,
+  subtitleField,
+  titleField,
+} from '../fields'
 
 // Tests for whether a document is one of the pages with these IDs, or its draft
 const isPage =
@@ -13,8 +22,15 @@ const isPeopleLanding = isPage('page-people')
 const isAllEvents = isPage('page-events-all')
 const isNewsLanding = isPage('page-news')
 const isResearchLanding = isPage('page-research')
+const isResearchIndex = isPage('page-research-all')
 // Pages that only list documents, with nothing but a headline above
-const isListing = isPage('page-people', 'page-events', 'page-events-all', 'page-news')
+const isListing = isPage(
+  'page-people',
+  'page-events',
+  'page-events-all',
+  'page-research-all',
+  'page-news',
+)
 
 /**
  * Any page that isn't a person, event or other document: the homepage,
@@ -57,10 +73,7 @@ export default defineType({
       description: 'The large heading at the top of the page, like “About LCAU”. Optional.',
       hidden: ({document}) => isHomepage(document),
     }),
-    defineField({
-      name: 'subtitle',
-      type: 'string',
-      title: 'Subtitle',
+    subtitleField({
       description: 'A line under the headline, like “Last updated on October 14, 2026”. Optional.',
       hidden: ({document}) => isLandingPage(document?._id) || !document?.headline,
     }),
@@ -71,12 +84,13 @@ export default defineType({
       description: 'The large text under the headline. Optional.',
       hidden: ({document}) => isHomepage(document) || isListing(document),
     }),
-    defineField({
-      name: 'links',
-      type: 'array',
-      title: 'Links',
-      description: 'Buttons under the introduction, like “Visit Index”.',
-      of: [{type: 'navLink'}],
+    noteField({
+      description:
+        'Purple text under the introduction, like “Explore all research, exhibitions and sponsored courses.”',
+      hidden: ({document}) => !isResearchLanding(document),
+    }),
+    linksField({
+      description: 'Buttons under the introduction and note, like “Visit Index”.',
       hidden: ({document}) => !isResearchLanding(document),
     }),
     referencesField('roleFilters', 'Role Filters', 'role', {
@@ -89,20 +103,22 @@ export default defineType({
         'The Type buttons above every event, in this order. Types with no events yet are left out. Leave empty for every type, A–Z.',
       hidden: ({document}) => !isAllEvents(document),
     }),
+    referencesField('themeFilters', 'Theme Filters', 'researchTheme', {
+      description:
+        'The Theme filter’s choices, in this order. Themes with nothing yet are left out. Leave empty for every theme, A–Z.',
+      hidden: ({document}) => !isResearchIndex(document),
+    }),
+    referencesField('fieldFilters', 'Field Filters', 'researchField', {
+      description:
+        'The Field filter’s choices, in this order. Fields with nothing yet are left out. Leave empty for every field, A–Z.',
+      hidden: ({document}) => !isResearchIndex(document),
+    }),
     referencesField('featuredNews', 'Featured News', 'news', {
       description: 'Up to three posts above All News, in this order. They list under All News too.',
       hidden: ({document}) => !isNewsLanding(document),
       validation: (rule) => rule.unique().max(3),
     }),
-    defineField({
-      name: 'onThisPage',
-      type: 'boolean',
-      title: 'Show “On this page”',
-      description:
-        'Links to the page’s sections, under the logo. Each section can be renamed there or left out.',
-      initialValue: false,
-      hidden: ({document}) => isLandingPage(document?._id),
-    }),
+    onThisPageField({hidden: ({document}) => isLandingPage(document?._id)}),
     modulesField({
       hidden: ({document}) =>
         isHomepage(document) || isResearchLanding(document) || isListing(document),

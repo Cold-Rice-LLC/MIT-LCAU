@@ -5,7 +5,7 @@ import { labelSlug } from '#lib/url.js';
  * else its "On this page" label: "#who-we-are", then "#who-we-are-2". One
  * with neither has none.
  */
-export const withIds = (modules) => {
+const withIds = (modules) => {
 	const counts = {};
 	return (modules ?? []).map((module) => {
 		const name = module.heading || module.onThisPageLabel;
@@ -17,7 +17,13 @@ export const withIds = (modules) => {
 };
 
 /** The "On this page" links to `modules` (see withIds), less those hidden in the Studio. */
-export const onThisPageLinks = (modules) =>
+const onThisPageLinks = (modules) =>
 	modules
 		.filter((module) => module.id && !module.hideOnThisPage)
 		.map(({ id, heading, onThisPageLabel }) => ({ id, label: onThisPageLabel || heading }));
+
+/** A page's `modules` with their ids, and its "On this page" links, none unless it shows them. */
+export const pageSections = ({ modules: queried, onThisPage }) => {
+	const modules = withIds(queried);
+	return { modules, onThisPage: onThisPage ? onThisPageLinks(modules) : [] };
+};

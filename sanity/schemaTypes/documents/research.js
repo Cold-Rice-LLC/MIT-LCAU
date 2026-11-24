@@ -1,90 +1,52 @@
 import {ProjectsIcon} from '@sanity/icons/Projects'
-import {defineField, defineType} from 'sanity'
+import {defineType} from 'sanity'
 import {
+  classificationFields,
   excerptField,
   imageField,
   modulesField,
+  onThisPageField,
   referencesField,
   seoField,
   slugField,
+  subtitleField,
   titleField,
+  yearField,
 } from '../fields'
 
-/** A research project in the Research Index. */
+/** A research project, at /research/…, listed in the Research Index. */
 export default defineType({
   name: 'research',
   type: 'document',
   title: 'Research',
   icon: ProjectsIcon,
-  fieldsets: [
-    {name: 'credits', title: 'Credits', options: {collapsible: true}},
-    {name: 'recognition', title: 'Press and Awards', options: {collapsible: true}},
-  ],
   fields: [
     titleField(),
-    slugField(),
-    defineField({
-      name: 'year',
-      type: 'number',
-      title: 'Year',
-      validation: (rule) => rule.required().integer().min(1900).max(2100),
-    }),
-    defineField({
-      name: 'category',
-      type: 'reference',
-      title: 'Category',
-      description: 'Beside the year on cards, as “2025, Cities Initiative”.',
-      to: [{type: 'researchCategory'}],
-    }),
+    // The Index is /research/all, and exhibitions are under /research/exhibitions
+    slugField({reserved: ['all', 'exhibitions']}),
+    subtitleField(),
+    yearField(),
+    ...classificationFields(),
     excerptField(),
     imageField(),
     referencesField('people', 'People', 'person', {
       description: 'Lists this project on each person’s page.',
     }),
+    onThisPageField({initialValue: true}),
     modulesField(),
-    defineField({
-      name: 'credits',
-      type: 'richText',
-      title: 'Credits',
-      fieldset: 'credits',
-    }),
-    defineField({
-      name: 'websiteUrl',
-      type: 'url',
-      title: 'Project Website',
-      fieldset: 'credits',
-    }),
-    defineField({
-      name: 'pdf',
-      type: 'file',
-      title: 'PDF',
-      description: 'Offered as “Download PDF”.',
-      fieldset: 'credits',
-      options: {accept: 'application/pdf'},
-    }),
-    defineField({
-      name: 'press',
-      type: 'richText',
-      title: 'Press',
-      fieldset: 'recognition',
-    }),
-    defineField({
-      name: 'awards',
-      type: 'richText',
-      title: 'Awards',
-      fieldset: 'recognition',
-    }),
     referencesField('relatedResearch', 'Related Research', 'research', {
-      description: 'Leave empty to show the latest projects.',
+      description:
+        'Up to four projects. Leave empty for the latest, starting with those that share a theme.',
+      validation: (rule) => rule.unique().max(4),
     }),
     seoField(),
   ],
   orderings: [{title: 'Year', name: 'yearDesc', by: [{field: 'year', direction: 'desc'}]}],
   preview: {
-    select: {title: 'title', year: 'year', category: 'category.title', media: 'image'},
-    prepare: ({title, year, category, media}) => ({
+    select: {title: 'title', year: 'year', theme: 'themes.0.title', media: 'image'},
+    prepare: ({title, year, theme, media}) => ({
       title,
-      subtitle: [year, category].filter(Boolean).join(', '),
+      subtitle: [year, theme].filter(Boolean).join(', '),
       media,
     }),
   },

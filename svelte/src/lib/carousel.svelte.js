@@ -2,8 +2,8 @@ import Swiper from 'swiper';
 import { Keyboard } from 'swiper/modules';
 
 /**
- * A Swiper carousel's state, shared by the homepage hero and the gallery
- * module. `count` gets the number of slides. Attach `attach` to the
+ * A Swiper carousel's state, shared by the homepage hero, the gallery
+ * module and the lightbox. `count` gets the number of slides. Attach `attach` to the
  * .swiper element, read `current` (the real slide index, looped or not)
  * and `near(i)`, and call `swiper.slidePrev()` / `slideNext()`. The arrow
  * keys move it while it's on screen.
