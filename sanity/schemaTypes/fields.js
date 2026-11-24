@@ -61,6 +61,17 @@ export const yearField = (options = {}) =>
     ...options,
   })
 
+/** A day, today to start, that a type's documents are ordered by. */
+export const dateField = (options = {}) =>
+  defineField({
+    name: 'date',
+    type: 'date',
+    title: 'Date',
+    initialValue: () => new Date().toISOString().slice(0, 10),
+    validation: (rule) => rule.required(),
+    ...options,
+  })
+
 export const excerptField = (options = {}) =>
   defineField({
     name: 'excerpt',
@@ -136,15 +147,6 @@ export const referencesField = (name, title, to, options = {}) =>
     ...options,
   })
 
-/** Purple text over buttons (see linksField). */
-export const noteField = (options = {}) =>
-  defineField({
-    name: 'note',
-    type: 'string',
-    title: 'Note',
-    ...options,
-  })
-
 export const linksField = (options = {}) =>
   defineField({
     name: 'links',
@@ -153,6 +155,18 @@ export const linksField = (options = {}) =>
     of: [{type: 'navLink'}],
     ...options,
   })
+
+/** A note in purple over a row of buttons, given the description of each. */
+export const buttonsFields = ({note, links, ...options}) => [
+  defineField({
+    name: 'note',
+    type: 'string',
+    title: 'Note',
+    description: note,
+    ...options,
+  }),
+  linksField({title: 'Buttons', description: links, ...options}),
+]
 
 /** The Theme and Field a research, exhibition or course page is filtered by in the Index. */
 export const classificationFields = () => [

@@ -1,11 +1,16 @@
 import {ImageIcon} from '@sanity/icons/Image'
 import {defineField, defineType} from 'sanity'
-import {linksField, noteField, radioField} from '../fields'
+import {buttonsFields, radioField} from '../fields'
+import {cardsFields} from './cardsFields'
 import {headingField} from './headingField'
+
+// Whether the media goes above the text, or it's a video, which always does
+const isNotBeside = ({parent}) => parent?.layout === 'above' || parent?.mediaType === 'video'
 
 /**
  * Text with images or a video, either side by side or with the media
- * above the text.
+ * above the text, and any cards underneath, like a grant's Related
+ * Research.
  */
 export default defineType({
   name: 'textMediaModule',
@@ -19,11 +24,10 @@ export default defineType({
       type: 'richText',
       title: 'Text',
     }),
-    noteField({
-      description:
-        'Purple text under the text, like “This event is free and open to MIT students.”',
+    ...buttonsFields({
+      note: 'Purple text under the text, like “This event is free and open to MIT students.”',
+      links: 'Under the text and note, like “RSVP”.',
     }),
-    linksField({title: 'Buttons', description: 'Under the text and note, like “RSVP”.'}),
     radioField('mediaType', 'Media', {Images: 'images', Video: 'video'}),
     defineField({
       name: 'images',
@@ -52,9 +56,35 @@ export default defineType({
       {Left: 'left', Right: 'right'},
       {
         description: 'Which side of the text an image beside it is on.',
-        hidden: ({parent}) => parent?.layout === 'above' || parent?.mediaType === 'video',
+        hidden: isNotBeside,
       },
     ),
+    radioField(
+      'imageShape',
+      'Image Shape',
+      {'Cropped to 3:2': 'cropped', Original: 'original'},
+      {description: 'For an image beside the text.', hidden: isNotBeside},
+    ),
+    defineField({
+      name: 'showCards',
+      type: 'boolean',
+      title: 'Show Cards Underneath',
+      description: 'Research, exhibitions or courses that go with this, like Related Research.',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'cards',
+      type: 'object',
+      title: 'Cards',
+      fields: [
+        headingField({
+          description: 'Smaller than the section’s own, like “Related Research”.',
+          initialValue: 'Related Research',
+        }),
+        ...cardsFields,
+      ],
+      hidden: ({parent}) => !parent?.showCards,
+    }),
   ],
   preview: {
     select: {heading: 'heading', media: 'images.0', mediaType: 'mediaType'},

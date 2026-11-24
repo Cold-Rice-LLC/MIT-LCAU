@@ -7,11 +7,9 @@ const linkTypeIs = (type) => (context) => context.parent?.linkType === type
  * Where a link points, with no label of its own: a page on this site or
  * an external URL. Pass `required: true` for links that must point
  * somewhere; left optional, an untouched link renders as no link.
- * `files` adds an uploaded file, like a PDF. `schemes` widens the URL
- * schemes an external link accepts, as rich text links take mailto: and
- * tel:.
+ * `files` adds an uploaded file, like a PDF.
  */
-export const linkTargetFields = ({required = false, schemes, files = false} = {}) => [
+export const linkTargetFields = ({required = false, files = false} = {}) => [
   defineField({
     name: 'linkType',
     type: 'string',
@@ -57,12 +55,10 @@ export const linkTargetFields = ({required = false, schemes, files = false} = {}
     name: 'externalUrl',
     type: 'url',
     title: 'External URL',
-    description: schemes
-      ? 'A full URL, or a mailto:/tel: address. Opens in a new tab.'
-      : 'A full URL. Opens in a new tab.',
+    description: 'A full URL, or a mailto:/tel: address. Opens in a new tab.',
     ...shownWhere(linkTypeIs('external'), {
       required: 'External URL is required.',
-      rule: (rule) => (schemes ? rule.uri({scheme: schemes}) : rule),
+      rule: (rule) => rule.uri({scheme: ['http', 'https', 'mailto', 'tel']}),
     }),
   }),
   ...(files
@@ -78,12 +74,12 @@ export const linkTargetFields = ({required = false, schemes, files = false} = {}
     : []),
 ]
 
-/** Rich text's link annotation: a required target, URLs including mailto:/tel:. */
+/** Rich text's link annotation: a required target. */
 export const linkAnnotation = {
   name: 'link',
   type: 'object',
   title: 'Link',
-  fields: linkTargetFields({required: true, schemes: ['http', 'https', 'mailto', 'tel']}),
+  fields: linkTargetFields({required: true}),
 }
 
 /** Shared preview select for a link destination. */

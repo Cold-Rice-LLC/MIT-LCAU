@@ -1,6 +1,6 @@
 import {UsersIcon} from '@sanity/icons/Users'
 import {defineField, defineType} from 'sanity'
-import {radioField, referencesField} from '../fields'
+import {buttonsFields, radioField, referencesField} from '../fields'
 import {headingField} from './headingField'
 
 const isTabs = (parent) => parent?.display === 'tabs'
@@ -35,6 +35,11 @@ export default defineType({
     }),
     referencesField('people', 'People', 'person', {
       hidden: ({parent}) => isTabs(parent) || Boolean(parent?.role),
+    }),
+    ...buttonsFields({
+      note: 'Purple text under the grid, like “See Past SPURS Fellows”.',
+      links: 'Under the grid and note, like “Visit People”.',
+      hidden: ({parent}) => isTabs(parent),
     }),
     referencesField('roles', 'Roles', 'role', {
       description: 'One tab each, in this order. The first is selected to start.',

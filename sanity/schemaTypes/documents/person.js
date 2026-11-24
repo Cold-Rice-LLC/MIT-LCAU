@@ -1,6 +1,6 @@
 import {UserIcon} from '@sanity/icons/User'
 import {defineField, defineType} from 'sanity'
-import {linksField, seoField, slugField} from '../fields'
+import {linksField, referencesField, seoField, slugField} from '../fields'
 
 /**
  * Someone at or connected to LCAU. Their research and courses list on
@@ -26,13 +26,10 @@ export default defineType({
         'How they’re alphabetized, like “Sánchez de Madariaga, Inés”. Leave empty to sort by their last word: “Sarah Williams” as “Williams, Sarah”.',
     }),
     slugField({options: {source: 'name'}}),
-    defineField({
-      name: 'role',
-      type: 'reference',
-      title: 'Role',
-      description: 'Their tag, and the Role filter they’re under.',
-      to: [{type: 'role'}],
-      validation: (rule) => rule.required(),
+    referencesField('roles', 'Roles', 'role', {
+      description:
+        'The Role filters they’re under. Their card’s tag is the first, or the one a list is of: “SPURS Team” on the SPURS page.',
+      validation: (rule) => rule.required().min(1).unique(),
     }),
     defineField({
       name: 'positions',
@@ -79,6 +76,6 @@ export default defineType({
     },
   ],
   preview: {
-    select: {title: 'name', subtitle: 'role.title', media: 'photo'},
+    select: {title: 'name', subtitle: 'roles.0.title', media: 'photo'},
   },
 })

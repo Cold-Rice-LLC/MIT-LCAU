@@ -10,20 +10,21 @@ import { pageSeo, seoFields } from '#lib/sanity/seo.js';
  * their People field, newest first.
  */
 export async function load({ params }) {
+	const named = (type) =>
+		`*[${listedResearch} && _type == "${type}" && references(^._id)] | ${latestResearch}{ ${researchCard} }`;
+
 	const person = await client.fetch(
 		`*[_type == "person" && slug.current == $slug][0]{
 			name,
 			positions,
-			"role": role->title,
+			"roles": roles[]->title,
 			photo{ ${imageFields} },
 			bio[]{ ${portableTextFields} },
 			"bioText": pt::text(bio),
 			contact[]{ ${portableTextFields} },
 			links[]{ _key, ${linkFields} },
-			"research": *[${listedResearch} && _type == "research" && references(^._id)]
-				| ${latestResearch}{ ${researchCard} },
-			"courses": *[${listedResearch} && _type == "course" && references(^._id)]
-				| ${latestResearch}{ ${researchCard} },
+			"research": ${named('research')},
+			"courses": ${named('course')},
 			${seoFields}
 		}`,
 		{ slug: params.slug }

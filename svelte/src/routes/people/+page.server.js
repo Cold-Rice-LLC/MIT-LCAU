@@ -18,7 +18,7 @@ export async function load() {
 		},
 		"people": *[_type == "person" && defined(slug.current)]{
 			${personCard},
-			"roleId": role._ref
+			"roleIds": roles[]._ref
 		}
 	}`);
 

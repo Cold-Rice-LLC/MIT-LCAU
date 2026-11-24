@@ -1,11 +1,14 @@
 import {defineArrayMember, defineType} from 'sanity'
 import accordionModule from './accordionModule'
 import cardsModule from './cardsModule'
+import caseStudiesModule from './caseStudiesModule'
 import columnsModule from './columnsModule'
 import detailsModule from './detailsModule'
 import galleryModule from './galleryModule'
 import imagesModule from './imagesModule'
+import namesModule from './namesModule'
 import {onThisPageFields} from './onThisPageFields'
+import openCallsModule from './openCallsModule'
 import opportunitiesModule from './opportunitiesModule'
 import peopleModule from './peopleModule'
 import quoteModule from './quoteModule'
@@ -23,9 +26,12 @@ const members = [
   quoteModule,
   detailsModule,
   cardsModule,
+  caseStudiesModule,
   accordionModule,
   peopleModule,
+  namesModule,
   opportunitiesModule,
+  openCallsModule,
   columnsModule,
 ]
 

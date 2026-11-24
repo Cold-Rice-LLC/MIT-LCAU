@@ -18,6 +18,9 @@ export const linkFields = `
 	"internal": internalLink->{ ${internalFields} }
 `;
 
+/** GROQ projection for what Buttons shows: a note and links. */
+export const buttonsFields = `note, links[]{ _key, ${linkFields} }`;
+
 /**
  * GROQ projection for a plainText or richText field's blocks, with each
  * link mark's page resolved the way linkFields resolves it.
@@ -38,7 +41,8 @@ const paths = {
 	educationPage: (slug) => `/education/${slug}`,
 	news: (slug) => `/news/${slug}`,
 	opportunity: (slug) => `/about/opportunities/${slug}`,
-	caseStudy: (slug) => `/case-studies/${slug}`
+	// A section of the page, so it's the link's whole suffix
+	caseStudy: (slug) => `/collaborations/case-studies#${slug}`
 };
 
 /** The href for a link, or null when it points nowhere. */
@@ -49,7 +53,8 @@ export const linkHref = (link) => {
 
 	const { _id, _type, slug } = link.internal;
 	const path = _id === 'homepage' ? '/' : slug && paths[_type]?.(slug);
-	return path ? path + (link.suffix ?? '') : null;
+	if (!path) return null;
+	return path.includes('#') ? path : path + (link.suffix ?? '');
 };
 
 // Opens in a new tab: files and web URLs, not mailto:/tel:

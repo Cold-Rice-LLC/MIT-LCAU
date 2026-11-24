@@ -30,14 +30,30 @@
 
 		& :global(ul) {
 			list-style: disc;
-		}
-
-		& :global(ol) {
-			list-style: decimal;
-		}
-
-		& :global(:is(ul, ol)) {
 			padding-left: 1.2em;
+		}
+
+		/* Figma's numbers: at the edge, with no full stop */
+		& :global(ol) {
+			padding-left: 1.75em;
+		}
+
+		& :global(ol > li) {
+			position: relative;
+		}
+
+		& :global(ol > li::before) {
+			content: counter(list-item);
+			position: absolute;
+			right: 100%;
+			width: 1.75em;
+			font-feature-settings:
+				'lnum' 1,
+				'tnum' 1;
+		}
+
+		& :global(ol > li + li) {
+			margin-top: var(--spacing-xs);
 		}
 	}
 </style>

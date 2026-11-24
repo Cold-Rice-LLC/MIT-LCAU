@@ -1,20 +1,22 @@
 <script>
+	import Buttons from '#lib/components/Buttons.svelte';
 	import RichText from '#lib/components/RichText.svelte';
 
 	/**
-	 * The headline, subtitle and intro at the top of a page, centred, and
-	 * `children` under them, like buttons. Without a headline, the title is
-	 * the page's h1 for screen readers alone. A subtitle has a little more
-	 * room under it before the first module.
+	 * The headline, subtitle and intro at the top of a page, centred, with
+	 * any note and buttons under them. Without a headline, the title is the
+	 * page's h1 for screen readers alone. A subtitle has a little more room
+	 * under it before the first module. `introId` is for links to it.
 	 */
-	let { title, headline, subtitle, intro, children } = $props();
+	let { title, headline, subtitle, intro, introId, note, links } = $props();
 
 	let shownSubtitle = $derived(headline && subtitle);
 </script>
 
 <header
+	id={introId}
 	class={[
-		'col-span-full page-top lg:grid lg:grid-cols-subgrid',
+		'col-span-full scroll-mt-3xl page-top lg:grid lg:grid-cols-subgrid',
 		shownSubtitle && !intro?.length && 'pb-xs lg:pb-md'
 	]}
 >
@@ -30,5 +32,5 @@
 			class={['text-h3 lg:col-span-7 lg:col-start-2', headline && 'mt-2xl lg:mt-[12rem]']}
 		/>
 	{/if}
-	{@render children?.()}
+	<Buttons {note} {links} class="mt-lg lg:col-span-7 lg:col-start-2 lg:mt-xl" />
 </header>

@@ -1,5 +1,5 @@
 import { client } from '#lib/sanity/client.js';
-import { linkFields, portableTextFields } from '#lib/sanity/links.js';
+import { buttonsFields, portableTextFields } from '#lib/sanity/links.js';
 import { latestResearch, listedResearch, researchCard } from '#lib/sanity/modules.js';
 import { pageSeo, seoFields } from '#lib/sanity/seo.js';
 
@@ -13,8 +13,7 @@ export async function load() {
 			title,
 			headline,
 			intro[]{ ${portableTextFields} },
-			note,
-			links[]{ _key, ${linkFields} },
+			${buttonsFields},
 			${seoFields}
 		},
 		"research": ${latest('research', 6)},

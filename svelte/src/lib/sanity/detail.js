@@ -9,7 +9,7 @@ import { pageSeo, seoFields } from '#lib/sanity/seo.js';
  * modules and "On this page" links, and its head tags, with whatever else
  * `fields`, a GROQ projection, asks for. A 404 without one.
  */
-export const loadDetail = async (type, slug, fields) => {
+export const loadDetail = async (type, slug, fields = '') => {
 	const doc = await client.fetch(
 		`*[_type == $type && slug.current == $slug][0]{
 			title,
@@ -27,11 +27,8 @@ export const loadDetail = async (type, slug, fields) => {
 
 	if (!doc) error(404, 'Not found');
 
-	const { modules, onThisPage } = pageSections(doc);
-
 	return {
-		page: { ...doc, modules },
-		onThisPage,
+		...pageSections(doc),
 		seo: pageSeo(doc.seo, { title: doc.title, description: doc.excerpt, image: doc.image })
 	};
 };

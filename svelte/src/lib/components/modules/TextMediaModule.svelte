@@ -2,18 +2,22 @@
 	import Buttons from '#lib/components/Buttons.svelte';
 	import Figure from '#lib/components/Figure.svelte';
 	import RichText from '#lib/components/RichText.svelte';
+	import CardsModule from '#lib/components/modules/CardsModule.svelte';
 	import VideoModule from '#lib/components/modules/VideoModule.svelte';
 	import { croppedAspect } from '#lib/sanity/images.js';
 
 	/**
 	 * Text with images or a video: an image beside the text, each half the
-	 * content, on the left or the right `side`; or the media above the text in
-	 * the paragraph column. Above, one image is the middle 7 columns at its
-	 * own shape, two split the content, and a video is all of it. Two images
-	 * and videos always go above. Under the text, an optional note in purple
-	 * and buttons, like an event's RSVP.
+	 * content, on the left or the right `side`, at 3:2 or the original
+	 * `imageShape`; or the media above the text in the paragraph column.
+	 * Above, one image is the middle 7 columns at its own shape, two split
+	 * the content, and a video is all of it. Two images and videos always go
+	 * above. Under the text, an optional note in purple and buttons, like an
+	 * event's RSVP, and under it all, any `cards`, like Related Research,
+	 * with a heading of their own.
 	 */
-	let { heading, text, mediaType, images, video, layout, side, note, links } = $props();
+	let { heading, text, mediaType, images, video, layout, side, imageShape, note, links, cards } =
+		$props();
 
 	// Either kind of media may still be filled in when the other's chosen
 	let shown = $derived(mediaType === 'video' ? [] : (images ?? []));
@@ -27,7 +31,8 @@
 		rounded: false,
 		class: 'lg:col-span-7 lg:col-start-2'
 	});
-	const besideOrPair = $derived({
+	const besideOrPair = (image) => ({
+		aspect: beside && imageShape === 'original' ? croppedAspect(image) : undefined,
 		sizes: '(width >= 1024px) 40vw, 100vw',
 		class: beside && side === 'right' && 'lg:order-last'
 	});
@@ -45,7 +50,7 @@
 		<VideoModule {video} {heading} />
 	{/if}
 	{#each shown as image (image._key)}
-		<Figure {image} {...beside || pair ? besideOrPair : alone(image)} />
+		<Figure {image} {...beside || pair ? besideOrPair(image) : alone(image)} />
 	{/each}
 	{#if text?.length || note || links?.length}
 		<div class={['flex flex-col items-start gap-lg', !beside && 'col-span-full measure']}>
@@ -56,3 +61,12 @@
 		</div>
 	{/if}
 </div>
+
+{#if cards?.cards?.length}
+	{#if cards.heading}
+		<svelte:element this={heading ? 'h3' : 'h2'} class="col-span-full -mb-xs text-h3 text-trim">
+			{cards.heading}
+		</svelte:element>
+	{/if}
+	<CardsModule {...cards} />
+{/if}

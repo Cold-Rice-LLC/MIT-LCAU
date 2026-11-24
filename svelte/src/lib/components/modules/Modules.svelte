@@ -1,10 +1,14 @@
 <script>
 	import Section from '#lib/components/Section.svelte';
+	import AccordionModule from '#lib/components/modules/AccordionModule.svelte';
 	import CardsModule from '#lib/components/modules/CardsModule.svelte';
+	import CaseStudiesModule from '#lib/components/modules/CaseStudiesModule.svelte';
 	import ColumnsModule from '#lib/components/modules/ColumnsModule.svelte';
 	import DetailsModule from '#lib/components/modules/DetailsModule.svelte';
 	import GalleryModule from '#lib/components/modules/GalleryModule.svelte';
 	import ImagesModule from '#lib/components/modules/ImagesModule.svelte';
+	import NamesModule from '#lib/components/modules/NamesModule.svelte';
+	import OpenCallsModule from '#lib/components/modules/OpenCallsModule.svelte';
 	import OpportunitiesModule from '#lib/components/modules/OpportunitiesModule.svelte';
 	import PeopleModule from '#lib/components/modules/PeopleModule.svelte';
 	import QuoteModule from '#lib/components/modules/QuoteModule.svelte';
@@ -31,7 +35,11 @@
 		columnsModule: ColumnsModule,
 		quoteModule: QuoteModule,
 		detailsModule: DetailsModule,
-		cardsModule: CardsModule
+		cardsModule: CardsModule,
+		caseStudiesModule: CaseStudiesModule,
+		accordionModule: AccordionModule,
+		namesModule: NamesModule,
+		openCallsModule: OpenCallsModule
 	};
 
 	// Sanity returns null for an empty field, which a module's defaults

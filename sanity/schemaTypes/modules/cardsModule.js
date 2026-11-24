@@ -1,13 +1,11 @@
 import {ThLargeIcon} from '@sanity/icons/ThLarge'
 import {defineField, defineType} from 'sanity'
-import {linksField, noteField, radioField, referencesField} from '../fields'
+import {cardsFields} from './cardsFields'
 import {headingField} from './headingField'
-
-const isPicked = ({parent}) => parent?.source === 'picked'
 
 /**
  * Cards for research, exhibitions or courses, like a course's Related
- * Research: the latest of one kind, or any picked by hand.
+ * Research: the latest of one kind, or any picked by hand (see cardsFields).
  */
 export default defineType({
   name: 'cardsModule',
@@ -22,32 +20,7 @@ export default defineType({
       title: 'Text',
       description: 'Above the cards. Optional.',
     }),
-    radioField('source', 'Show', {'The latest': 'latest', 'Picked by hand': 'picked'}),
-    radioField(
-      'kind',
-      'Kind',
-      {Research: 'research', Exhibitions: 'exhibition', Courses: 'course'},
-      {hidden: isPicked},
-    ),
-    defineField({
-      name: 'count',
-      type: 'number',
-      title: 'How Many',
-      description: 'Four to a row.',
-      initialValue: 4,
-      hidden: isPicked,
-      validation: (rule) => rule.integer().min(1).max(12),
-    }),
-    referencesField('documents', 'Cards', ['research', 'exhibition', 'course'], {
-      hidden: (context) => !isPicked(context),
-    }),
-    noteField({
-      description: 'Purple text under the cards, like “Explore all Research on Index.”',
-    }),
-    linksField({
-      title: 'Buttons',
-      description: 'Under the cards and note, like “Visit Index”.',
-    }),
+    ...cardsFields,
   ],
   preview: {
     select: {heading: 'heading', source: 'source', kind: 'kind'},

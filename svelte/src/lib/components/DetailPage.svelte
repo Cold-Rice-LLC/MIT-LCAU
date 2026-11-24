@@ -1,12 +1,13 @@
 <script>
-	import Tag from '#lib/components/Tag.svelte';
+	import Tags from '#lib/components/Tags.svelte';
 	import Modules from '#lib/components/modules/Modules.svelte';
 
 	/**
-	 * A research project, exhibition or course: its title, subtitle, `lines`
-	 * (its year, or its dates and where it is) and `tags`, centred, with 12px
-	 * more than a section's gap below (24px from lg), then its modules and,
-	 * as children, its related sections. `smallHeadings` passes to Modules.
+	 * A research project, exhibition, course or program: its title, subtitle,
+	 * `lines` (its year, or its dates and where it is) and `tags`, centred,
+	 * with 12px more than a section's gap below (24px from lg), then its
+	 * modules and, as children, its related sections. `smallHeadings` passes
+	 * to Modules.
 	 */
 	let { page, lines = [], tags = [], smallHeadings = false, children } = $props();
 </script>
@@ -23,13 +24,7 @@
 			{#each lines as line (line)}
 				<p class="text-body-lg text-trim">{line}</p>
 			{/each}
-			{#if tags.length}
-				<ul class="flex flex-wrap justify-center gap-x-xs gap-y-sm lg:gap-x-md">
-					{#each tags as tag (tag)}
-						<li><Tag label={tag} /></li>
-					{/each}
-				</ul>
-			{/if}
+			<Tags labels={tags} />
 		</div>
 	{/if}
 </header>

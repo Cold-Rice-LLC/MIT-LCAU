@@ -1,17 +1,15 @@
 import {BookIcon} from '@sanity/icons/Book'
 import {defineType} from 'sanity'
 import {
-  excerptField,
-  imageField,
   modulesField,
-  referencesField,
+  onThisPageField,
   seoField,
   slugField,
   subtitleField,
   titleField,
 } from '../fields'
 
-/** A program under Education, like the PhD Program or SPURS. */
+/** A program under Education, at /education/…, like the PhD Program or SPURS. */
 export default defineType({
   name: 'educationPage',
   type: 'document',
@@ -22,15 +20,11 @@ export default defineType({
     // Courses are under /education/courses
     slugField({reserved: ['courses']}),
     subtitleField(),
-    excerptField(),
-    imageField({
-      description: 'For cards and the top of the page. Cropped to 3:2 around the hotspot.',
-    }),
+    onThisPageField({initialValue: true}),
     modulesField(),
-    referencesField('relatedResearch', 'Related Research', 'research'),
     seoField(),
   ],
   preview: {
-    select: {title: 'title', subtitle: 'subtitle', media: 'image'},
+    select: {title: 'title', subtitle: 'subtitle'},
   },
 })

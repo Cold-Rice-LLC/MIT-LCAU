@@ -12,13 +12,16 @@ export function load({ data, url }) {
 	const { people, roles: allRoles, ...rest } = data;
 	const params = url.searchParams;
 
-	const roles = filterOptions(allRoles, people, 'roleId');
+	const roles = filterOptions(allRoles, people, 'roleIds');
 	const role = roles.find((role) => role.value === params.get('role'));
 	const descending = params.get('sort') === 'desc';
 	const query = params.get('q') ?? '';
 
 	const matches = fuzzySearch(
-		sortPeople(role ? people.filter((person) => person.roleId === role._id) : people, descending),
+		sortPeople(
+			role ? people.filter(({ roleIds }) => roleIds?.includes(role._id)) : people,
+			descending
+		),
 		query,
 		(person) => [person.name, ...(person.positions ?? [])].join(' ')
 	);
@@ -28,7 +31,7 @@ export function load({ data, url }) {
 	return {
 		...rest,
 		roles,
-		role: role?.value ?? null,
+		role,
 		sort: descending ? 'desc' : null,
 		query,
 		...paging,

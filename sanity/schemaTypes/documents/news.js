@@ -1,6 +1,7 @@
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {defineField, defineType} from 'sanity'
 import {
+  dateField,
   excerptField,
   imageField,
   modulesField,
@@ -19,13 +20,7 @@ export default defineType({
   fields: [
     titleField(),
     slugField(),
-    defineField({
-      name: 'date',
-      type: 'date',
-      title: 'Date',
-      initialValue: () => new Date().toISOString().slice(0, 10),
-      validation: (rule) => rule.required(),
-    }),
+    dateField(),
     defineField({
       name: 'type',
       type: 'reference',

@@ -1,5 +1,6 @@
 <script>
-	import PersonCard from '#lib/components/PersonCard.svelte';
+	import Buttons from '#lib/components/Buttons.svelte';
+	import PersonCards from '#lib/components/PersonCards.svelte';
 	import RefineControl from '#lib/components/RefineControl.svelte';
 	import RefineRow from '#lib/components/RefineRow.svelte';
 	import RichText from '#lib/components/RichText.svelte';
@@ -12,10 +13,10 @@
 	 * of role buttons picks whose first four show, A–Z, starting with the
 	 * first role, and "View All People" links to the People page filtered
 	 * to that role; roles with no one yet are left out. As a grid, everyone
-	 * it lists, with any text above them: A–Z when it's everyone with a
-	 * role (`byRole`), else in the order picked.
+	 * it lists, with any text above them and note and buttons below: A–Z when
+	 * it's everyone with a `role`, else in the order picked.
 	 */
-	let { display, tabs = [], people = [], byRole, peoplePage, text } = $props();
+	let { display, tabs = [], people = [], role, peoplePage, text, note, links } = $props();
 
 	let roles = $derived(
 		tabs
@@ -23,16 +24,8 @@
 			.map((tab) => ({ ...tab, people: sortPeople(tab.people).slice(0, 4) }))
 	);
 	let selected = $state(0);
-	let gridPeople = $derived(byRole ? sortPeople(people) : people);
+	let gridPeople = $derived(role ? sortPeople(people) : people);
 </script>
-
-{#snippet grid(people)}
-	<ul class="col-span-full card-grid">
-		{#each people as person (person._id)}
-			<li><PersonCard {person} /></li>
-		{/each}
-	</ul>
-{/snippet}
 
 {#if display === 'tabs'}
 	{#if roles.length}
@@ -46,7 +39,7 @@
 					/>
 				{/each}
 			</RefineRow>
-			{@render grid(roles[selected].people)}
+			<PersonCards people={roles[selected].people} role={roles[selected]._id} />
 		</div>
 	{/if}
 	{#if peoplePage}
@@ -63,5 +56,6 @@
 	{#if text?.length}
 		<RichText value={text} class="col-span-full measure text-body-lg" />
 	{/if}
-	{@render grid(gridPeople)}
+	<PersonCards people={gridPeople} {role} />
+	<Buttons {note} {links} class="col-span-full" />
 {/if}

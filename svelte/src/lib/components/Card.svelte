@@ -9,7 +9,8 @@
 	 * `meta`, linking to `link`. The image multiplies into the card's
 	 * colour, which `class` sets (bg-ui, bg-cool-gray…). `large` cards, three
 	 * across from lg, have a larger title there, uncut, over the `excerpt`
-	 * in place of the meta.
+	 * in place of the meta. `uncut`, the title's uncut on phones too, over
+	 * three lines of the excerpt, and there's no grey frame without an image.
 	 */
 	let {
 		link,
@@ -20,6 +21,7 @@
 		meta,
 		excerpt,
 		large = false,
+		uncut = false,
 		class: className
 	} = $props();
 </script>
@@ -32,23 +34,23 @@
 	]}
 >
 	<Tag label={tag} />
-	<ImageFrame
-		as="span"
-		{image}
-		{aspect}
-		sizes="(width >= 1024px) {large ? 27 : 20}vw, 50vw"
-		class="mix-blend-multiply"
-	/>
-	<span class={['title', { large }]}>{title}</span>
+	{#if image || !uncut}
+		<ImageFrame
+			as="span"
+			{image}
+			{aspect}
+			sizes="(width >= 1024px) {large ? 27 : 20}vw, 50vw"
+			class="mix-blend-multiply"
+		/>
+	{/if}
+	<span class={['title', { large, uncut }]}>{title}</span>
 	{#if meta}
 		<span class={['text-body text-trim lg:leading-[1.3] lg:tracking-slight', large && 'lg:hidden']}>
 			{meta}
 		</span>
 	{/if}
 	{#if large && excerpt}
-		<span class="mt-xs hidden text-body leading-[1.25] tracking-slight text-trim lg:block">
-			{excerpt}
-		</span>
+		<span class={['excerpt', { uncut }]}>{excerpt}</span>
 	{/if}
 </AppLink>
 
@@ -68,6 +70,32 @@
 			@media (width >= 1024px) {
 				@apply line-clamp-none text-h3 text-trim;
 				margin-block: var(--spacing-2xs) 0;
+				padding-top: 0;
+			}
+		}
+
+		&.uncut {
+			-webkit-line-clamp: none;
+		}
+	}
+
+	/* From lg only, unless the card's uncut */
+	.excerpt {
+		@apply hidden text-body;
+		line-height: 1.25;
+
+		@media (width >= 1024px) {
+			@apply block text-trim;
+			margin-top: var(--spacing-xs);
+			letter-spacing: var(--tracking-slight);
+		}
+
+		&.uncut {
+			@apply text-trim-clipped line-clamp-3;
+
+			@media (width >= 1024px) {
+				@apply line-clamp-none text-trim;
+				margin-top: var(--spacing-xs);
 				padding-top: 0;
 			}
 		}

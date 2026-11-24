@@ -1,6 +1,6 @@
 import {TextIcon} from '@sanity/icons/Text'
 import {defineField, defineType} from 'sanity'
-import {radioField} from '../fields'
+import {buttonsFields, radioField} from '../fields'
 import {headingField} from './headingField'
 
 /**
@@ -27,6 +27,10 @@ export default defineType({
       type: 'richText',
       title: 'Text',
       validation: (rule) => rule.required(),
+    }),
+    ...buttonsFields({
+      note: 'Purple text under the text. Optional.',
+      links: 'Under the text and note, like “Inquire”.',
     }),
     radioField('size', 'Size', {Regular: 'regular', Large: 'large'}),
   ],

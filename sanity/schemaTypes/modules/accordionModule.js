@@ -1,8 +1,9 @@
 import {UlistIcon} from '@sanity/icons/Ulist'
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {titleField} from '../fields'
 import {headingField} from './headingField'
 
-/** Questions or topics that open one at a time, like the SPURS FAQ. */
+/** Questions or topics that open to show their text, like the SPURS FAQ. */
 export default defineType({
   name: 'accordionModule',
   type: 'object',
@@ -20,12 +21,7 @@ export default defineType({
           type: 'object',
           title: 'Item',
           fields: [
-            defineField({
-              name: 'title',
-              type: 'string',
-              title: 'Title',
-              validation: (rule) => rule.required(),
-            }),
+            titleField(),
             defineField({
               name: 'text',
               type: 'richText',

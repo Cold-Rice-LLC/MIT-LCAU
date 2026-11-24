@@ -1,3 +1,4 @@
+import {BookIcon} from '@sanity/icons/Book'
 import {CalendarIcon} from '@sanity/icons/Calendar'
 import {CogIcon} from '@sanity/icons/Cog'
 import {DocumentIcon} from '@sanity/icons/Document'
@@ -69,8 +70,10 @@ export const myStructure = (S) =>
         ['researchTheme', 'Themes'],
         ['researchField', 'Fields'],
       ]),
-      typeItem(S, ['course', 'Courses']),
-      typeItem(S, ['educationPage', 'Education']),
+      typeGroup(S, 'educationGroup', 'Education', BookIcon, [
+        ['educationPage', 'Education Pages'],
+        ['course', 'Courses'],
+      ]),
       typeGroup(S, 'newsGroup', 'News', DocumentTextIcon, [
         ['news', 'All News'],
         ['newsType', 'News Types'],

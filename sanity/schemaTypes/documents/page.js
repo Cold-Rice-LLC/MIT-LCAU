@@ -2,9 +2,8 @@ import {defineField, defineType} from 'sanity'
 import {DocumentIcon} from '@sanity/icons/Document'
 import {isLandingPage} from '../../landingPages'
 import {
-  linksField,
+  buttonsFields,
   modulesField,
-  noteField,
   onThisPageField,
   referencesField,
   seoField,
@@ -12,10 +11,11 @@ import {
   titleField,
 } from '../fields'
 
-// Tests for whether a document is one of the pages with these IDs, or its draft
+// Tests, as for a field's `hidden`, for whether its document is one of the
+// pages with these IDs, or its draft
 const isPage =
   (...ids) =>
-  (document) =>
+  ({document}) =>
     ids.some((id) => [id, `drafts.${id}`].includes(document?._id))
 const isHomepage = isPage('homepage')
 const isPeopleLanding = isPage('page-people')
@@ -23,14 +23,17 @@ const isAllEvents = isPage('page-events-all')
 const isNewsLanding = isPage('page-news')
 const isResearchLanding = isPage('page-research')
 const isResearchIndex = isPage('page-research-all')
-// Pages that only list documents, with nothing but a headline above
-const isListing = isPage(
+// The homepage, and pages that only list documents, with nothing but a headline above
+const hasNoIntro = isPage(
+  'homepage',
   'page-people',
   'page-events',
   'page-events-all',
   'page-research-all',
   'page-news',
 )
+// Those, and the Research landing, whose sections are what it lists
+const hasNoModules = (context) => hasNoIntro(context) || isResearchLanding(context)
 
 /**
  * Any page that isn't a person, event or other document: the homepage,
@@ -49,11 +52,11 @@ export default defineType({
       title: 'Slug',
       description: 'The last part of the page’s URL.',
       options: {source: 'title'},
-      hidden: ({document}) => isHomepage(document),
+      hidden: isHomepage,
       readOnly: ({document}) => isLandingPage(document?._id),
       validation: (rule) =>
         rule.custom((value, context) =>
-          isHomepage(context.document) || value?.current ? true : 'Required',
+          isHomepage(context) || value?.current ? true : 'Required',
         ),
     }),
     defineField({
@@ -64,14 +67,14 @@ export default defineType({
         'The full-screen images at the top of the homepage, under the large logo. Each one’s caption shows along the bottom.',
       of: [{type: 'figure'}],
       options: {layout: 'grid'},
-      hidden: ({document}) => !isHomepage(document),
+      hidden: (context) => !isHomepage(context),
     }),
     defineField({
       name: 'headline',
       type: 'string',
       title: 'Headline',
       description: 'The large heading at the top of the page, like “About LCAU”. Optional.',
-      hidden: ({document}) => isHomepage(document),
+      hidden: isHomepage,
     }),
     subtitleField({
       description: 'A line under the headline, like “Last updated on October 14, 2026”. Optional.',
@@ -82,47 +85,48 @@ export default defineType({
       type: 'richText',
       title: 'Introduction',
       description: 'The large text under the headline. Optional.',
-      hidden: ({document}) => isHomepage(document) || isListing(document),
+      hidden: hasNoIntro,
     }),
-    noteField({
-      description:
-        'Purple text under the introduction, like “Explore all research, exhibitions and sponsored courses.”',
-      hidden: ({document}) => !isResearchLanding(document),
-    }),
-    linksField({
-      description: 'Buttons under the introduction and note, like “Visit Index”.',
-      hidden: ({document}) => !isResearchLanding(document),
+    ...buttonsFields({
+      note: 'Purple text under the introduction, like “Explore all research, exhibitions and sponsored courses.”',
+      links: 'Under the introduction and note, like “Visit Index”.',
+      hidden: hasNoIntro,
     }),
     referencesField('roleFilters', 'Role Filters', 'role', {
       description:
         'The Role buttons above everyone, in this order. Roles with no one yet are left out.',
-      hidden: ({document}) => !isPeopleLanding(document),
+      hidden: (context) => !isPeopleLanding(context),
     }),
     referencesField('typeFilters', 'Type Filters', 'eventType', {
       description:
         'The Type buttons above every event, in this order. Types with no events yet are left out. Leave empty for every type, A–Z.',
-      hidden: ({document}) => !isAllEvents(document),
+      hidden: (context) => !isAllEvents(context),
     }),
     referencesField('themeFilters', 'Theme Filters', 'researchTheme', {
       description:
         'The Theme filter’s choices, in this order. Themes with nothing yet are left out. Leave empty for every theme, A–Z.',
-      hidden: ({document}) => !isResearchIndex(document),
+      hidden: (context) => !isResearchIndex(context),
     }),
     referencesField('fieldFilters', 'Field Filters', 'researchField', {
       description:
         'The Field filter’s choices, in this order. Fields with nothing yet are left out. Leave empty for every field, A–Z.',
-      hidden: ({document}) => !isResearchIndex(document),
+      hidden: (context) => !isResearchIndex(context),
     }),
     referencesField('featuredNews', 'Featured News', 'news', {
       description: 'Up to three posts above All News, in this order. They list under All News too.',
-      hidden: ({document}) => !isNewsLanding(document),
+      hidden: (context) => !isNewsLanding(context),
       validation: (rule) => rule.unique().max(3),
     }),
-    onThisPageField({hidden: ({document}) => isLandingPage(document?._id)}),
-    modulesField({
-      hidden: ({document}) =>
-        isHomepage(document) || isResearchLanding(document) || isListing(document),
+    onThisPageField({hidden: hasNoModules}),
+    defineField({
+      name: 'introLabel',
+      type: 'string',
+      title: 'Introduction’s “On this page” Label',
+      description:
+        'What the introduction is called there, like “Introduction”. Leave empty to leave it out.',
+      hidden: ({document}) => !document?.onThisPage || !document?.intro?.length,
     }),
+    modulesField({hidden: hasNoModules}),
     seoField(),
   ],
 })

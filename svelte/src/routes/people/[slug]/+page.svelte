@@ -3,14 +3,14 @@
 	import ImageFrame from '#lib/components/ImageFrame.svelte';
 	import ResearchSection from '#lib/components/ResearchSection.svelte';
 	import RichText from '#lib/components/RichText.svelte';
-	import Tag from '#lib/components/Tag.svelte';
+	import Tags from '#lib/components/Tags.svelte';
 
 	let { data } = $props();
 
 	let person = $derived(data.person);
 </script>
 
-<!-- Their name, positions a line each, and role, centred -->
+<!-- Their name, positions a line each, and roles, centred -->
 <header class="col-span-full flex flex-col items-center page-top text-center">
 	<h1 class="text-h1 text-trim">{person.name}</h1>
 	{#if person.positions?.length}
@@ -20,7 +20,7 @@
 			{/each}
 		</p>
 	{/if}
-	<Tag label={person.role} class="mt-md" />
+	<Tags labels={person.roles} class="mt-md" />
 </header>
 
 <div class="intro end-gap">
