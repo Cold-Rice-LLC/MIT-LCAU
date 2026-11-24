@@ -58,6 +58,13 @@ export default defineType({
       hidden: ({document}) => isHomepage(document),
     }),
     defineField({
+      name: 'subtitle',
+      type: 'string',
+      title: 'Subtitle',
+      description: 'A line under the headline, like “Last updated on October 14, 2026”. Optional.',
+      hidden: ({document}) => isLandingPage(document?._id) || !document?.headline,
+    }),
+    defineField({
       name: 'intro',
       type: 'richText',
       title: 'Introduction',
@@ -86,6 +93,15 @@ export default defineType({
       description: 'Up to three posts above All News, in this order. They list under All News too.',
       hidden: ({document}) => !isNewsLanding(document),
       validation: (rule) => rule.unique().max(3),
+    }),
+    defineField({
+      name: 'onThisPage',
+      type: 'boolean',
+      title: 'Show “On this page”',
+      description:
+        'Links to the page’s sections, under the logo. Each section can be renamed there or left out.',
+      initialValue: false,
+      hidden: ({document}) => isLandingPage(document?._id),
     }),
     modulesField({
       hidden: ({document}) =>

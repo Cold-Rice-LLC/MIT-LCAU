@@ -65,7 +65,13 @@ export const modulesFields = `
 	_key,
 	_type,
 	heading,
-	_type == "textModule" => { size, ${text} },
+	onThisPageLabel,
+	hideOnThisPage,
+	_type == "textModule" => {
+		size,
+		"smallHeading": headingStyle == "small" && size != "large",
+		${text}
+	},
 	_type == "textMediaModule" => {
 		layout,
 		${text},

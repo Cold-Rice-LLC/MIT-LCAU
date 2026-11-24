@@ -13,12 +13,14 @@
 	import Footer from '#lib/components/layout/Footer.svelte';
 	import HomeHero from '#lib/components/layout/HomeHero.svelte';
 	import MobileMenu from '#lib/components/layout/MobileMenu.svelte';
+	import MobileOnThisPage from '#lib/components/layout/MobileOnThisPage.svelte';
 	import Seo from '#lib/components/layout/Seo.svelte';
 	import Sidebar from '#lib/components/layout/Sidebar.svelte';
 
 	let { children, data } = $props();
 
 	let home = $derived(page.route.id === '/');
+	let onThisPage = $derived(page.data.onThisPage ?? []);
 	// Explore's height, for the logo to stop above it
 	let exploreHeight = $state(0);
 
@@ -53,7 +55,7 @@
 <!-- From lg: the sidebar's column beside a 9-column content grid (see the
      style block) -->
 <div class="shell" style:--explore-height="{exploreHeight}px">
-	<Sidebar />
+	<Sidebar links={onThisPage} />
 	<div class="min-w-0 px-xs lg:col-start-2 lg:row-start-1 lg:flex lg:flex-col">
 		<a
 			href="/"
@@ -66,16 +68,17 @@
 			</span>
 		</a>
 		<MobileMenu navigation={data.navigation} />
-		<!-- TEMPORARY min-h-svh: room to scroll past the sidebar until pages
-		     have content -->
 		<main
 			class={[
-				'min-h-svh lg:grid lg:grid-cols-9 lg:content-start lg:gap-x-xs',
+				'lg:grid lg:grid-cols-9 lg:content-start lg:gap-x-xs',
 				home ? 'lg:pt-xs' : 'lg:pt-[5.8rem]'
 			]}
 		>
 			{@render children()}
 		</main>
+		{#if onThisPage.length}
+			<MobileOnThisPage links={onThisPage} />
+		{/if}
 		<!-- On a short page, at the foot, clear of the logo -->
 		<Explore links={data.explore} bind:height={exploreHeight} class="lg:mt-auto" />
 	</div>

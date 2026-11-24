@@ -11,7 +11,8 @@
 
 	/**
 	 * A page's modules (queried with modulesFields), each a Section with
-	 * its heading. Types not built yet are skipped.
+	 * its heading, and `id` if it has one (see withIds). Types not built
+	 * yet are skipped.
 	 */
 	let { modules = [] } = $props();
 
@@ -35,7 +36,7 @@
 {#each modules as module (module._key)}
 	{@const Module = components[module._type]}
 	{#if Module}
-		<Section heading={module.heading}>
+		<Section id={module.id} heading={module.heading} smallHeading={module.smallHeading}>
 			<Module {...filled(module)} />
 		</Section>
 	{/if}

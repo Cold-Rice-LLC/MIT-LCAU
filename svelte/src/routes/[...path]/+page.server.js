@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import { onThisPageLinks, withIds } from '#lib/onThisPage.js';
 import { client } from '#lib/sanity/client.js';
 import { portableTextFields } from '#lib/sanity/links.js';
 import { modulesFields } from '#lib/sanity/modules.js';
@@ -11,6 +12,8 @@ export async function load({ params }) {
 		`*[_type == "page" && slug.current == $slug && _id != "homepage"][0]{
 			title,
 			headline,
+			subtitle,
+			onThisPage,
 			intro[]{ ${portableTextFields} },
 			modules[]{ ${modulesFields} },
 			${seoFields}
@@ -20,5 +23,11 @@ export async function load({ params }) {
 
 	if (!page) error(404, 'Not found');
 
-	return { page, seo: pageSeo(page.seo, { title: page.title }) };
+	const modules = withIds(page.modules);
+
+	return {
+		page: { ...page, modules },
+		onThisPage: page.onThisPage ? onThisPageLinks(modules) : [],
+		seo: pageSeo(page.seo, { title: page.title })
+	};
 }
