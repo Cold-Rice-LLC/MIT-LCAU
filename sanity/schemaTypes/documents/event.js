@@ -1,6 +1,7 @@
 import {CalendarIcon} from '@sanity/icons/Calendar'
 import {defineField, defineType} from 'sanity'
 import {
+  excerptField,
   imageField,
   modulesField,
   referencesField,
@@ -69,6 +70,9 @@ export default defineType({
       description: 'Where the RSVP button goes. Hidden once the event has ended.',
       fieldset: 'when',
       validation: (rule) => rule.uri({scheme: ['http', 'https', 'mailto']}),
+    }),
+    excerptField({
+      description: 'The short description on the homepage, which shows the date if it’s empty.',
     }),
     imageField(),
     modulesField(),

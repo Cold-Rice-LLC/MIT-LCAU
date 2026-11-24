@@ -10,7 +10,8 @@
 	 * children in two `columns` (or three), never too narrow for
 	 * "Announcement" (or "Transportation"). With an `excerpt`, rows from lg
 	 * are all the same height: it's cut to three lines under a one-line
-	 * title, one under two.
+	 * title, one under two, or four and three with no tag. The Facts can be
+	 * left out, as can the image's column, with `imageless`.
 	 *
 	 * On phones the image sits beside the title, with `meta` under it in
 	 * place of the Facts; `stacked` puts the image above the whole title and
@@ -25,11 +26,16 @@
 		meta,
 		stacked = false,
 		columns = 2,
+		imageless = false,
 		class: className,
 		children
 	} = $props();
 
 	let titleLines = $state(2);
+	let excerptLines = $derived.by(() => {
+		if (titleLines === 1) return tag ? 'lg:line-clamp-3' : 'lg:line-clamp-4';
+		return tag ? 'lg:line-clamp-1' : 'lg:line-clamp-3';
+	});
 
 	const measureTitle = (el) => {
 		const observer = new ResizeObserver(() => {
@@ -45,20 +51,25 @@
 	{link}
 	class={[
 		'grid gap-xs rounded-def lg:p-xs',
-		columns === 3
-			? 'lg:grid-cols-[209fr_691fr_minmax(31.6rem,444fr)] xl:grid-cols-[209fr_691fr_minmax(38.8rem,444fr)]'
-			: 'lg:grid-cols-[209fr_691fr_minmax(28.8rem,444fr)]',
-		stacked ? 'p-xs pb-sm' : 'grid-cols-[minmax(0,1fr)_minmax(0,2fr)] p-[0.9rem]',
+		imageless
+			? 'lg:grid-cols-[minmax(0,900fr)_444fr]'
+			: columns === 3
+				? 'lg:grid-cols-[209fr_691fr_minmax(31.6rem,444fr)] xl:grid-cols-[209fr_691fr_minmax(38.8rem,444fr)]'
+				: 'lg:grid-cols-[209fr_691fr_minmax(28.8rem,444fr)]',
+		stacked ? 'p-xs pb-sm' : 'p-[0.9rem]',
+		!stacked && !imageless && 'grid-cols-[minmax(0,1fr)_minmax(0,2fr)]',
 		className
 	]}
 >
-	<ImageFrame
-		as="span"
-		{image}
-		aspect={3 / 2}
-		sizes="(width >= 1024px) 15vw, {stacked ? '100vw' : '33vw'}"
-		class="mix-blend-multiply"
-	/>
+	{#if !imageless}
+		<ImageFrame
+			as="span"
+			{image}
+			aspect={3 / 2}
+			sizes="(width >= 1024px) 15vw, {stacked ? '100vw' : '33vw'}"
+			class="mix-blend-multiply"
+		/>
+	{/if}
 	<span class={['flex min-w-0 flex-col gap-xs lg:gap-md', excerpt && 'lg:h-[13.9rem]']}>
 		<Tag label={tag} class={['lg:-mb-2xs', stacked && 'hidden lg:flex']} />
 		<span
@@ -74,25 +85,20 @@
 			<span class="mt-2xs text-body text-trim lg:hidden">{meta}</span>
 		{/if}
 		{#if excerpt}
-			<span
-				class={[
-					'text-trim-clipped hidden text-body',
-					titleLines === 1 ? 'lg:line-clamp-3' : 'lg:line-clamp-1'
-				]}
-			>
-				{excerpt}
-			</span>
+			<span class={['text-trim-clipped hidden text-body', excerptLines]}>{excerpt}</span>
 		{/if}
 	</span>
-	<dl
-		class={[
-			'grid-cols-2 gap-xs lg:mt-0 lg:grid',
-			columns === 3 && 'three',
-			stacked ? 'mt-xs grid' : 'hidden'
-		]}
-	>
-		{@render children()}
-	</dl>
+	{#if children}
+		<dl
+			class={[
+				'grid-cols-2 gap-xs lg:mt-0 lg:grid',
+				columns === 3 && 'three',
+				stacked ? 'mt-xs grid' : 'hidden'
+			]}
+		>
+			{@render children()}
+		</dl>
+	{/if}
 </AppLink>
 
 <style>

@@ -1,12 +1,14 @@
 <script>
-	import AppLink from '#lib/components/AppLink.svelte';
+	import CardColumns from '#lib/components/CardColumns.svelte';
+	import FeedCard from '#lib/components/FeedCard.svelte';
 
 	let { data } = $props();
 </script>
 
-<h1 class="col-span-full mb-xl text-h1">{data.homepage?.title ?? 'MIT LCAU'}</h1>
-<ul class="col-span-full text-body-lg">
-	{#each data.pages as { _id, link } (_id)}
-		<li><AppLink {link} class="underline" /></li>
-	{/each}
-</ul>
+<h1 class="sr-only">MIT Norman B. Leventhal Center for Advanced Urbanism</h1>
+
+<CardColumns items={data.feed} class="lg:mb-xl">
+	{#snippet card(item)}
+		<FeedCard {item} />
+	{/snippet}
+</CardColumns>

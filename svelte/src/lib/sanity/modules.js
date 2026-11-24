@@ -95,6 +95,12 @@ export const researchCard = `
 	${linkTo}
 `;
 
+// Filter for all of those, which the homepage's feed shows
+export const listedFeed = `(${listedEvents}) || (${listedNews}) || (${listedResearch})`;
+
+// What ResearchRow shows
+export const researchRow = `${researchCard}, "themes": themes[]->title, "fields": fields[]->title`;
+
 /**
  * GROQ for a listing page's filters: the labels picked in its `field`, in
  * order, or else every document of `type`, A–Z. `label` is what they say.

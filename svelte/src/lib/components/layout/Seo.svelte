@@ -1,6 +1,7 @@
 <script>
 	import { page } from '$app/state';
 	import { urlFor } from '#lib/sanity/client.js';
+	import { searchTitle } from '#lib/search.js';
 
 	/**
 	 * The head tags for search engines and shared links, from the page's
@@ -8,7 +9,7 @@
 	 * read "Page — Site Title"; a page with no title of its own, like the
 	 * homepage, is the site's title alone. Descriptions are cut to about
 	 * 160 characters, at a word, and share images cropped to 1200 × 630.
-	 * Error pages are kept out of search engines.
+	 * Error pages and search results are kept out of search engines.
 	 */
 	let { defaults } = $props();
 
@@ -19,7 +20,7 @@
 
 	let ownTitle = $derived.by(() => {
 		if (page.error) return page.status === 404 ? 'Not Found' : 'Error';
-		return seo.title;
+		return page.state.search ? searchTitle(page.state.search.query) : seo.title;
 	});
 	let title = $derived(ownTitle ? `${ownTitle} — ${siteTitle}` : siteTitle);
 
@@ -44,7 +45,7 @@
 		<meta name="description" content={description} />
 		<meta property="og:description" content={description} />
 	{/if}
-	{#if page.error}
+	{#if page.error || seo.noindex}
 		<meta name="robots" content="noindex" />
 	{:else}
 		<link rel="canonical" href={url} />

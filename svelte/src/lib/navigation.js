@@ -61,3 +61,24 @@ export const breadcrumb = (trail, title) => ({
 	via: trail.nested ? trail.link?.label : null,
 	here: trail.nested ? title : trail.link?.label
 });
+
+/**
+ * The breadcrumb to a search result: the crumbs `above` it and the one
+ * `here`, as the menu would show them on its page, or the section alone
+ * for a landing page. Out of the menu, news is under News and anything
+ * else is its title alone.
+ */
+export const crumbsTo = (navigation, { _type, menuTitle, name, title, link, menuParent }) => {
+	const own = menuTitle ?? name ?? title;
+	const href = linkHref(link);
+	const landing = navigation.find((section) => section.landing && sectionHref(section) === href);
+	if (landing) return { above: [], here: landing.title };
+
+	const trail = activeTrail(navigation, href, menuParent);
+	const { via, here } = breadcrumb(trail, own);
+	const section = trail.section?.title ?? (_type === 'news' ? 'News' : null);
+	return {
+		above: [section, via].filter(Boolean),
+		here: here ?? own
+	};
+};

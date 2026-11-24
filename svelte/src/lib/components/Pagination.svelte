@@ -11,7 +11,9 @@
 	 */
 	let { page, pageCount, class: className } = $props();
 
-	const href = (number) => queryHref(currentPage.url, { page: number > 1 ? number : null });
+	// Over a page, as search results are, the URL that shows
+	let url = $derived(currentPage.shallow?.url ?? currentPage.url);
+	const href = (number) => queryHref(url, { page: number > 1 ? number : null });
 
 	// Seven at most: the numbers to show, null for each gap
 	let numbers = $derived.by(() => {

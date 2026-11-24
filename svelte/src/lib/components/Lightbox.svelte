@@ -145,9 +145,4 @@
 	figure {
 		width: min(100cqw, (100cqh - 5.2rem) * var(--aspect));
 	}
-
-	/* The page doesn't scroll behind it */
-	:global(html:has(dialog[open])) {
-		overflow: hidden;
-	}
 </style>

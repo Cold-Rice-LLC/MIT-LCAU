@@ -1,5 +1,5 @@
 import { client } from '#lib/sanity/client.js';
-import { filterLabels, latestResearch, listedResearch, researchCard } from '#lib/sanity/modules.js';
+import { filterLabels, latestResearch, listedResearch, researchRow } from '#lib/sanity/modules.js';
 import { pageSeo, seoFields } from '#lib/sanity/seo.js';
 
 /**
@@ -19,11 +19,9 @@ export async function load() {
 			${seoFields}
 		},
 		"items": *[${listedResearch}] | ${latestResearch}{
-			${researchCard},
+			${researchRow},
 			subtitle,
-			"themes": themes[]->title,
 			"themeIds": coalesce(themes[]._ref, []),
-			"fields": fields[]->title,
 			"fieldIds": coalesce(fields[]._ref, [])
 		}
 	}`);

@@ -8,7 +8,7 @@
 	 * or focusing it takes its words back to the initials a step at a time,
 	 * then shows the full name; leaving runs them back out. Timed from the
 	 * designers' screen recording, slowed by 20%. Already on the homepage,
-	 * it scrolls back to the top instead. Size it with a font-size on
+	 * it scrolls back to the top instead, unless search results are over it. Size it with a font-size on
 	 * `class`; `logoClass` goes on the logo itself.
 	 */
 	let { class: className, logoClass } = $props();
@@ -29,7 +29,7 @@
 	});
 
 	const toTop = (event) => {
-		if (page.url.pathname !== '/') return;
+		if (page.url.pathname !== '/' || page.shallow) return;
 		event.preventDefault();
 		scrollTo({ top: 0, behavior: prefersReducedMotion.current ? 'instant' : 'smooth' });
 	};

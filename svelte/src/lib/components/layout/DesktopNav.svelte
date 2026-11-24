@@ -5,8 +5,10 @@
 	import { page } from '$app/state';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import AppLink from '#lib/components/AppLink.svelte';
+	import SearchInput from '#lib/components/SearchInput.svelte';
 	import SearchIcon from '#lib/components/icons/Search.svelte';
 	import { activeTrail, breadcrumb, sectionHref } from '#lib/navigation.js';
+	import { opensSearch } from '#lib/searchOverlay.js';
 
 	/**
 	 * Desktop main menu: a grey pill of section titles centred over the
@@ -83,8 +85,11 @@
 	// Held until the panel has been measured at its new size and painted:
 	// two frames after the navigation finishes (or fails). A change to the
 	// query alone, like typing in People's search, leaves the nav be while
-	// it's shut: the breadcrumb is the same.
-	beforeNavigate(({ from, to, complete }) => {
+	// it's shut: the breadcrumb is the same. So does searching the site, until
+	// its results are there to open over the page.
+	beforeNavigate((navigation) => {
+		if (opensSearch(navigation)) return;
+		const { from, to, complete } = navigation;
 		if (!open && !searching && from?.url.pathname === to?.url.pathname) return;
 		instant = true;
 		const done = () => {
@@ -133,20 +138,7 @@
 					bind:offsetHeight={height}
 					in:fade={{ duration }}
 				>
-					<SearchIcon class="w-[3.4rem]" />
-					<label for="search-query" class="sr-only">Search</label>
-					<input
-						bind:this={input}
-						bind:value={query}
-						id="search-query"
-						type="text"
-						enterkeyhint="search"
-						name="q"
-						placeholder="Search LCAU"
-						autocomplete="off"
-						class="h-xl min-w-0 flex-1 bg-transparent p-0 text-[4.8rem] leading-none tracking-[-0.02em] outline-none placeholder:text-white/50"
-					/>
-					<button class="cta"> Go </button>
+					<SearchInput bind:value={query} bind:input />
 				</form>
 			{:else}
 				<ul

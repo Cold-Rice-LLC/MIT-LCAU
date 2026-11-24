@@ -7,8 +7,7 @@
 	 * A research project, exhibition or course as a CardRow in its type's
 	 * colour, with its excerpt, or an exhibition's dates, and its year, theme
 	 * and field, each in its own column whether or not it has the others
-	 * (queried with researchCard, plus `themes` and `fields`); on phones just
-	 * its year or dates.
+	 * (queried with researchRow); on phones just its year or dates.
 	 */
 	let { item } = $props();
 

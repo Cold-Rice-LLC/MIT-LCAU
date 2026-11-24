@@ -35,7 +35,7 @@
 	/* The logo is sized like the footer's (--logo-size). Stops once the
 	   Explore links reach its foot, so their images never cover it: sticking
 	   ends where its margin box meets the foot of the page, so the margin is
-	   Explore's height (--explore-height, from the layout). At most the
+	   Explore's height (--explore-height, from the layout), if it's there. At most the
 	   screen's height less the MIT link's 3.81rem and the gaps, so "On this
 	   page" never reaches it. */
 	div {
@@ -50,7 +50,7 @@
 			grid-area: 1 / 1;
 			align-self: start;
 			max-height: calc(100svh - 3 * var(--spacing-xs) - 3.81rem);
-			margin: var(--spacing-xs) 0 var(--explore-height) var(--spacing-xs);
+			margin: var(--spacing-xs) 0 var(--explore-height, 0) var(--spacing-xs);
 		}
 	}
 </style>

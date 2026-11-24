@@ -227,6 +227,14 @@ is desktop.
 	}
 }
 
+/* From lg, the sidebar's column (--sidebar-column), and the content in the rest */
+@utility shell {
+	@media (width >= 1024px) {
+		display: grid;
+		grid-template-columns: var(--sidebar-column) minmax(0, 1fr);
+	}
+}
+
 /* Room above a page's heading, under the menu */
 @utility page-top {
 	padding-top: 6rem;
@@ -300,6 +308,11 @@ html {
 	/* The desktop sidebar's column: the logo's plus its padding */
 	--sidebar-column: calc(var(--logo-column) + var(--spacing-md));
 	font-size: 10px;
+
+	/* The page doesn't scroll behind the lightbox or search results */
+	&:has(dialog[open]) {
+		overflow: hidden;
+	}
 }
 
 /* Tailwind's preflight gives buttons the default cursor, and leaves the

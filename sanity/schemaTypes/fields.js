@@ -19,6 +19,9 @@ export const linkableTypes = [
   'caseStudy',
 ]
 
+// What the homepage's cards can be
+export const feedTypes = ['event', 'news', 'research', 'exhibition', 'course']
+
 export const titleField = (options = {}) =>
   defineField({
     name: 'title',

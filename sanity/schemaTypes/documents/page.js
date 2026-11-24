@@ -3,6 +3,7 @@ import {DocumentIcon} from '@sanity/icons/Document'
 import {isLandingPage} from '../../landingPages'
 import {
   buttonsFields,
+  feedTypes,
   modulesField,
   onThisPageField,
   referencesField,
@@ -55,9 +56,12 @@ export default defineType({
       hidden: isHomepage,
       readOnly: ({document}) => isLandingPage(document?._id),
       validation: (rule) =>
-        rule.custom((value, context) =>
-          isHomepage(context) || value?.current ? true : 'Required',
-        ),
+        rule.custom((value, context) => {
+          if (isHomepage(context)) return true
+          if (!value?.current) return 'Required'
+          // /search is the site's search
+          return value.current === 'search' ? '“search” is taken' : true
+        }),
     }),
     defineField({
       name: 'heroSlides',
@@ -67,6 +71,11 @@ export default defineType({
         'The full-screen images at the top of the homepage, under the large logo. Each one’s caption shows along the bottom.',
       of: [{type: 'figure'}],
       options: {layout: 'grid'},
+      hidden: (context) => !isHomepage(context),
+    }),
+    referencesField('featured', 'Featured', feedTypes, {
+      description:
+        'First in the cards under the hero, in this order. The latest events, news, research, exhibitions and courses follow, up to 24 cards in all.',
       hidden: (context) => !isHomepage(context),
     }),
     defineField({
