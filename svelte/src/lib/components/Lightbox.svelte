@@ -36,6 +36,8 @@
 
 	const modal = (dialog) => {
 		dialog.showModal();
+		// Rather than its first button, the left half, which would be outlined
+		dialog.focus();
 		return () => {
 			const origin = originOf(carousel.current);
 			requestAnimationFrame(() => origin?.focus({ preventScroll: true }));
@@ -58,8 +60,9 @@
 <dialog
 	{@attach modal}
 	aria-label={page.data.seo?.title}
+	tabindex="-1"
 	transition:fade={{ duration }}
-	class="h-dvh max-h-none w-screen max-w-none bg-black/50 p-xs backdrop:bg-transparent"
+	class="h-dvh max-h-none w-screen max-w-none bg-black/50 p-xs outline-none backdrop:bg-transparent"
 	oncancel={(event) => {
 		event.preventDefault();
 		close();
@@ -99,7 +102,9 @@
 			</div>
 
 			{#if images.length > 1}
-				<CarouselHalves {carousel} />
+				<!-- A click leaves the focus where it is, so the arrow keys don't
+				     then outline a half -->
+				<CarouselHalves {carousel} onmousedown={(event) => event.preventDefault()} />
 			{/if}
 		</div>
 

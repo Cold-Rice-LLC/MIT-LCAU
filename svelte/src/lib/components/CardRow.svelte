@@ -8,8 +8,9 @@
 	 * that multiplies into the row's colour (which `class` sets, as on Card),
 	 * a tag and a title of up to two lines, then, from lg, the Facts passed as
 	 * children in two `columns` (or three), never too narrow for
-	 * "Announcement". With an `excerpt`, rows from lg are all the same height:
-	 * it's cut to three lines under a one-line title, one under two.
+	 * "Announcement" (or "Transportation"). With an `excerpt`, rows from lg
+	 * are all the same height: it's cut to three lines under a one-line
+	 * title, one under two.
 	 *
 	 * On phones the image sits beside the title, with `meta` under it in
 	 * place of the Facts; `stacked` puts the image above the whole title and
@@ -43,7 +44,10 @@
 <AppLink
 	{link}
 	class={[
-		'grid gap-xs rounded-def lg:grid-cols-[209fr_691fr_minmax(28.8rem,444fr)] lg:p-xs',
+		'grid gap-xs rounded-def lg:p-xs',
+		columns === 3
+			? 'lg:grid-cols-[209fr_691fr_minmax(31.6rem,444fr)] xl:grid-cols-[209fr_691fr_minmax(38.8rem,444fr)]'
+			: 'lg:grid-cols-[209fr_691fr_minmax(28.8rem,444fr)]',
 		stacked ? 'p-xs pb-sm' : 'grid-cols-[minmax(0,1fr)_minmax(0,2fr)] p-[0.9rem]',
 		className
 	]}
@@ -83,7 +87,7 @@
 	<dl
 		class={[
 			'grid-cols-2 gap-xs lg:mt-0 lg:grid',
-			columns === 3 && 'lg:grid-cols-3',
+			columns === 3 && 'three',
 			stacked ? 'mt-xs grid' : 'hidden'
 		]}
 	>
@@ -97,6 +101,28 @@
 		@media (width >= 1024px) {
 			line-height: 1.1;
 			letter-spacing: -0.02em;
+		}
+	}
+
+	/* Equal where there's room. Short of it, the first, like Year, narrows,
+	   and until xl the values are smaller. */
+	.three {
+		@media (width >= 1024px) {
+			grid-template-columns: minmax(0, 1fr) repeat(2, minmax(10.4rem, 1fr));
+		}
+
+		@media (width >= 1280px) {
+			grid-template-columns: minmax(0, 1fr) repeat(2, minmax(13rem, 1fr));
+		}
+
+		& :global(dd) {
+			@media (width >= 1024px) {
+				font-size: 1.6rem;
+			}
+
+			@media (width >= 1280px) {
+				font-size: 2rem;
+			}
 		}
 	}
 </style>
