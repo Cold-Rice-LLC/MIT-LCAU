@@ -4,16 +4,11 @@
 	import PageTitle from '#lib/components/PageTitle.svelte';
 	import Pagination from '#lib/components/Pagination.svelte';
 	import RefineBar from '#lib/components/RefineBar.svelte';
-	import { eventSorts } from '#lib/events.js';
+	import { archiveLinks } from '#lib/archive.js';
 
 	let { data } = $props();
 
 	let Item = $derived(data.list ? EventRow : EventCard);
-
-	const views = [
-		{ label: 'Grid', value: null },
-		{ label: 'List', value: 'list' }
-	];
 </script>
 
 <PageTitle>{data.headline}</PageTitle>
@@ -27,16 +22,7 @@
 		options: data.types,
 		value: data.type
 	}}
-	links={[
-		{
-			label: 'View',
-			param: 'view',
-			options: views,
-			value: data.list ? 'list' : null,
-			keepPage: true
-		},
-		{ label: 'Sort', param: 'sort', options: eventSorts, value: data.sort }
-	]}
+	links={archiveLinks(data)}
 	query={data.query}
 	placeholder="Search events"
 />

@@ -25,6 +25,12 @@ export const croppedSize = ({ width, height, crop }) => {
 	};
 };
 
+/** An image's shape (width / height) after its Studio crop, or null if it wasn't queried. */
+export const croppedAspect = (image) => {
+	const size = croppedSize(image);
+	return size && size.width / size.height;
+};
+
 /**
  * The src, srcset and intrinsic size for an image queried with
  * `imageFields`. With an `aspect` (width / height), every file is cropped
@@ -33,7 +39,7 @@ export const croppedSize = ({ width, height, crop }) => {
  */
 export const imageSources = (image, aspect) => {
 	const size = croppedSize(image);
-	const ratio = aspect ?? (size ? size.width / size.height : null);
+	const ratio = aspect ?? croppedAspect(image);
 
 	const url = (width) => {
 		const builder = urlFor(image).width(width).auto('format');

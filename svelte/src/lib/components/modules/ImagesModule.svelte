@@ -1,6 +1,6 @@
 <script>
 	import Figure from '#lib/components/Figure.svelte';
-	import { croppedSize } from '#lib/sanity/images.js';
+	import { croppedAspect } from '#lib/sanity/images.js';
 
 	/**
 	 * One image, or two side by side, at their own shapes and centred. From
@@ -11,10 +11,9 @@
 	let { images = [] } = $props();
 
 	let figures = $derived.by(() => {
-		const shown = images.flatMap((image) => {
-			const size = croppedSize(image);
-			return size ? [{ image, aspect: size.width / size.height }] : [];
-		});
+		const shown = images
+			.map((image) => ({ image, aspect: croppedAspect(image) }))
+			.filter(({ aspect }) => aspect);
 		const pair = shown.length > 1;
 		const allLandscape = shown.every(({ aspect }) => aspect > 1);
 

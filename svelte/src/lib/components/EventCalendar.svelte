@@ -1,4 +1,6 @@
 <script>
+	import { Disclosure } from '#lib/disclosure.svelte.js';
+
 	/**
 	 * Figma's D - Calendar / M - Calendar: a grey bar with the month and how
 	 * many events are on in it, opening over the page below into that
@@ -18,9 +20,7 @@
 	});
 	const id = $props.id();
 
-	let open = $state(false);
-	let container = $state();
-	let toggle = $state();
+	const disclosure = new Disclosure();
 
 	// The month showing, as its 1st at midnight UTC: today's to start, then
 	// whichever Previous and Next go to
@@ -51,30 +51,16 @@
 	});
 
 	const keyOf = (day) => `${monthKey}-${String(day).padStart(2, '0')}`;
-
-	// Closes on Escape, back to the bar, and on a click anywhere else
-	const onkeydown = (event) => {
-		if (open && event.key === 'Escape') {
-			open = false;
-			toggle.focus();
-		}
-	};
-	const onclick = (event) => {
-		if (open && !container.contains(event.target)) open = false;
-	};
 </script>
-
-<svelte:window {onkeydown} {onclick} />
 
 <!-- Holds the bar's place; the calendar opens over what's below -->
 <div class={['calendar', className]}>
-	<div bind:this={container} class="absolute inset-x-0 top-0 z-10 rounded-def bg-ui">
+	<div {@attach disclosure.attach} class="absolute inset-x-0 top-0 z-10 rounded-def bg-ui">
 		<button
-			bind:this={toggle}
 			type="button"
-			aria-expanded={open}
+			aria-expanded={disclosure.open}
 			aria-controls={id}
-			onclick={() => (open = !open)}
+			onclick={disclosure.toggle}
 			class="bar"
 		>
 			<span class="absolute left-sm text-body text-highlight text-trim lg:tracking-[-0.02em]">
@@ -92,7 +78,7 @@
 				<path d="M18 21.5 25 28.5 32 21.5" />
 			</svg>
 		</button>
-		<div {id} hidden={!open}>
+		<div {id} hidden={!disclosure.open}>
 			<table>
 				<caption class="sr-only">{title}</caption>
 				<thead>

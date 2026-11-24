@@ -7,9 +7,9 @@
 	 * Figma's D - Card - List, a card as a row linking to `link`: a 3:2 image
 	 * that multiplies into the row's colour (which `class` sets, as on Card),
 	 * a tag and a title of up to two lines, then, from lg, the Facts passed as
-	 * children in two columns, never too narrow for "Announcement". With an
-	 * `excerpt`, rows from lg are all the same height: it's cut to three lines
-	 * under a one-line title, one under two.
+	 * children in two `columns` (or three), never too narrow for
+	 * "Announcement". With an `excerpt`, rows from lg are all the same height:
+	 * it's cut to three lines under a one-line title, one under two.
 	 *
 	 * On phones the image sits beside the title, with `meta` under it in
 	 * place of the Facts; `stacked` puts the image above the whole title and
@@ -23,6 +23,7 @@
 		excerpt,
 		meta,
 		stacked = false,
+		columns = 2,
 		class: className,
 		children
 	} = $props();
@@ -79,7 +80,23 @@
 			</span>
 		{/if}
 	</span>
-	<dl class={['grid-cols-2 gap-xs lg:mt-0 lg:grid', stacked ? 'mt-xs grid' : 'hidden']}>
+	<dl
+		class={[
+			'grid-cols-2 gap-xs lg:mt-0 lg:grid',
+			columns === 3 && 'lg:grid-cols-3',
+			stacked ? 'mt-xs grid' : 'hidden'
+		]}
+	>
 		{@render children()}
 	</dl>
 </AppLink>
+
+<style>
+	/* The Facts' values, set closer from lg */
+	dl :global(dd) {
+		@media (width >= 1024px) {
+			line-height: 1.1;
+			letter-spacing: -0.02em;
+		}
+	}
+</style>

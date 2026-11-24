@@ -21,7 +21,7 @@
 
 <!-- The title and subtitle, and the facts four across below them (two on
      phones) -->
-<header class="col-span-full end-gap pt-[6rem] lg:pt-3xl">
+<header class="col-span-full end-gap page-top">
 	<h1 class="text-center text-h1 text-trim">{event.title}</h1>
 	{#if event.subtitle}
 		<p class="mt-md text-center text-h3 text-trim lg:mt-xl">{event.subtitle}</p>

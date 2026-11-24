@@ -1,24 +1,10 @@
-import { compare } from '#lib/sort.js';
-
-const byTitle = (a, b) => compare(a.title, b.title);
-
-// The All Events sorts: each one's `?sort=`, null for the default, and
-// how it orders events that come latest first
-export const eventSorts = [
-	{ label: 'Date Descending', value: null, order: (events) => events },
-	{ label: 'Date Ascending', value: 'date-asc', order: (events) => events.toReversed() },
-	{ label: 'Title A–Z', value: 'title', order: (events) => events.toSorted(byTitle) },
-	{
-		label: 'Title Z–A',
-		value: 'title-desc',
-		order: (events) => events.toSorted(byTitle).reverse()
-	}
-];
+import { datePartsFormat } from '#lib/dates.js';
 
 // Every date and time reads as it is in Cambridge, wherever it's rendered
 const timeZone = 'America/New_York';
 
-const partsFormat = new Intl.DateTimeFormat('en-US', {
+/** A date's year, month name, day, hour (1–12), minute and dayPeriod (AM or PM) in Cambridge. */
+const partsOf = datePartsFormat({
 	timeZone,
 	year: 'numeric',
 	month: 'long',
@@ -27,12 +13,6 @@ const partsFormat = new Intl.DateTimeFormat('en-US', {
 	minute: '2-digit',
 	hourCycle: 'h12'
 });
-
-/** A date's year, month name, day, hour (1–12), minute and dayPeriod (AM or PM) in Cambridge. */
-const partsOf = (date) =>
-	Object.fromEntries(
-		partsFormat.formatToParts(new Date(date)).map(({ type, value }) => [type, value])
-	);
 
 // "5", or "5:30" when it isn't on the hour
 const clock = ({ hour, minute }) => (minute === '00' ? hour : `${hour}:${minute}`);

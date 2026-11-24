@@ -227,6 +227,15 @@ is desktop.
 	}
 }
 
+/* Room above a page's heading, under the menu */
+@utility page-top {
+	padding-top: 6rem;
+
+	@media (width >= 1024px) {
+		padding-top: var(--spacing-3xl);
+	}
+}
+
 /* Room above Explore after a page's last section */
 @utility end-gap {
 	&:last-child {

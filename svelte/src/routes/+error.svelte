@@ -3,9 +3,7 @@
 </script>
 
 <!-- Spaced like a PageTitle -->
-<header
-	class="col-span-full pt-[6rem] pb-2xl text-center text-h2 text-trim lg:pt-3xl lg:pb-[12rem]"
->
+<header class="col-span-full page-top pb-2xl text-center text-h2 text-trim lg:pb-[12rem]">
 	<h1>
 		{page.status === 404 ? 'The page you are looking for does not exist.' : 'Something went wrong.'}
 	</h1>

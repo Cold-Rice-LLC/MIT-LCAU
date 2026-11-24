@@ -11,7 +11,7 @@
 
 <!-- The title and date, with 12px more than a section's gap below (24px
      from lg) -->
-<header class="col-span-full end-gap pt-[6rem] pb-xs text-center lg:pt-3xl lg:pb-md">
+<header class="col-span-full end-gap page-top pb-xs text-center lg:pb-md">
 	<h1 class="text-h1 text-trim">{post.title}</h1>
 	<time datetime={post.date} class="mt-lg block text-body-lg text-trim lg:mt-xl">
 		{formatDate(post.date)}

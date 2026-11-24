@@ -18,5 +18,5 @@
 	meta={formatWhen(event.start, event.end)}
 	class="bg-orange"
 >
-	<EventFacts {event} valueClass="lg:leading-[1.1] lg:tracking-[-0.02em]" />
+	<EventFacts {event} />
 </CardRow>

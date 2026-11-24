@@ -1,10 +1,11 @@
-import { eventSorts, yearOf } from '#lib/events.js';
+import { archiveSorts } from '#lib/archive.js';
+import { yearOf } from '#lib/events.js';
 import { fuzzySearch } from '#lib/search.js';
 import { filterOptions, paginate } from '#lib/url.js';
 
 /**
  * Which events to show, from the URL: `?type=` (a type's labelSlug) to
- * filter, `?sort=` (see eventSorts), `?q=` to search titles, subtitles,
+ * filter, `?sort=` (see archiveSorts), `?q=` to search titles, subtitles,
  * types and locations, `?view=list` for rows rather than cards, and
  * `?page=` for which page. Sorted by date, a page's events group under
  * their years; a search's under "Results for …". Types with no events are
@@ -16,7 +17,7 @@ export function load({ data, url }) {
 
 	const types = filterOptions(allTypes, events, 'typeId');
 	const type = types.find((type) => type.value === params.get('type'));
-	const sort = eventSorts.find((sort) => sort.value === params.get('sort')) ?? eventSorts[0];
+	const sort = archiveSorts.find((sort) => sort.value === params.get('sort')) ?? archiveSorts[0];
 	const query = params.get('q') ?? '';
 
 	const matches = fuzzySearch(

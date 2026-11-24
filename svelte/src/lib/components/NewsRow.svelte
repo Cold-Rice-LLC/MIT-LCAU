@@ -27,6 +27,6 @@
 	class="bg-brown"
 >
 	{#each facts as [label, value] (label)}
-		<Fact {label} {value} valueClass="lg:leading-[1.1] lg:tracking-[-0.02em]" />
+		<Fact {label} {value} />
 	{/each}
 </CardRow>

@@ -29,7 +29,7 @@
 {/snippet}
 
 <!-- The title, and the facts four across below it (two on phones) -->
-<header class="col-span-full pt-[6rem] lg:pt-3xl">
+<header class="col-span-full page-top">
 	<h1 class="text-center text-h1 text-trim">{opportunity.title}</h1>
 	<dl class="mt-2xl grid grid-cols-2 gap-x-xs gap-y-lg lg:mt-[14.2rem] lg:grid-cols-4">
 		{#each facts as [label, value] (label)}

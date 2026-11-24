@@ -11,18 +11,7 @@
      in the layout's first column, each stuck on its own so they can stop in
      different places. -->
 
-<!-- The logo is sized like the footer's (--logo-size). Stops once the
-     Explore links reach its foot, so their images never cover it: sticking
-     ends where its margin box meets the foot of the page, so the margin is
-     Explore's height (--explore-height, from the layout). At most the
-     screen's height less the MIT link's 3.81rem and the gaps, so "On this
-     page" never reaches it. -->
-<div
-	class={[
-		'sticky top-xs col-start-1 row-start-1 mt-xs mb-(--explore-height) ml-xs hidden self-start lg:flex',
-		'max-h-[calc(100svh-3*var(--spacing-xs)-3.81rem)] flex-col gap-xs'
-	]}
->
+<div>
 	<LogoLink
 		class="shrink-0 self-start rounded-def bg-charcoal p-xs pb-[1.6rem] text-(length:--logo-size) text-white"
 	/>
@@ -41,3 +30,27 @@
 		'mt-[calc(100svh-var(--spacing-xs)-3.81rem)]'
 	]}
 />
+
+<style>
+	/* The logo is sized like the footer's (--logo-size). Stops once the
+	   Explore links reach its foot, so their images never cover it: sticking
+	   ends where its margin box meets the foot of the page, so the margin is
+	   Explore's height (--explore-height, from the layout). At most the
+	   screen's height less the MIT link's 3.81rem and the gaps, so "On this
+	   page" never reaches it. */
+	div {
+		display: none;
+
+		@media (width >= 1024px) {
+			position: sticky;
+			top: var(--spacing-xs);
+			display: flex;
+			flex-direction: column;
+			gap: var(--spacing-xs);
+			grid-area: 1 / 1;
+			align-self: start;
+			max-height: calc(100svh - 3 * var(--spacing-xs) - 3.81rem);
+			margin: var(--spacing-xs) 0 var(--explore-height) var(--spacing-xs);
+		}
+	}
+</style>
