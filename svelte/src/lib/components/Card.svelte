@@ -19,9 +19,7 @@
 		className
 	]}
 >
-	{#if tag}
-		<Tag label={tag} />
-	{/if}
+	<Tag label={tag} />
 	<ImageFrame
 		as="span"
 		{image}

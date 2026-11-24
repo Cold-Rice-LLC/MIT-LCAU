@@ -2,16 +2,6 @@ import {CalendarIcon} from '@sanity/icons/Calendar'
 import {defineField, defineType} from 'sanity'
 import {imageField, modulesField, referencesField, seoField, slugField, titleField} from '../fields'
 
-// The All Events Type filter, and the tag on each event's card
-export const eventTypes = [
-  {title: 'Conference', value: 'conference'},
-  {title: 'Exhibition', value: 'exhibition'},
-  {title: 'Lecture', value: 'lecture'},
-  {title: 'Workshop', value: 'workshop'},
-  {title: 'Open House', value: 'openHouse'},
-  {title: 'Other', value: 'other'},
-]
-
 /** A lecture, conference or other event. It's upcoming or past by its dates. */
 export default defineType({
   name: 'event',
@@ -34,9 +24,10 @@ export default defineType({
     }),
     defineField({
       name: 'type',
-      type: 'string',
+      type: 'reference',
       title: 'Type',
-      options: {list: eventTypes},
+      description: 'Its tag, and the Type filter it’s under.',
+      to: [{type: 'eventType'}],
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -77,29 +68,27 @@ export default defineType({
       fieldset: 'when',
       validation: (rule) => rule.uri({scheme: ['http', 'https', 'mailto']}),
     }),
-    defineField({
-      name: 'exhibition',
-      type: 'reference',
-      title: 'Exhibition',
-      description: 'The exhibition this event is part of, like its opening. Optional.',
-      to: [{type: 'exhibition'}],
-      options: {disableNew: true},
-    }),
     imageField({description: 'For cards. Cropped to 3:2 around the hotspot.'}),
     modulesField(),
     referencesField('relatedEvents', 'Related Events', 'event', {
       description: 'Leave empty to show the next upcoming events.',
     }),
+    defineField({
+      name: 'exhibition',
+      type: 'reference',
+      title: 'Related Exhibition',
+      description: 'The exhibition this event is part of, like its opening. Optional.',
+      to: [{type: 'exhibition'}],
+      options: {disableNew: true},
+    }),
     seoField(),
   ],
   orderings: [{title: 'Date', name: 'startDesc', by: [{field: 'start', direction: 'desc'}]}],
   preview: {
-    select: {title: 'title', start: 'start', type: 'type', media: 'image'},
+    select: {title: 'title', start: 'start', type: 'type.title', media: 'image'},
     prepare: ({title, start, type, media}) => ({
       title,
-      subtitle: [eventTypes.find(({value}) => value === type)?.title, start?.slice(0, 10)]
-        .filter(Boolean)
-        .join(', '),
+      subtitle: [type, start?.slice(0, 10)].filter(Boolean).join(', '),
       media,
     }),
   },

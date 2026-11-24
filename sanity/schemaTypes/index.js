@@ -3,8 +3,10 @@ import caseStudy from './documents/caseStudy'
 import course from './documents/course'
 import educationPage from './documents/educationPage'
 import event from './documents/event'
+import eventType from './documents/eventType'
 import exhibition from './documents/exhibition'
 import news from './documents/news'
+import newsType from './documents/newsType'
 import opportunity from './documents/opportunity'
 import page from './documents/page'
 import person from './documents/person'
@@ -28,12 +30,14 @@ export const schemaTypes = [
   person,
   role,
   event,
+  eventType,
   research,
   researchCategory,
   exhibition,
   course,
   educationPage,
   news,
+  newsType,
   opportunity,
   caseStudy,
   // Objects

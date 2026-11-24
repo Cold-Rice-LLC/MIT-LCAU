@@ -10,6 +10,7 @@ const isPage =
     ids.some((id) => [id, `drafts.${id}`].includes(document?._id))
 const isHomepage = isPage('homepage')
 const isPeopleLanding = isPage('page-people')
+const isAllEvents = isPage('page-events-all')
 const isNewsLanding = isPage('page-news')
 const isResearchLanding = isPage('page-research')
 // Pages that only list documents, with nothing but a headline above
@@ -75,6 +76,11 @@ export default defineType({
       description:
         'The Role buttons above everyone, in this order. Roles with no one yet are left out.',
       hidden: ({document}) => !isPeopleLanding(document),
+    }),
+    referencesField('typeFilters', 'Type Filters', 'eventType', {
+      description:
+        'The Type buttons above every event, in this order. Types with no events yet are left out. Leave empty for every type, A–Z.',
+      hidden: ({document}) => !isAllEvents(document),
     }),
     referencesField('featuredNews', 'Featured News', 'news', {
       description: 'Up to three posts above All News, in this order. They list under All News too.',

@@ -6,7 +6,6 @@
 	import Section from '#lib/components/Section.svelte';
 	import Tag from '#lib/components/Tag.svelte';
 	import Modules from '#lib/components/modules/Modules.svelte';
-	import { typeLabel } from '#lib/events.js';
 
 	let { data } = $props();
 
@@ -30,7 +29,7 @@
 	<dl class="mt-2xl grid grid-cols-2 gap-x-xs gap-y-lg lg:grid-cols-4">
 		<Fact label="Type">
 			<dd class="flex flex-col gap-xs">
-				<Tag label={typeLabel(event.type)} />
+				<Tag label={event.type} />
 				{#if !data.ended}
 					<Tag label="Upcoming" class="text-upcoming" />
 				{/if}

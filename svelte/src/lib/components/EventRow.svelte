@@ -1,7 +1,7 @@
 <script>
 	import CardRow from '#lib/components/CardRow.svelte';
 	import EventFacts from '#lib/components/EventFacts.svelte';
-	import { formatWhen, typeLabel } from '#lib/events.js';
+	import { formatWhen } from '#lib/events.js';
 
 	/**
 	 * An event as a CardRow on orange, with its type as the tag, its date
@@ -12,7 +12,7 @@
 
 <CardRow
 	link={event.link}
-	tag={typeLabel(event.type)}
+	tag={event.type}
 	image={event.image}
 	title={event.title}
 	meta={formatWhen(event.start, event.end)}

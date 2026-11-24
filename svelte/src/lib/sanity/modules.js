@@ -25,7 +25,7 @@ export const listedEvents = `_type == "event" && defined(slug.current) && define
 export const eventCard = `
 	_id,
 	title,
-	type,
+	"type": type->title,
 	start,
 	end,
 	location,
@@ -46,7 +46,16 @@ export const newsCard = `
 `;
 
 // What NewsRow shows
-export const newsRow = `${newsCard}, type, excerpt`;
+export const newsRow = `${newsCard}, "type": type->title, excerpt`;
+
+/**
+ * GROQ for a listing page's filters: the labels picked in its `field`, in
+ * order, or else every document of `type`, A–Z. `label` is what they say.
+ */
+export const filterLabels = (field, type, label = 'title') => `select(
+	count(${field}) > 0 => (${field}[]->)[defined(title)]{ _id, "label": ${label} },
+	*[_type == "${type}" && defined(title)] | order(title asc){ _id, "label": ${label} }
+)`;
 
 /**
  * GROQ projection for each module in a modules field, by type. People

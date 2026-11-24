@@ -3,7 +3,6 @@
 	import EventFacts from '#lib/components/EventFacts.svelte';
 	import ImageFrame from '#lib/components/ImageFrame.svelte';
 	import Tag from '#lib/components/Tag.svelte';
-	import { typeLabel } from '#lib/events.js';
 
 	/**
 	 * An upcoming event on the Events landing, unboxed: its type and
@@ -15,7 +14,7 @@
 
 <AppLink link={event.link} class="flex flex-col">
 	<span class="flex gap-xs">
-		<Tag label={typeLabel(event.type)} />
+		<Tag label={event.type} />
 		<Tag label="Upcoming" class="text-upcoming" />
 	</span>
 	<ImageFrame

@@ -4,7 +4,8 @@
 	import RefineRow from '#lib/components/RefineRow.svelte';
 	import RichText from '#lib/components/RichText.svelte';
 	import { linkHref } from '#lib/sanity/links.js';
-	import { roleSlug, sortPeople } from '#lib/people.js';
+	import { sortPeople } from '#lib/people.js';
+	import { labelSlug } from '#lib/url.js';
 
 	/**
 	 * People in a grid of four across (two on phones). As role tabs, a row
@@ -51,7 +52,7 @@
 	{#if peoplePage}
 		<a
 			href={roles.length
-				? `${linkHref(peoplePage)}?role=${roleSlug(roles[selected].label)}`
+				? `${linkHref(peoplePage)}?role=${labelSlug(roles[selected].label)}`
 				: linkHref(peoplePage)}
 			class="col-span-full self-start justify-self-start cta"
 		>

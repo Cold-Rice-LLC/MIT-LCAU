@@ -19,7 +19,7 @@ export async function load({ params }) {
 			"picked": (relatedNews[]->)[defined(slug.current) && _id != ^._id]{ ${newsCard} },
 			"latest": *[
 				${listedNews} && _id != ^._id && !(_id in coalesce(^.relatedNews[]._ref, []))
-			] | order(select(type == ^.type => 0, 1) asc, date desc, _createdAt desc)[0...3]{
+			] | order(select(type._ref == ^.type._ref => 0, 1) asc, date desc, _createdAt desc)[0...3]{
 				${newsCard}
 			},
 			${seoFields}

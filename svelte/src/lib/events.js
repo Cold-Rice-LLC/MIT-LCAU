@@ -1,16 +1,5 @@
 import { compare } from '#lib/sort.js';
 
-// The Studio's event types (sanity/schemaTypes/documents/event.js), in its
-// order, for filters and tags
-export const eventTypes = [
-	{ label: 'Conference', value: 'conference' },
-	{ label: 'Exhibition', value: 'exhibition' },
-	{ label: 'Lecture', value: 'lecture' },
-	{ label: 'Workshop', value: 'workshop' },
-	{ label: 'Open House', value: 'openHouse' },
-	{ label: 'Other', value: 'other' }
-];
-
 const byTitle = (a, b) => compare(a.title, b.title);
 
 // The All Events sorts: each one's `?sort=`, null for the default, and
@@ -25,9 +14,6 @@ export const eventSorts = [
 		order: (events) => events.toSorted(byTitle).reverse()
 	}
 ];
-
-/** An event type's label, like "Open House" for `openHouse`. */
-export const typeLabel = (value) => eventTypes.find((type) => type.value === value)?.label;
 
 // Every date and time reads as it is in Cambridge, wherever it's rendered
 const timeZone = 'America/New_York';

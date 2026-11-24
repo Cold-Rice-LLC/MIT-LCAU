@@ -1,19 +1,10 @@
+import {CalendarIcon} from '@sanity/icons/Calendar'
 import {CogIcon} from '@sanity/icons/Cog'
 import {DocumentIcon} from '@sanity/icons/Document'
+import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {ProjectsIcon} from '@sanity/icons/Projects'
 import {UserIcon} from '@sanity/icons/User'
 import {landingPages} from './landingPages'
-
-// The kinds of document listed on their own, after People, Events and
-// Research, in menu order
-const documentTypes = [
-  ['exhibition', 'Exhibitions'],
-  ['course', 'Courses'],
-  ['educationPage', 'Education'],
-  ['news', 'News'],
-  ['opportunity', 'Opportunities'],
-  ['caseStudy', 'Case Studies'],
-]
 
 const typeItem = (S, [type, title]) => S.documentTypeListItem(type).title(title)
 
@@ -63,16 +54,28 @@ export const myStructure = (S) =>
 
       S.divider(),
 
+      // In menu order
       typeGroup(S, 'peopleGroup', 'People', UserIcon, [
         ['person', 'All People'],
         ['role', 'Roles'],
       ]),
-      typeItem(S, ['event', 'Events']),
+      typeGroup(S, 'eventsGroup', 'Events', CalendarIcon, [
+        ['event', 'All Events'],
+        ['eventType', 'Event Types'],
+      ]),
       typeGroup(S, 'researchGroup', 'Research', ProjectsIcon, [
         ['research', 'All Research'],
         ['researchCategory', 'Categories'],
       ]),
-      ...documentTypes.map((type) => typeItem(S, type)),
+      typeItem(S, ['exhibition', 'Exhibitions']),
+      typeItem(S, ['course', 'Courses']),
+      typeItem(S, ['educationPage', 'Education']),
+      typeGroup(S, 'newsGroup', 'News', DocumentTextIcon, [
+        ['news', 'All News'],
+        ['newsType', 'News Types'],
+      ]),
+      typeItem(S, ['opportunity', 'Opportunities']),
+      typeItem(S, ['caseStudy', 'Case Studies']),
 
       S.divider(),
 

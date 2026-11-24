@@ -10,14 +10,6 @@ import {
   titleField,
 } from '../fields'
 
-// The Type in lists, and what makes a post More News on another's page
-export const newsTypes = [
-  {title: 'Announcement', value: 'announcement'},
-  {title: 'Call for Proposals', value: 'callForProposals'},
-  {title: 'Exhibition Opening', value: 'exhibitionOpening'},
-  {title: 'Project Feature', value: 'projectFeature'},
-]
-
 /** A news post. */
 export default defineType({
   name: 'news',
@@ -36,9 +28,9 @@ export default defineType({
     }),
     defineField({
       name: 'type',
-      type: 'string',
+      type: 'reference',
       title: 'Type',
-      options: {list: newsTypes},
+      to: [{type: 'newsType'}],
       validation: (rule) => rule.required(),
     }),
     excerptField({
@@ -47,7 +39,7 @@ export default defineType({
     }),
     imageField({description: 'For cards. Cropped to 3:2 around the hotspot.'}),
     modulesField(),
-    referencesField('relatedNews', 'More News', 'news', {
+    referencesField('relatedNews', 'Related News', 'news', {
       description:
         'Up to three posts. Any left empty are filled with the latest of the same type, then the latest of all.',
       validation: (rule) => rule.unique().max(3),
@@ -56,12 +48,10 @@ export default defineType({
   ],
   orderings: [{title: 'Newest', name: 'dateDesc', by: [{field: 'date', direction: 'desc'}]}],
   preview: {
-    select: {title: 'title', date: 'date', type: 'type', media: 'image'},
+    select: {title: 'title', date: 'date', type: 'type.title', media: 'image'},
     prepare: ({title, date, type, media}) => ({
       title,
-      subtitle: [newsTypes.find(({value}) => value === type)?.title, date]
-        .filter(Boolean)
-        .join(', '),
+      subtitle: [type, date].filter(Boolean).join(', '),
       media,
     }),
   },

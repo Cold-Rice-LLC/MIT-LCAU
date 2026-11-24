@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { goto } from '$app/navigation';
+import { plain } from '#lib/search.js';
 
 /**
  * A link to `url` with `changes` to its query: each key is set to its
@@ -23,6 +24,22 @@ export const refineHref = (url, changes) => queryHref(url, { page: null, ...chan
  */
 export const replaceQuery = (url, changes) =>
 	goto(refineHref(url, changes), { replace: true, reset: false });
+
+/** A filter's label for the URL: "PhD Students" as `?role=phd-students`. */
+export const labelSlug = (label) =>
+	plain(label)
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-|-$/g, '');
+
+/**
+ * Filter options from `labels` (see filterLabels): those any of `items`
+ * have, by the label's _id in their `key`, each with its `value` for the
+ * URL (see labelSlug).
+ */
+export const filterOptions = (labels, items, key) =>
+	labels
+		.filter((label) => items.some((item) => item[key] === label._id))
+		.map((label) => ({ ...label, value: labelSlug(label.label) }));
 
 /**
  * The `?page=` in `url`, the first by default, as the `start` and `end` of

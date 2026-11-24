@@ -39,9 +39,7 @@
 			{/each}
 		</p>
 	{/if}
-	{#if person.role}
-		<Tag label={person.role} class="mt-md" />
-	{/if}
+	<Tag label={person.role} class="mt-md" />
 </header>
 
 <div class="intro end-gap">

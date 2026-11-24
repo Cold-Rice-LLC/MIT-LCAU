@@ -1,4 +1,3 @@
-import { plain } from '#lib/search.js';
 import { compare } from '#lib/sort.js';
 
 /**
@@ -16,9 +15,3 @@ export const sortPeople = (people, descending = false) => {
 	const sorted = people.toSorted((a, b) => compare(sortKey(a), sortKey(b)));
 	return descending ? sorted.reverse() : sorted;
 };
-
-/** A role's name for the URL, as `?role=phd-students`. */
-export const roleSlug = (label) =>
-	plain(label)
-		.replace(/[^a-z0-9]+/g, '-')
-		.replace(/^-|-$/g, '');

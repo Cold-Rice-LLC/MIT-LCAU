@@ -16,7 +16,7 @@ export async function load({ params }) {
 		`*[_type == "event" && slug.current == $slug][0]{
 			title,
 			subtitle,
-			type,
+			"type": type->title,
 			start,
 			end,
 			location,

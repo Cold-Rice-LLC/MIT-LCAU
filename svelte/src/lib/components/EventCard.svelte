@@ -1,6 +1,6 @@
 <script>
 	import Card from '#lib/components/Card.svelte';
-	import { formatWhen, typeLabel } from '#lib/events.js';
+	import { formatWhen } from '#lib/events.js';
 
 	/**
 	 * An event's Card: its type as the tag, its image, title and when it
@@ -11,7 +11,7 @@
 
 <Card
 	link={event.link}
-	tag={typeLabel(event.type)}
+	tag={event.type}
 	image={event.image}
 	title={event.title}
 	meta={formatWhen(event.start, event.end)}

@@ -1,16 +1,12 @@
-import {TagIcon} from '@sanity/icons/Tag'
-import {defineField, defineType} from 'sanity'
+import {defineField} from 'sanity'
 import {titleField} from '../fields'
+import {labelType} from '../labelType'
 
 /**
  * A role people have, like Administrative Staff: the tag on their card,
  * and a filter wherever people are listed by role.
  */
-export default defineType({
-  name: 'role',
-  type: 'document',
-  title: 'Role',
-  icon: TagIcon,
+export default labelType('role', 'Role', {
   fields: [
     titleField({description: 'One person’s role, as on their card: “PhD Student”.'}),
     defineField({
@@ -20,7 +16,6 @@ export default defineType({
       description: 'For filters and tabs: “PhD Students”. Leave empty if it’s the same.',
     }),
   ],
-  orderings: [{title: 'Title', name: 'titleAsc', by: [{field: 'title', direction: 'asc'}]}],
   preview: {
     select: {title: 'title', subtitle: 'pluralTitle'},
   },

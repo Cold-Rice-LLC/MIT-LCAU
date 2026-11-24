@@ -2,7 +2,6 @@
 	import CardRow from '#lib/components/CardRow.svelte';
 	import Fact from '#lib/components/Fact.svelte';
 	import { formatDate } from '#lib/dates.js';
-	import { typeLabel } from '#lib/news.js';
 
 	/**
 	 * A news post as a CardRow on brown, with its excerpt, date and type;
@@ -13,7 +12,7 @@
 	let facts = $derived(
 		[
 			['Date', formatDate(post.date)],
-			['Type', typeLabel(post.type)]
+			['Type', post.type]
 		].filter(([, value]) => value)
 	);
 </script>
