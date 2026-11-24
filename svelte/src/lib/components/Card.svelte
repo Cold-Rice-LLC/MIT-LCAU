@@ -29,24 +29,10 @@
 		sizes="(width >= 1024px) 25vw, 50vw"
 		class="mix-blend-multiply"
 	/>
-	<span class="title line-clamp-2 text-body-lg lg:leading-[1.1] lg:tracking-[-0.02em]">
+	<span class="trim-clamped line-clamp-2 text-body-lg lg:leading-[1.1] lg:tracking-[-0.02em]">
 		{title}
 	</span>
 	{#if meta}
 		<span class="text-body text-trim lg:leading-[1.3] lg:tracking-slight">{meta}</span>
 	{/if}
 </AppLink>
-
-<style>
-	/* Trimmed to the cap height above, but not below: Chrome skips the
-	   bottom trim on a title that fills its two lines exactly, so it would
-	   sit lower than the rest. The box ends half a line below the last
-	   baseline, less the font's descent (0.35em), deep enough that
-	   line-clamp doesn't clip descenders; the margin takes that back out,
-	   so meta sits the gap below the baseline, as the title does below the
-	   image. */
-	.title {
-		margin-bottom: calc(0.35em - 0.5lh);
-		text-box: trim-start cap text;
-	}
-</style>

@@ -2,6 +2,7 @@
 	import AppLink from '#lib/components/AppLink.svelte';
 	import Fact from '#lib/components/Fact.svelte';
 	import RichText from '#lib/components/RichText.svelte';
+	import { formatDate } from '#lib/dates.js';
 
 	let { data } = $props();
 
@@ -12,20 +13,11 @@
 		opportunity.applyUrl && { linkType: 'external', externalUrl: opportunity.applyUrl }
 	);
 
-	// "March 9, 2026", read as UTC so the date doesn't slip back a day
-	let postedOn = $derived(
-		opportunity.postedOn &&
-			new Date(opportunity.postedOn).toLocaleDateString('en-US', {
-				dateStyle: 'long',
-				timeZone: 'UTC'
-			})
-	);
-
 	let facts = $derived(
 		[
 			['Term', opportunity.term],
 			['Hiring Range', opportunity.salaryRange],
-			['Posted On', postedOn]
+			['Posted On', formatDate(opportunity.postedOn)]
 		].filter(([, value]) => value)
 	);
 

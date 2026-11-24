@@ -2,6 +2,7 @@
 	import Section from '#lib/components/Section.svelte';
 	import ColumnsModule from '#lib/components/modules/ColumnsModule.svelte';
 	import GalleryModule from '#lib/components/modules/GalleryModule.svelte';
+	import ImagesModule from '#lib/components/modules/ImagesModule.svelte';
 	import OpportunitiesModule from '#lib/components/modules/OpportunitiesModule.svelte';
 	import PeopleModule from '#lib/components/modules/PeopleModule.svelte';
 	import TextMediaModule from '#lib/components/modules/TextMediaModule.svelte';
@@ -19,6 +20,7 @@
 		textMediaModule: TextMediaModule,
 		videoModule: VideoModule,
 		galleryModule: GalleryModule,
+		imagesModule: ImagesModule,
 		peopleModule: PeopleModule,
 		opportunitiesModule: OpportunitiesModule,
 		columnsModule: ColumnsModule

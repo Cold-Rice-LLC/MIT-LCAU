@@ -17,5 +17,10 @@
 		@media (width >= 1024px) {
 			padding-block: var(--spacing-3xl) 12rem;
 		}
+
+		/* A Section straight under it is spaced by the padding alone */
+		& + :global(section) {
+			margin-top: 0;
+		}
 	}
 </style>

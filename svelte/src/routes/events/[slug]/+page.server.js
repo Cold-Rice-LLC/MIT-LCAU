@@ -25,7 +25,7 @@ export async function load({ params }) {
 			image{ asset },
 			modules[]{ ${modulesFields} },
 			"related": select(
-				count(relatedEvents) > 0 => relatedEvents[]->[defined(slug.current)]{ ${eventCard} },
+				count(relatedEvents) > 0 => (relatedEvents[]->)[defined(slug.current)]{ ${eventCard} },
 				*[${listedEvents} && _id != ^._id && dateTime(start) > dateTime($now)]
 					| order(start asc)[0...4]{ ${eventCard} }
 			),

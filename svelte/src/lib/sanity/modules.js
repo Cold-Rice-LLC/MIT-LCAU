@@ -33,6 +33,21 @@ export const eventCard = `
 	${linkTo}
 `;
 
+// Filter for the news posts that have a page to list: a slug and a date
+export const listedNews = `_type == "news" && defined(slug.current) && defined(date)`;
+
+// What NewsCard shows
+export const newsCard = `
+	_id,
+	title,
+	date,
+	image{ ${imageFields} },
+	${linkTo}
+`;
+
+// What NewsRow shows
+export const newsRow = `${newsCard}, type, excerpt`;
+
 /**
  * GROQ projection for each module in a modules field, by type. People
  * and opportunities are queried here, so the modules need nothing more.
@@ -51,6 +66,7 @@ export const modulesFields = `
 	},
 	_type == "videoModule" => { video{ url, caption, poster{ ${imageFields} } } },
 	_type == "galleryModule" => { display, ${images} },
+	_type == "imagesModule" => { ${images} },
 	_type == "peopleModule" => {
 		display,
 		display == "tabs" => {

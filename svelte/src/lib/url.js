@@ -24,21 +24,27 @@ export const refineHref = (url, changes) => queryHref(url, { page: null, ...chan
 export const replaceQuery = (url, changes) =>
 	goto(refineHref(url, changes), { replace: true, reset: false });
 
+/**
+ * The `?page=` in `url`, the first by default, as the `start` and `end` of
+ * its items, `size` to a page.
+ */
+export const pageRange = (url, size) => {
+	const page = Number(url.searchParams.get('page') ?? 1);
+	if (!Number.isInteger(page) || page < 1) error(404, 'Not found');
+	return { page, start: (page - 1) * size, end: page * size };
+};
+
+/** The page, and how many pages `total` items make. A page that isn't there is a 404. */
+export const paging = (page, total, size) => {
+	const pageCount = Math.max(1, Math.ceil(total / size));
+	if (page > pageCount) error(404, 'Not found');
+	return { page, pageCount, total };
+};
+
 const PAGE_SIZE = 24;
 
-/**
- * The 24 of `items` on the `?page=` in `url`, the first by default, and
- * how many pages and items there are. A page that isn't there is a 404.
- */
+/** The 24 of `items` on the `?page=` in `url` (see pageRange), with its paging. */
 export const paginate = (items, url) => {
-	const page = Number(url.searchParams.get('page') ?? 1);
-	const pageCount = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
-	if (!Number.isInteger(page) || page < 1 || page > pageCount) error(404, 'Not found');
-
-	return {
-		page,
-		pageCount,
-		total: items.length,
-		items: items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
-	};
+	const { page, start, end } = pageRange(url, PAGE_SIZE);
+	return { ...paging(page, items.length, PAGE_SIZE), items: items.slice(start, end) };
 };

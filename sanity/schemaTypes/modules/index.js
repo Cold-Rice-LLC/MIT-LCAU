@@ -2,7 +2,7 @@ import {defineArrayMember, defineType} from 'sanity'
 import accordionModule from './accordionModule'
 import columnsModule from './columnsModule'
 import galleryModule from './galleryModule'
-import groupedImagesModule from './groupedImagesModule'
+import imagesModule from './imagesModule'
 import opportunitiesModule from './opportunitiesModule'
 import peopleModule from './peopleModule'
 import quoteModule from './quoteModule'
@@ -24,7 +24,7 @@ const modules = defineType({
     'textMediaModule',
     'videoModule',
     'galleryModule',
-    'groupedImagesModule',
+    'imagesModule',
     'quoteModule',
     'accordionModule',
     'peopleModule',
@@ -38,7 +38,7 @@ export const moduleTypes = [
   accordionModule,
   columnsModule,
   galleryModule,
-  groupedImagesModule,
+  imagesModule,
   opportunitiesModule,
   peopleModule,
   quoteModule,

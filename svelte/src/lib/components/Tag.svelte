@@ -1,13 +1,14 @@
 <script>
 	/**
 	 * Figma's D - Tag / M - Tag: a dot and an uppercase mono label, in the
-	 * current colour, cut off with an ellipsis when its column is too narrow.
+	 * current colour, cut off with an ellipsis when its column is too narrow
+	 * (with room either side of the trimmed capitals, so they aren't clipped).
 	 */
 	let { label, class: className } = $props();
 </script>
 
 <span class={['tag flex min-w-0 items-center gap-2xs text-label', className]}>
-	<span class="truncate text-trim">{label}</span>
+	<span class="-my-[0.2em] truncate py-[0.2em] text-trim">{label}</span>
 </span>
 
 <style>

@@ -10,9 +10,10 @@ const isPage =
     ids.some((id) => [id, `drafts.${id}`].includes(document?._id))
 const isHomepage = isPage('homepage')
 const isPeopleLanding = isPage('page-people')
+const isNewsLanding = isPage('page-news')
 const isResearchLanding = isPage('page-research')
 // Pages that only list documents, with nothing but a headline above
-const isListing = isPage('page-people', 'page-events', 'page-events-all')
+const isListing = isPage('page-people', 'page-events', 'page-events-all', 'page-news')
 
 /**
  * Any page that isn't a person, event or other document: the homepage,
@@ -74,6 +75,11 @@ export default defineType({
       description:
         'The Role buttons above everyone, in this order. Roles with no one yet are left out.',
       hidden: ({document}) => !isPeopleLanding(document),
+    }),
+    referencesField('featuredNews', 'Featured News', 'news', {
+      description: 'Up to three posts above All News, in this order. They list under All News too.',
+      hidden: ({document}) => !isNewsLanding(document),
+      validation: (rule) => rule.unique().max(3),
     }),
     modulesField({
       hidden: ({document}) =>

@@ -152,10 +152,33 @@ is desktop.
 	text-box: trim-both cap alphabetic;
 }
 
+/* Room above the cap height for text that's trimmed and cut off with
+   overflow, so round letters (C, S, O), which rise past it, and accents
+   aren't clipped. The margin takes it back out, so it takes no space; put
+   the gap above on the parent. */
+@utility clip-room {
+	margin-top: -0.2em;
+	padding-top: 0.2em;
+}
+
 /* text-trim for text cut off with overflow (truncate, line-clamp): trimmed
    to the descenders rather than the baseline, so they aren't clipped */
 @utility text-trim-clipped {
+	@apply clip-room;
 	text-box: trim-both cap text;
+}
+
+/* text-trim for a title cut off with line-clamp that has something under
+   it: trimmed to the cap height above, but not below. Chrome skips the
+   bottom trim on a title that fills its lines exactly, so what's under it
+   would sit lower than the rest. The box ends half a line below the last
+   baseline, less the font's descent (0.35em), deep enough that line-clamp
+   doesn't clip descenders; the margin takes that back out, so a gap below
+   starts at the baseline. */
+@utility trim-clamped {
+	@apply clip-room;
+	margin-bottom: calc(0.35em - 0.5lh);
+	text-box: trim-start cap text;
 }
 
 /* Figma's CTA (D - CTA, M - CTA): purple on grey, with a soft purple glow
